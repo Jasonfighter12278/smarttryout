@@ -2,79 +2,99 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard — Verbeterd</title>
+<title>Smartschool Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-:root {
-  --brand: #7b0f14;
-  --bg: #f6f7fb;
-  --card: #fff;
-  --radius: 12px;
-  --muted: #555;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:#222;}
-a{color:inherit;text-decoration:none;}
-button{cursor:pointer;border:none;background:none;font-family:inherit;}
-.navbar{background:var(--brand);color:#fff;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 3px 6px rgba(0,0,0,0.2);}
-.nav-left,.nav-right{display:flex;align-items:center;gap:16px;}
-.nav-links{display:flex;gap:12px;align-items:center;}
-.nav-links a{padding:6px 10px;border-radius:6px;transition:background 0.2s;}
-.nav-links a:hover{background:rgba(255,255,255,0.15);}
-.profile img{width:32px;height:32px;border-radius:50%;object-fit:cover;}
-.dropdown{position:relative;}
-.dropdown-toggle{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;color:#fff;font-weight:500;}
-.dropdown-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.15);display:none;z-index:200;}
-.dropdown-menu.show{display:block;}
-.dropdown-menu a{display:block;padding:10px 14px;color:#222;font-size:14px;}
-.dropdown-menu a:hover{background:#f9f9f9;}
-.gmail-container{display:grid;grid-template-columns:220px 1fr 320px;gap:20px;align-items:start;max-width:1200px;margin:20px auto;padding:0 20px;}
-.gmail-sidebar{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 3px 10px rgba(0,0,0,0.06);display:flex;flex-direction:column;gap:10px;}
-.gmail-compose{background:var(--brand);color:#fff;border-radius:24px;padding:12px 20px;font-weight:600;cursor:pointer;text-align:center;}
-.gmail-folder{padding:10px;border-radius:8px;cursor:pointer;}
-.gmail-folder.active{background:rgba(123,15,20,0.08);font-weight:600;}
-.gmail-list{background:var(--card);border-radius:var(--radius);box-shadow:0 3px 10px rgba(0,0,0,0.06);display:flex;flex-direction:column;height:70vh;}
-.gmail-list-header{padding:10px;border-bottom:1px solid #eee;display:flex;gap:10px;align-items:center;}
-.gmail-search{flex:1;}
-.gmail-search input{width:100%;padding:8px;border-radius:6px;border:1px solid #ccc;}
-.gmail-messages{overflow:auto;flex:1;}
-.gmail-message{display:flex;gap:10px;padding:10px;border-bottom:1px solid #f0f0f0;cursor:pointer;align-items:center;}
-.gmail-message:hover{background:#f6f6f8;}
-.gmail-snippet{flex:1;}
-.gmail-time{font-size:12px;color:var(--muted);}
-.gmail-viewer{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 3px 10px rgba(0,0,0,0.06);height:70vh;display:flex;flex-direction:column;}
-.gmail-viewer-header{font-weight:600;border-bottom:1px solid #eee;padding-bottom:8px;margin-bottom:10px;}
-.gmail-thread{flex:1;overflow:auto;padding:6px;}
-.gmail-bubble{margin-bottom:12px;padding:10px;border-radius:10px;background:#f3f3f5;}
-.gmail-bubble.me{margin-left:auto;background:linear-gradient(180deg,#fff,#f7f7f9);box-shadow:0 2px 6px rgba(0,0,0,0.04);}
-@media(max-width:1024px){.gmail-container{grid-template-columns:200px 1fr;}.gmail-viewer{display:none;}}
-@media(max-width:768px){.gmail-container{grid-template-columns:1fr;}.gmail-sidebar{display:none;}}
-.hidden{display:none!important;}
+:root{--brand:#7b0f14;--brand-dark:#5e0c10;--bg:#f4f5f9;--card:#fff;--radius:12px;--muted:#666;--line:#e6e6ea}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:#222}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+.navbar{background:var(--brand);color:#fff;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 3px 6px rgba(0,0,0,.2)}
+.nav-left,.nav-right{display:flex;align-items:center;gap:16px}
+.nav-links{display:flex;gap:12px;align-items:center}
+.nav-links a{padding:6px 10px;border-radius:6px;transition:background .2s}
+.nav-links a:hover{background:rgba(255,255,255,.15)}
+.profile img{width:32px;height:32px;border-radius:50%;object-fit:cover}
+.dropdown{position:relative}
+.dropdown-toggle{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;color:#fff;font-weight:500}
+.dropdown-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.15);display:none;z-index:200}
+.dropdown-menu.show{display:block}
+.dropdown-menu a{display:block;padding:10px 14px;color:#222;font-size:14px}
+.dropdown-menu a:hover{background:#f9f9f9}
+.container{max-width:1200px;margin:20px auto;padding:20px}
+.card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:0 3px 10px rgba(0,0,0,.06);margin-bottom:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.card h3{margin-bottom:10px;font-size:18px;color:var(--brand)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px}
+.kpi{background:#fafbff;border:1px solid var(--line);border-radius:10px;padding:12px}
+#time{font-size:20px;font-weight:700}
+.badge{display:inline-flex;align-items:center;gap:6px;background:#f7e9ea;color:#7b0f14;border:1px solid #e8c8cb;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
+.calendar div{padding:10px;border-radius:8px}
+.calendar .day{background:#fff;border:1px solid var(--line);cursor:pointer}
+.calendar .day.today{background:rgba(123,15,20,.06);border:1px solid var(--brand)}
+.calendar .day.hasEvent{background:rgba(123,15,20,.12)}
+.calendar .header{font-weight:700}
+.calendar-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.event-list{margin:10px 0}
+.event{padding:6px 10px;background:#f7f7fb;border:1px solid var(--line);border-radius:8px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.event button{background:#e53935;color:#fff;padding:4px 8px;border-radius:6px;font-size:12px}
+.rooster{overflow-x:auto}
+.rooster table{width:100%;border-collapse:separate;border-spacing:10px}
+.rooster thead th{font-weight:700;text-transform:capitalize}
+.rooster th,.rooster td{vertical-align:top}
+.slot-wrap{background:#fff;border:1px solid #d9d9de;border-radius:12px;min-height:82px;box-shadow:inset 0 0 0 1px #f1f1f4}
+.slot{padding:10px;border-radius:10px;height:100%}
+.slot-empty{color:#9aa0a6;font-size:13px}
+.slot-title{font-weight:700;margin-bottom:4px}
+.slot-meta{font-size:12px;color:#6b7280}
+.slot-actions{display:flex;gap:6px;margin-top:8px}
+.btn{background:var(--brand);color:#fff;padding:8px 12px;border-radius:8px;font-weight:700;transition:.15s}
+.btn:hover{background:var(--brand-dark)}
+.btn-small{padding:4px 8px;border-radius:6px;font-size:12px}
+.btn-ghost{background:#f3f4f6;color:#111827}
+.grid-compact{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gmail-container{display:grid;grid-template-columns:220px 1fr 320px;gap:20px;align-items:start}
+.gmail-sidebar{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 3px 10px rgba(0,0,0,.06);display:flex;flex-direction:column;gap:10px}
+.gmail-compose{background:var(--brand);color:#fff;border-radius:24px;padding:12px 20px;font-weight:700;cursor:pointer;text-align:center;transition:.2s}
+.gmail-compose:hover{background:var(--brand-dark)}
+.gmail-folder{padding:10px;border-radius:8px;cursor:pointer;transition:.2s;border:1px solid transparent}
+.gmail-folder:hover{background:#f2f2f4}
+.gmail-folder.active{background:#fff;border:1px solid var(--line);font-weight:700}
+.gmail-list{background:var(--card);border-radius:var(--radius);box-shadow:0 3px 10px rgba(0,0,0,.06);display:flex;flex-direction:column;height:70vh}
+.gmail-list-header{padding:10px;border-bottom:1px solid #eee;display:flex;gap:10px;align-items:center}
+.gmail-search{flex:1}
+.gmail-search input{width:100%;padding:8px;border-radius:6px;border:1px solid #ccc}
+.gmail-messages{overflow:auto;flex:1}
+.gmail-message{display:flex;gap:10px;padding:10px;border-bottom:1px solid #f0f0f0;cursor:pointer;align-items:center;transition:.2s}
+.gmail-message:hover{background:#f6f6f8}
+.gmail-snippet{flex:1}
+.gmail-time{font-size:12px;color:var(--muted)}
+.gmail-viewer{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 3px 10px rgba(0,0,0,.06);height:70vh;display:flex;flex-direction:column}
+.gmail-viewer-header{font-weight:700;border-bottom:1px solid #eee;padding-bottom:8px;margin-bottom:10px}
+.gmail-thread{flex:1;overflow:auto;padding:6px}
+.gmail-bubble{margin-bottom:12px;padding:10px;border-radius:10px;background:#f3f3f5}
+.gmail-bubble.me{margin-left:auto;background:linear-gradient(180deg,#fff,#f7f7f9);box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.gmail-compose-window{position:fixed;bottom:20px;right:20px;width:360px;background:var(--card);box-shadow:0 4px 12px rgba(0,0,0,.2);border-radius:var(--radius);padding:14px;display:none;flex-direction:column;z-index:300}
+.gmail-compose-window.show{display:flex}
+.gmail-compose-window input,.gmail-compose-window textarea{margin-bottom:10px;padding:8px;border:1px solid #ccc;border-radius:6px;width:100%;font-size:14px}
+.gmail-compose-window textarea{resize:vertical;min-height:80px}
+.gmail-compose-window button{background:var(--brand);color:#fff;padding:10px;border-radius:6px;font-weight:700;transition:.2s}
+.gmail-compose-window button:hover{background:var(--brand-dark)}
+.hidden{display:none!important}
+@media(max-width:1024px){.gmail-container{grid-template-columns:200px 1fr}.gmail-viewer{display:none}}
+@media(max-width:768px){.gmail-container{grid-template-columns:1fr}.gmail-sidebar{display:none}}
 </style>
 </head>
 <body>
 <div class="navbar">
   <div class="nav-left nav-links">
     <a onclick="showPage('home')">🏠 Start</a>
-    <div class="dropdown">
-      <button class="dropdown-toggle">🔗 Links ▾</button>
-      <div class="dropdown-menu">
-        <a href="https://smg.smartschool.be" target="_blank">📘 Smartschool</a>
-        <a href="https://youtube.com" target="_blank">🎥 YouTube</a>
-        <a href="https://vrt.be" target="_blank">📺 VRT</a>
-        <a href="https://wikipedia.org" target="_blank">📚 Wikipedia</a>
-      </div>
-    </div>
     <a onclick="showPage('messages')">📩 Berichten</a>
   </div>
   <div class="nav-right">
-    <div class="dropdown">
-      <div class="notif dropdown-toggle">🔔<span class="notif-badge" id="notifCount">2</span></div>
-      <div class="dropdown-menu" id="notifDropdown">
-        <a href="#">📢 Nieuwe aankondiging beschikbaar</a>
-        <a href="#">💬 Je hebt een nieuw bericht</a>
-      </div>
-    </div>
+    <span id="adminBadge" class="badge hidden">Admin modus</span>
     <div class="dropdown">
       <div class="profile dropdown-toggle">
         <img id="profilePic" src="" alt="Profiel">
@@ -87,20 +107,49 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;}
     </div>
   </div>
 </div>
+
 <div id="home" class="container">
-  <h2>Welkom, <span id="userDisplay"></span> 🎉</h2>
-  <p id="quote">"Leren is de sleutel tot succes!"</p>
+  <div class="grid">
+    <div class="card">
+      <h3>Welkom <span id="userDisplay"></span> 🎉</h3>
+      <div class="kpis">
+        <div class="kpi"><div>Datum</div><div id="date"></div></div>
+        <div class="kpi"><div>Tijd</div><div id="time"></div></div>
+        <div class="kpi"><div>Account</div><div id="roleText"></div></div>
+      </div>
+      <div style="margin-top:14px" id="quotes"></div>
+    </div>
+    <div class="card">
+      <h3>📅 Agenda</h3>
+      <div class="calendar-controls">
+        <button class="btn-ghost btn-small" onclick="prevMonth()">◀</button>
+        <div id="monthYear"></div>
+        <button class="btn-ghost btn-small" onclick="nextMonth()">▶</button>
+      </div>
+      <div class="calendar" id="calendar"></div>
+      <div class="event-list" id="eventList"></div>
+      <div class="grid-compact">
+        <input type="text" id="eventText" placeholder="Nieuw event...">
+        <button class="btn" onclick="addEvent()">Toevoegen</button>
+      </div>
+    </div>
+    <div class="card" style="grid-column:1/-1">
+      <h3>📘 Lesrooster</h3>
+      <div class="rooster" id="rooster"></div>
+    </div>
+  </div>
 </div>
+
 <div id="messages" class="container hidden">
   <div class="gmail-container">
     <div class="gmail-sidebar">
       <div class="gmail-compose" onclick="toggleComposer()">✉ Nieuw bericht</div>
-      <div class="gmail-folder active" data-folder="inbox">📥 Inbox</div>
-      <div class="gmail-folder" data-folder="sent">📤 Verzonden</div>
+      <div class="gmail-folder active" data-folder="inbox" onclick="switchFolder('inbox')">📥 Inbox</div>
+      <div class="gmail-folder" data-folder="sent" onclick="switchFolder('sent')">📤 Verzonden</div>
     </div>
     <div class="gmail-list">
       <div class="gmail-list-header">
-        <div class="gmail-search"><input type="text" id="searchConv" placeholder="Zoeken..."></div>
+        <div class="gmail-search"><input type="text" id="searchConv" placeholder="Zoeken..." oninput="renderConversations()"></div>
       </div>
       <div class="gmail-messages" id="convList">Geen berichten</div>
     </div>
@@ -110,25 +159,227 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;}
     </div>
   </div>
 </div>
+
+<div class="gmail-compose-window" id="composer">
+  <input type="text" id="to" placeholder="Aan...">
+  <input type="text" id="subject" placeholder="Onderwerp">
+  <textarea id="body" placeholder="Bericht..."></textarea>
+  <button onclick="sendMessage()">Versturen</button>
+</div>
+
 <script>
 const user=localStorage.getItem("loggedInUser")||"test.account";
+const admins=["test.account2"];
+const isAdmin=admins.includes(user);
 document.getElementById("userDisplay").textContent=user;
 document.getElementById("profileName").textContent=user;
-const profilePics={
-  "test.account":"https://cdn-icons-png.flaticon.com/512/194/194915.png",
-  "test.account2":"https://static.wikia.nocookie.net/h__/images/0/09/Vorhees.jpg",
-  "test.account3":"https://cdn-icons-png.flaticon.com/512/194/194915.png"
-};
-document.getElementById("profilePic").src=profilePics[user]||profilePics["test.account"];
-function logout(){localStorage.removeItem("loggedInUser");window.location.href="index.html";}
-function showPage(id){document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
-document.addEventListener("click",e=>{document.querySelectorAll(".dropdown-menu").forEach(m=>m.classList.remove("show"));const t=e.target.closest(".dropdown-toggle");if(t){t.nextElementSibling.classList.toggle("show");}});
-function getAllMessages(){return JSON.parse(localStorage.getItem("messages")||"[]");}
-function saveAllMessages(arr){localStorage.setItem("messages",JSON.stringify(arr));}
-function toggleComposer(){}
-function sendMessage(){}
-function renderConversations(){const convList=document.getElementById("convList");const all=getAllMessages();const inbox=all.filter(m=>m.to===user).sort((a,b)=>b.time-a.time);convList.innerHTML="";if(!inbox.length){convList.innerHTML="Geen berichten";return;}inbox.forEach(m=>{const div=document.createElement("div");div.className="gmail-message";div.innerHTML=`<div class="gmail-snippet"><strong>${m.from}</strong> — ${m.subject||'(geen onderwerp)'}<br><span>${m.text.substring(0,40)}</span></div><div class="gmail-time">${new Date(m.time).toLocaleTimeString()}</div>`;div.onclick=()=>showMessage(m);convList.appendChild(div);});}
-function showMessage(m){const viewer=document.getElementById("viewer");viewer.innerHTML=`<div class="gmail-viewer-header">${m.subject||'(geen onderwerp)'} — van ${m.from}</div><div class="gmail-thread"><div class="gmail-bubble"><strong>${m.from}</strong>: ${m.text}<div class="gmail-time">${new Date(m.time).toLocaleString()}</div></div></div>`;}
+document.getElementById("profilePic").src="https://cdn-icons-png.flaticon.com/512/194/194915.png";
+document.getElementById("roleText").textContent=isAdmin?"Beheerder":"Leerling";
+document.getElementById("adminBadge").classList.toggle("hidden",!isAdmin);
+
+function logout(){localStorage.removeItem("loggedInUser");window.location.href="index.html"}
+function showPage(id){document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));document.getElementById(id).classList.remove("hidden")}
+document.addEventListener("click",e=>{document.querySelectorAll(".dropdown-menu").forEach(m=>m.classList.remove("show"));const t=e.target.closest(".dropdown-toggle");if(t){t.nextElementSibling.classList.toggle("show")}})
+
+function updateDateTime(){
+  const now=new Date();
+  document.getElementById("date").textContent=now.toLocaleDateString("nl-NL",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+  document.getElementById("time").textContent=now.toLocaleTimeString()
+}
+setInterval(updateDateTime,1000);updateDateTime();
+const quotes=["Leren is de sleutel tot succes!","Elke dag is een nieuwe kans om te groeien.","Kennis is macht, enthousiasme brengt je verder."]
+document.getElementById("quotes").innerHTML=quotes.map(q=>`<p>“${q}”</p>`).join("")
+
+let currentMonth=new Date().getMonth();
+let currentYear=new Date().getFullYear();
+let selectedDate=new Date();
+function getEvents(){return JSON.parse(localStorage.getItem("events")||"{}")}
+function saveEvents(e){localStorage.setItem("events",JSON.stringify(e))}
+function renderCalendar(){
+  const monthYear=document.getElementById("monthYear");
+  const cal=document.getElementById("calendar");
+  cal.innerHTML="";
+  const firstDay=new Date(currentYear,currentMonth,1);
+  const lastDay=new Date(currentYear,currentMonth+1,0);
+  monthYear.textContent=firstDay.toLocaleString("nl-NL",{month:"long",year:"numeric"});
+  const days=["Ma","Di","Wo","Do","Vr","Za","Zo"];
+  days.forEach(d=>{const div=document.createElement("div");div.textContent=d;div.className="header";cal.appendChild(div)});
+  const pad=(firstDay.getDay()+6)%7;
+  for(let i=0;i<pad;i++){cal.appendChild(document.createElement("div"))}
+  for(let d=1;d<=lastDay.getDate();d++){
+    const date=new Date(currentYear,currentMonth,d);
+    const div=document.createElement("div");
+    div.textContent=d;
+    div.className="day";
+    if(date.toDateString()===new Date().toDateString()){div.classList.add("today")}
+    const events=getEvents();
+    const key=date.toISOString().split("T")[0];
+    if(events[key]&&events[key].length){div.classList.add("hasEvent")}
+    div.onclick=()=>{selectedDate=date;renderEvents()};
+    cal.appendChild(div)
+  }
+}
+function renderEvents(){
+  const list=document.getElementById("eventList");
+  list.innerHTML="";
+  const key=selectedDate.toISOString().split("T")[0];
+  const events=getEvents();
+  if(events[key]&&events[key].length){
+    events[key].forEach((ev,i)=>{
+      const div=document.createElement("div");
+      div.className="event";
+      div.innerHTML=`<span>${ev}</span> <button onclick="deleteEvent('${key}',${i})">Verwijder</button>`;
+      list.appendChild(div)
+    })
+  }else{list.innerHTML="<em>Geen events</em>"}
+}
+function addEvent(){
+  const text=document.getElementById("eventText").value.trim();
+  if(!text)return;
+  const key=selectedDate.toISOString().split("T")[0];
+  const events=getEvents();
+  if(!events[key])events[key]=[];
+  events[key].push(text);
+  saveEvents(events);
+  document.getElementById("eventText").value="";
+  renderCalendar();renderEvents()
+}
+function deleteEvent(key,i){
+  const events=getEvents();
+  events[key].splice(i,1);
+  saveEvents(events);
+  renderCalendar();renderEvents()
+}
+function prevMonth(){currentMonth--;if(currentMonth<0){currentMonth=11;currentYear--}renderCalendar()}
+function nextMonth(){currentMonth++;if(currentMonth>11){currentMonth=0;currentYear++}renderCalendar()}
+renderCalendar();renderEvents();
+
+const periodTimes={
+  1:"08:25 - 09:15",
+  2:"09:15 - 10:05",
+  3:"10:15 - 11:05",
+  4:"11:05 - 11:55",
+  "Middag":"11:55 - 12:45",
+  5:"12:45 - 13:35",
+  6:"13:35 - 14:25",
+  7:"14:35 - 15:25",
+  8:"15:25 - 16:15"
+}
+const daysOrder=["maandag","dinsdag","woensdag","donderdag","vrijdag"]
+function getTimetable(){return JSON.parse(localStorage.getItem("timetable")||"{}")}
+function saveTimetable(t){localStorage.setItem("timetable",JSON.stringify(t))}
+function ensureTimetable(){
+  const t=getTimetable();
+  daysOrder.forEach(d=>{if(!t[d])t[d]={}});
+  Object.keys(periodTimes).forEach(p=>{
+    if(p==="Middag")return;
+    daysOrder.forEach(d=>{if(!t[d][p])t[d][p]=""})
+  });
+  saveTimetable(t)
+}
+ensureTimetable()
+function renderTimetable(){
+  const t=getTimetable();
+  const container=document.getElementById("rooster");
+  const table=document.createElement("table");
+  const thead=document.createElement("thead");
+  const trh=document.createElement("tr");
+  trh.appendChild(document.createElement("th"));
+  daysOrder.forEach(d=>{const th=document.createElement("th");th.textContent=d;trh.appendChild(th)});
+  thead.appendChild(trh);
+  const tbody=document.createElement("tbody");
+  Object.keys(periodTimes).forEach(p=>{
+    const tr=document.createElement("tr");
+    const label=document.createElement("th");
+    label.innerHTML=p==="Middag"?`Middag<br><span class="slot-meta">${periodTimes[p]}</span>`:`${p}<br><span class="slot-meta">${periodTimes[p]}</span>`;
+    tr.appendChild(label);
+    if(p==="Middag"){
+      const td=document.createElement("td");td.colSpan=daysOrder.length;
+      const wrap=document.createElement("div");wrap.className="slot-wrap";
+      const slot=document.createElement("div");slot.className="slot";
+      slot.innerHTML=`<div class="slot-title">Middagpauze</div><div class="slot-meta">${periodTimes[p]}</div>`;
+      wrap.appendChild(slot);td.appendChild(wrap);tr.appendChild(td)
+    }else{
+      daysOrder.forEach(d=>{
+        const td=document.createElement("td");
+        const wrap=document.createElement("div");wrap.className="slot-wrap";
+        const slot=document.createElement("div");slot.className="slot";
+        const val=t[d][p]||"";
+        if(val){
+          slot.innerHTML=`<div class="slot-title">${val}</div><div class="slot-meta">${d} • uur ${p}</div>`;
+          if(isAdmin){
+            const actions=document.createElement("div");actions.className="slot-actions";
+            const editBtn=document.createElement("button");editBtn.className="btn-ghost btn-small";editBtn.textContent="Wijzig";
+            editBtn.onclick=()=>editSlot(d,p,val);
+            const delBtn=document.createElement("button");delBtn.className="btn-ghost btn-small";delBtn.textContent="Leeg";
+            delBtn.onclick=()=>clearSlot(d,p);
+            actions.append(editBtn,delBtn);slot.appendChild(actions)
+          }
+        }else{
+          slot.innerHTML=`<div class="slot-empty">Leeg</div>`;
+          if(isAdmin){
+            const addBtn=document.createElement("button");addBtn.className="btn-ghost btn-small";addBtn.textContent="Invullen";
+            addBtn.onclick=()=>editSlot(d,p,"");
+            slot.appendChild(addBtn)
+          }
+        }
+        wrap.appendChild(slot);td.appendChild(wrap);tr.appendChild(td)
+      })
+    }
+    tbody.appendChild(tr)
+  })
+  table.appendChild(thead);table.appendChild(tbody);
+  container.innerHTML="";container.appendChild(table)
+}
+function editSlot(day,period,current){
+  const v=prompt(`${day} • uur ${period}\nVak/les`,current||"");
+  if(v===null)return;
+  const t=getTimetable();t[day][period]=v.trim();
+  saveTimetable(t);renderTimetable()
+}
+function clearSlot(day,period){
+  const t=getTimetable();t[day][period]="";
+  saveTimetable(t);renderTimetable()
+}
+renderTimetable();
+
+function getAllMessages(){return JSON.parse(localStorage.getItem("messages")||"[]")}
+function saveAllMessages(arr){localStorage.setItem("messages",JSON.stringify(arr))}
+let currentFolder="inbox";
+function switchFolder(f){currentFolder=f;document.querySelectorAll(".gmail-folder").forEach(el=>el.classList.toggle("active",el.dataset.folder===f));renderConversations()}
+function toggleComposer(){document.getElementById("composer").classList.toggle("show")}
+function sendMessage(){
+  const to=document.getElementById("to").value.trim();
+  const subject=document.getElementById("subject").value.trim();
+  const body=document.getElementById("body").value.trim();
+  if(!to||!body){alert("Vul alle velden in.");return}
+  const newMsg={from:user,to:to,subject:subject,text:body,time:Date.now()};
+  const all=getAllMessages();all.push(newMsg);saveAllMessages(all);
+  document.getElementById("to").value="";document.getElementById("subject").value="";document.getElementById("body").value="";
+  document.getElementById("composer").classList.remove("show");
+  renderConversations()
+}
+function renderConversations(){
+  const convList=document.getElementById("convList");
+  const all=getAllMessages();
+  const q=document.getElementById("searchConv").value?.toLowerCase()||"";
+  let list=[];
+  if(currentFolder==="inbox"){list=all.filter(m=>m.to===user)}else{list=all.filter(m=>m.from===user)}
+  list=list.filter(m=>(m.subject||"").toLowerCase().includes(q)||(m.text||"").toLowerCase().includes(q)||(m.from||"").toLowerCase().includes(q)).sort((a,b)=>b.time-a.time);
+  convList.innerHTML="";
+  if(!list.length){convList.innerHTML="Geen berichten";return}
+  list.forEach(m=>{
+    const div=document.createElement("div");
+    div.className="gmail-message";
+    div.innerHTML=`<div class="gmail-snippet"><strong>${currentFolder==="inbox"?m.from:m.to}</strong> — ${m.subject||"(geen onderwerp)"}<br><span>${m.text.substring(0,80)}</span></div><div class="gmail-time">${new Date(m.time).toLocaleTimeString()}</div>`;
+    div.onclick=()=>showMessage(m);
+    convList.appendChild(div)
+  })
+}
+function showMessage(m){
+  const viewer=document.getElementById("viewer");
+  viewer.innerHTML=`<div class="gmail-viewer-header">${m.subject||"(geen onderwerp)"} — ${currentFolder==="inbox"?"van "+m.from:"aan "+m.to}</div><div class="gmail-thread"><div class="gmail-bubble"><strong>${m.from}</strong>: ${m.text}<div class="gmail-time">${new Date(m.time).toLocaleString()}</div></div></div>`
+}
 renderConversations();
 </script>
 </body>
