@@ -173,45 +173,71 @@
     .card p { font-weight: 500; }
 
     /* Messages */
-    .messages { max-width: 750px; margin: auto; margin-top: 20px; }
+    .messages { max-width: 800px; margin: auto; margin-top: 20px; }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .topbar button {
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .topbar select {
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
     .message-list {
       border: 1px solid #ddd;
       padding: 12px;
-      height: 320px;
+      min-height: 300px;
       overflow-y: auto;
       background: #fff;
       border-radius: 10px;
       margin-bottom: 12px;
     }
-    .message {
-      padding: 12px 0;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
+    .empty-state {
+      text-align: center;
+      color: #888;
+      margin-top: 100px;
     }
-    .message:last-child { border-bottom: none; }
-    .message img {
-      width: 42px; height: 42px; border-radius: 50%;
-    }
-    .message-content { flex: 1; }
-    .message strong { color: #7b0f14; font-size: 14px; }
-    .message-subject { font-size: 13px; color: #666; margin-bottom: 3px; }
 
-    input, textarea, button {
-      padding: 10px;
-      margin: 5px 0;
-      border-radius: 8px;
+    /* Composer */
+    .composer {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .field { margin-bottom: 12px; }
+    .field label { display: block; margin-bottom: 4px; font-weight: 500; }
+    .suggestions {
+      position: absolute;
+      background: #fff;
       border: 1px solid #ccc;
-      font-size: 14px;
+      width: 100%;
+      max-height: 150px;
+      overflow-y: auto;
+      border-radius: 6px;
+      display: none;
+      z-index: 300;
     }
-    textarea { width: 100%; resize: none; }
-    button {
-      background: #3498db; color: white; border: none; cursor: pointer;
-      transition: background 0.2s;
-      font-weight: 500;
+    .suggestions div {
+      padding: 8px;
+      cursor: pointer;
     }
-    button:hover { background: #2980b9; }
+    .suggestions div:hover {
+      background: #f0f0f0;
+    }
   </style>
 </head>
 <body>
@@ -318,10 +344,41 @@
 <div id="messages" class="container hidden">
   <h2>Berichten</h2>
   <div class="messages">
-    <div class="message-list" id="messageList"></div>
-    <input type="text" id="subjectInput" placeholder="Onderwerp">
-    <textarea id="messageInput" rows="3" placeholder="Typ een bericht..."></textarea>
-    <button onclick="sendMessage()">Verstuur</button>
+    <!-- Inbox -->
+    <div id="inboxView">
+      <div class="topbar">
+        <span>📥 Inbox</span>
+        <button id="newMessageBtn">+ Nieuw bericht</button>
+        <select>
+          <option>Sorteren</option>
+          <option>Datum</option>
+          <option>Naam</option>
+        </select>
+      </div>
+      <div class="message-list" id="messageList">
+        <div class="empty-state">Geen berichten</div>
+      </div>
+    </div>
+
+    <!-- Composer -->
+    <div id="composerView" class="composer hidden">
+      <h3 style="color:#7b0f14;">Nieuw bericht</h3>
+      <div class="field" style="position:relative;">
+        <label for="toInput">Aan:</label>
+        <input type="text" id="toInput" autocomplete="off" placeholder="Typ een naam...">
+        <div id="suggestions" class="suggestions"></div>
+      </div>
+      <div class="field">
+        <label for="subjectInput">Onderwerp:</label>
+        <input type="text" id="subjectInput">
+      </div>
+      <div class="field">
+        <label for="messageInput">Bericht:</label>
+        <textarea id="messageInput" rows="4"></textarea>
+      </div>
+      <button onclick="sendMessage()">Verstuur</button>
+      <button onclick="cancelComposer()" style="background:#ccc;color:#333;margin-left:8px;">Annuleren</button>
+    </div>
   </div>
 </div>
 
@@ -351,12 +408,15 @@
 
   const messages = [];
   function sendMessage() {
+    const to = document.getElementById("toInput").value.trim();
     const subject = document.getElementById("subjectInput").value.trim();
     const text = document.getElementById("messageInput").value.trim();
-    if (text) {
-      messages.push({ user, subject, text });
+    if (to && text) {
+      messages.push({ user, to, subject, text });
+      document.getElementById("toInput").value = "";
       document.getElementById("subjectInput").value = "";
       document.getElementById("messageInput").value = "";
+      cancelComposer();
       renderMessages();
       updateStats();
     }
@@ -364,14 +424,18 @@
   function renderMessages() {
     const list = document.getElementById("messageList");
     list.innerHTML = "";
+    if (messages.length === 0) {
+      list.innerHTML = '<div class="empty-state">Geen berichten</div>';
+      return;
+    }
     messages.forEach(m => {
       const div = document.createElement("div");
       div.className = "message";
       div.innerHTML = `
-        <img src="${profilePics[m.user]}" alt="pfp">
-        <div class="message-content">
-          <strong>${m.user}</strong>
-          <div class="message-subject">${m.subject || "(geen onderwerp)"}</div>
+        <img src="${profilePics[m.user]}" alt="pfp" style="width:40px;height:40px;border-radius:50%;margin-right:10px;">
+        <div>
+          <strong>${m.user} ➝ ${m.to}</strong>
+          <div><em>${m.subject || "(geen onderwerp)"}</em></div>
           <div>${m.text}</div>
         </div>
       `;
@@ -380,6 +444,7 @@
     list.scrollTop = list.scrollHeight;
   }
 
+  // Stats
   let msgCount = 0;
   let linkClicks = 0;
   function updateStats() {
@@ -391,6 +456,7 @@
     document.getElementById("linkClicks").textContent = linkClicks + " keer bezocht";
   }
 
+  // Clock
   function updateClock() {
     const now = new Date();
     document.getElementById("todayDate").textContent = now.toLocaleDateString("nl-BE", { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -398,6 +464,42 @@
   }
   setInterval(updateClock, 1000);
   updateClock();
+
+  // Inbox/composer toggle
+  document.getElementById("newMessageBtn").onclick = () => {
+    document.getElementById("inboxView").classList.add("hidden");
+    document.getElementById("composerView").classList.remove("hidden");
+  };
+  function cancelComposer() {
+    document.getElementById("composerView").classList.add("hidden");
+    document.getElementById("inboxView").classList.remove("hidden");
+  }
+
+  // Suggestions (only main accounts, no co-accounts)
+  const mainAccounts = Object.keys(profilePics);
+  const toInput = document.getElementById("toInput");
+  const suggestions = document.getElementById("suggestions");
+
+  toInput.addEventListener("input", () => {
+    const query = toInput.value.toLowerCase();
+    suggestions.innerHTML = "";
+    if (!query) { suggestions.style.display = "none"; return; }
+    const results = mainAccounts.filter(acc => acc.toLowerCase().includes(query) && acc !== user);
+    if (results.length) {
+      results.forEach(acc => {
+        const div = document.createElement("div");
+        div.textContent = acc;
+        div.onclick = () => {
+          toInput.value = acc;
+          suggestions.style.display = "none";
+        };
+        suggestions.appendChild(div);
+      });
+      suggestions.style.display = "block";
+    } else {
+      suggestions.style.display = "none";
+    }
+  });
 </script>
 
 </body>
