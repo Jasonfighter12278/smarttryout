@@ -2,85 +2,70 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard — Messaging</title>
+<title>Dashboard — Verbeterd</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 :root{
-  --brand:#7b0f14; --bg:#f6f7fb; --card:#fff; --radius:12px; --muted:#555;
+  --brand:#7b0f14;
+  --bg:#f6f7fb;
+  --card:#fff;
+  --radius:12px;
+  --muted:#555;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);color:#222;}
 a{color:inherit;text-decoration:none;}
 button{cursor:pointer;border:none;background:none;font-family:inherit;}
-/* Navbar */
+
+/* NAVBAR */
 .navbar{background:var(--brand);color:#fff;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 3px 6px rgba(0,0,0,0.2);}
 .nav-left,.nav-right{display:flex;align-items:center;gap:16px;}
 .nav-links{display:flex;gap:12px;align-items:center;}
 .nav-links a{padding:6px 10px;border-radius:6px;transition:background 0.2s;}
 .nav-links a:hover{background:rgba(255,255,255,0.15);}
-/* Dropdown */
+
+/* DROPDOWN */
 .dropdown{position:relative;}
-.dropdown-toggle{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;background:transparent;color:#fff;font-weight:500;cursor:pointer;}
+.dropdown-toggle{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;background:transparent;color:#fff;font-weight:500;}
 .dropdown-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.15);display:none;z-index:200;}
 .dropdown-menu.show{display:block;}
 .dropdown-menu a{display:block;padding:10px 14px;color:#222;font-size:14px;}
 .dropdown-menu a:hover{background:#f9f9f9;}
-/* Notifications */
-.notif{position:relative;font-size:18px;}
-.notif-badge{position:absolute;top:-5px;right:-5px;background:#e74c3c;color:#fff;border-radius:50%;padding:2px 6px;font-size:11px;}
-/* Profile */
-.profile{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;}
-.profile img{width:35px;height:35px;border-radius:50%;border:2px solid #fff;}
-/* Dashboard layout */
-.container{max-width:1200px;margin:20px auto;padding:0 20px;}
-.dashboard-grid{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:start;}
-/* Sidebar */
-.sidebar{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 3px 10px rgba(0,0,0,0.06);}
-.compose-btn{width:100%;padding:10px;background:var(--brand);color:#fff;border-radius:10px;font-weight:600;margin-bottom:14px;}
-.folder-list{display:flex;flex-direction:column;gap:6px;}
-.folder{padding:10px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;color:#333;cursor:pointer;}
-.folder:hover{background:#f6f6f8;}
-.folder.active{background:rgba(123,15,20,0.08);border-left:3px solid var(--brand);}
-/* Conversations list */
-.conversations{background:var(--card);border-radius:var(--radius);padding:12px;box-shadow:0 3px 10px rgba(0,0,0,0.06);display:flex;flex-direction:column;height:74vh;}
-.conv-top{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
-.search{flex:1;display:flex;gap:6px;}
-.search input{flex:1;padding:8px;border-radius:6px;border:1px solid #ccc;}
-.conv-list{overflow:auto;flex:1;padding-right:6px;}
-.conv-item{display:flex;gap:10px;padding:10px;border-radius:8px;align-items:center;cursor:pointer;}
-.conv-item:hover{background:#f6f6f8;}
-.conv-item.active{background:rgba(123,15,20,0.08);}
-.avatar{width:44px;height:44px;border-radius:50%;flex-shrink:0;}
-.conv-body{flex:1;}
-.conv-sub{font-weight:600;color:var(--brand);}
-.conv-snippet{font-size:13px;color:var(--muted);margin-top:4px;}
-.conv-meta{font-size:12px;color:var(--muted);text-align:right;}
-/* Message viewer */
-.viewer{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 3px 10px rgba(0,0,0,0.06);height:74vh;display:flex;flex-direction:column;position:relative;}
-.viewer-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:10px;margin-bottom:10px;}
-.thread{flex:1;overflow:auto;padding:6px;display:flex;flex-direction:column;gap:10px;}
-.bubble-row{display:flex;gap:10px;margin-bottom:12px;}
-.bubble{max-width:72%;padding:10px;border-radius:10px;background:#f3f3f5;}
-.bubble.me{margin-left:auto;background:linear-gradient(180deg,#fff,#f7f7f9);box-shadow:0 2px 6px rgba(0,0,0,0.04);}
-.msg-meta{font-size:12px;color:var(--muted);margin-top:6px;}
-.viewer-empty{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:var(--muted);height:100%;}
-/* Composer at bottom */
-.viewer-composer{display:flex;gap:8px;padding-top:10px;border-top:1px solid #eee;}
-.viewer-composer input{flex:1;padding:8px;border-radius:6px;border:1px solid #ccc;}
-.viewer-composer button{padding:8px 12px;border-radius:6px;border:none;background:var(--brand);color:#fff;}
-.suggestions{position:absolute;background:#fff;border:1px solid #ccc;border-radius:6px;display:none;max-height:150px;overflow:auto;width:calc(100% - 16px);z-index:600;}
-.suggestions div{padding:8px;cursor:pointer;}
-.suggestions div:hover{background:#f0f0f0;}
+
+/* GMAIL-LIKE MESSAGES PAGE */
+.gmail-container{display:grid;grid-template-columns:240px 1fr 420px;gap:20px;align-items:start;}
+.gmail-sidebar{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 3px 10px rgba(0,0,0,0.06);display:flex;flex-direction:column;gap:10px;}
+.gmail-compose{background:var(--brand);color:#fff;border-radius:24px;padding:12px 20px;font-weight:600;cursor:pointer;text-align:center;}
+.gmail-folder{padding:10px;border-radius:8px;cursor:pointer;}
+.gmail-folder.active{background:rgba(123,15,20,0.08);font-weight:600;}
+.gmail-list{background:var(--card);border-radius:var(--radius);box-shadow:0 3px 10px rgba(0,0,0,0.06);display:flex;flex-direction:column;height:74vh;}
+.gmail-list-header{padding:10px;border-bottom:1px solid #eee;display:flex;gap:10px;align-items:center;}
+.gmail-search{flex:1;}
+.gmail-search input{width:100%;padding:8px;border-radius:6px;border:1px solid #ccc;}
+.gmail-messages{overflow:auto;flex:1;}
+.gmail-message{display:flex;gap:10px;padding:10px;border-bottom:1px solid #f0f0f0;cursor:pointer;align-items:center;}
+.gmail-message:hover{background:#f6f6f8;}
+.gmail-message.active{background:rgba(123,15,20,0.08);}
+.gmail-snippet{flex:1;}
+.gmail-time{font-size:12px;color:var(--muted);}
+
+.gmail-viewer{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 3px 10px rgba(0,0,0,0.06);height:74vh;display:flex;flex-direction:column;}
+.gmail-viewer-header{font-weight:600;border-bottom:1px solid #eee;padding-bottom:8px;margin-bottom:10px;}
+.gmail-thread{flex:1;overflow:auto;padding:6px;}
+.gmail-bubble{margin-bottom:12px;padding:10px;border-radius:10px;background:#f3f3f5;}
+.gmail-bubble.me{margin-left:auto;background:linear-gradient(180deg,#fff,#f7f7f9);box-shadow:0 2px 6px rgba(0,0,0,0.04);}
+
+.hidden{display:none!important;}
 </style>
 </head>
 <body>
 
-<!-- Navbar -->
+<!-- NAVBAR -->
 <div class="navbar">
   <div class="nav-left nav-links">
     <a onclick="showPage('home')">🏠 Start</a>
     <div class="dropdown">
-      <div class="dropdown-toggle">🔗 Links ▾</div>
+      <button class="dropdown-toggle">🔗 Links ▾</button>
       <div class="dropdown-menu">
         <a href="https://smg.smartschool.be" target="_blank">📘 Smartschool</a>
         <a href="https://youtube.com" target="_blank">🎥 YouTube</a>
@@ -90,10 +75,14 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;}
     </div>
     <a onclick="showPage('messages')">📩 Berichten</a>
   </div>
+
   <div class="nav-right">
     <div class="dropdown">
-      <div class="notif dropdown-toggle">🔔<span class="notif-badge" id="notifCount">0</span></div>
-      <div class="dropdown-menu" id="notifDropdown"></div>
+      <div class="notif dropdown-toggle">🔔<span class="notif-badge" id="notifCount">2</span></div>
+      <div class="dropdown-menu" id="notifDropdown">
+        <a href="#">📢 Nieuwe aankondiging beschikbaar</a>
+        <a href="#">💬 Je hebt een nieuw bericht</a>
+      </div>
     </div>
     <div class="dropdown">
       <div class="profile dropdown-toggle">
@@ -108,113 +97,144 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;}
   </div>
 </div>
 
-<!-- Home -->
+<!-- MAIN CONTENT -->
 <div id="home" class="container">
   <h2>Welkom, <span id="userDisplay"></span> 🎉</h2>
   <p id="quote">"Leren is de sleutel tot succes!"</p>
 </div>
 
-<!-- Messages page -->
+<!-- MESSAGES PAGE -->
 <div id="messages" class="container hidden">
-  <div class="dashboard-grid">
+  <div class="gmail-container">
     <!-- Sidebar -->
-    <div class="sidebar">
-      <button class="compose-btn" onclick="toggleComposer()">+ Nieuw bericht</button>
-      <div class="folder-list">
-        <div class="folder active" data-folder="inbox">📥 Inbox</div>
-        <div class="folder" data-folder="sent">📤 Verzonden</div>
+    <div class="gmail-sidebar">
+      <div class="gmail-compose" onclick="toggleComposer()">✉ Nieuw bericht</div>
+      <div class="gmail-folder active" data-folder="inbox">📥 Inbox</div>
+      <div class="gmail-folder" data-folder="sent">📤 Verzonden</div>
+    </div>
+
+    <!-- Message List -->
+    <div class="gmail-list">
+      <div class="gmail-list-header">
+        <div class="gmail-search"><input type="text" id="searchConv" placeholder="Zoeken..."></div>
       </div>
+      <div class="gmail-messages" id="convList">Geen berichten</div>
     </div>
-    <!-- Conversations list -->
-    <div class="conversations">
-      <div class="conv-top"><div class="search"><input type="text" id="searchConv" placeholder="Zoeken..."></div></div>
-      <div class="conv-list" id="convList"><div class="conv-item empty">Geen berichten</div></div>
-    </div>
+
     <!-- Viewer -->
-    <div class="viewer" id="viewer">
-      <div class="viewer-empty"><p>Selecteer een bericht om te bekijken</p></div>
+    <div class="gmail-viewer" id="viewer">
+      <div class="gmail-viewer-header">Selecteer een bericht</div>
+      <div class="gmail-thread"></div>
     </div>
   </div>
 </div>
 
+<!-- COMPOSER PANEL (unchanged) -->
+<div class="composer-panel" id="composerPanel">
+  <h3>Nieuw bericht</h3>
+  <div class="field" style="position:relative;">
+    <label>Aan:</label>
+    <input type="text" id="toInput" placeholder="Typ een naam...">
+    <div id="suggestions" class="suggestions"></div>
+  </div>
+  <div class="field">
+    <label>Onderwerp:</label>
+    <input type="text" id="subjectInput">
+  </div>
+  <div class="field">
+    <label>Bericht:</label>
+    <textarea id="messageInput" rows="5"></textarea>
+  </div>
+  <div class="composer-actions">
+    <button class="btn ghost" onclick="toggleComposer()">Annuleren</button>
+    <button class="btn primary" onclick="sendMessage()">Verstuur</button>
+  </div>
+</div>
+
 <script>
-// User setup
 const user = localStorage.getItem("loggedInUser") || "test.account";
 document.getElementById("userDisplay").textContent = user;
 document.getElementById("profileName").textContent = user;
-const profilePics = {"test.account":"https://cdn-icons-png.flaticon.com/512/194/194915.png","test.account2":"https://cdn-icons-png.flaticon.com/512/194/194915.png","test.account3":"https://cdn-icons-png.flaticon.com/512/194/194915.png"};
+
+const profilePics = {
+  "test.account":"https://cdn-icons-png.flaticon.com/512/194/194915.png",
+  "test.account2":"https://static.wikia.nocookie.net/h__/images/0/09/Vorhees.jpg",
+  "test.account3":"https://cdn-icons-png.flaticon.com/512/194/194915.png"
+};
 document.getElementById("profilePic").src = profilePics[user]||profilePics["test.account"];
+
 function logout(){localStorage.removeItem("loggedInUser");window.location.href="index.html";}
 function showPage(id){document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
+function toggleComposer(){document.getElementById("composerPanel").classList.toggle("open");}
 
-// Dropdowns
-document.querySelectorAll(".dropdown").forEach(drop=>{
-  const toggle=drop.querySelector(".dropdown-toggle"); const menu=drop.querySelector(".dropdown-menu");
-  toggle.addEventListener("click",()=>menu.classList.toggle("show"));
-  document.addEventListener("click",e=>{if(!drop.contains(e.target)) menu.classList.remove("show");});
+// Improved dropdown behavior
+document.addEventListener("click",e=>{
+  document.querySelectorAll(".dropdown-menu").forEach(m=>m.classList.remove("show"));
+  const toggle=e.target.closest(".dropdown-toggle");
+  if(toggle){toggle.nextElementSibling.classList.toggle("show");}
 });
 
-// Messages system
+// Messaging system
 function getAllMessages(){return JSON.parse(localStorage.getItem("messages")||"[]");}
 function saveAllMessages(arr){localStorage.setItem("messages",JSON.stringify(arr));}
-let currentThread=null;
+function sendMessage(){
+  const to=document.getElementById("toInput").value.trim();
+  const subj=document.getElementById("subjectInput").value.trim();
+  const text=document.getElementById("messageInput").value.trim();
+  if(to&&text){
+    const all=getAllMessages();
+    all.push({from:user,to,subject:subj,text,time:Date.now()});
+    saveAllMessages(all);
+    document.getElementById("toInput").value="";
+    document.getElementById("subjectInput").value="";
+    document.getElementById("messageInput").value="";
+    toggleComposer();
+    renderConversations();
+  }
+}
 
+// Recipient suggestions
+const mainAccounts=Object.keys(profilePics);
+const toInput=document.getElementById("toInput");
+const suggestions=document.getElementById("suggestions");
+toInput.addEventListener("input",()=>{
+  const q=toInput.value.toLowerCase();
+  suggestions.innerHTML="";
+  if(!q){suggestions.style.display="none";return;}
+  const res=mainAccounts.filter(a=>a.toLowerCase().includes(q)&&a!==user);
+  if(res.length){
+    res.forEach(a=>{
+      const div=document.createElement("div");
+      div.textContent=a;
+      div.onclick=()=>{toInput.value=a;suggestions.style.display="none";}
+      suggestions.appendChild(div);
+    });
+    suggestions.style.display="block";
+  } else suggestions.style.display="none";
+});
+
+// Render conversations
 function renderConversations(){
   const convList=document.getElementById("convList");
   const all=getAllMessages();
   const inbox=all.filter(m=>m.to===user).sort((a,b)=>b.time-a.time);
   convList.innerHTML="";
-  if(inbox.length===0){convList.innerHTML='<div class="conv-item empty">Geen berichten</div>'; return;}
-  const threads={};
-  inbox.forEach(m=>{const key=[m.from,m.to].sort().join('|'); if(!threads[key]) threads[key]=[]; threads[key].push(m);});
-  Object.keys(threads).forEach(k=>{
-    const msgs=threads[k]; const latest=msgs[msgs.length-1];
-    const div=document.createElement("div"); div.className="conv-item";
-    div.innerHTML=`<img src="${profilePics[latest.from]}" class="avatar"><div class="conv-body"><div class="conv-sub">${latest.from} ➝ ${latest.to}</div><div class="conv-snippet">${latest.subject||'(geen onderwerp)'} - ${latest.text.substring(0,40)}</div></div><div class="conv-meta">${new Date(latest.time).toLocaleTimeString()}</div>`;
-    div.onclick=()=>showThread(msgs); convList.appendChild(div);
+  if(inbox.length===0){convList.innerHTML='Geen berichten';return;}
+  inbox.forEach(m=>{
+    const div=document.createElement("div");
+    div.className="gmail-message";
+    div.innerHTML=`<div class="gmail-snippet"><strong>${m.from}</strong> — ${m.subject||'(geen onderwerp)'}<br><span>${m.text.substring(0,40)}</span></div><div class="gmail-time">${new Date(m.time).toLocaleTimeString()}</div>`;
+    div.onclick=()=>showMessage(m);
+    convList.appendChild(div);
   });
 }
 
-function showThread(messages){
-  currentThread=messages;
-  const viewer=document.getElementById("viewer"); viewer.innerHTML='';
-  const header=document.createElement("div"); header.className="viewer-header";
-  header.innerHTML=`<strong>Conversatie: ${messages[0].from} & ${messages[0].to}</strong>`;
-  viewer.appendChild(header);
-  const threadDiv=document.createElement("div"); threadDiv.className="thread";
-  messages.forEach(m=>{
-    const row=document.createElement("div"); row.className="bubble-row";
-    const bubble=document.createElement("div"); bubble.className="bubble"+(m.from===user?" me":"");
-    bubble.innerHTML=`<strong>${m.from}</strong>: ${m.text}<div class="msg-meta">${new Date(m.time).toLocaleString()}</div>`;
-    row.appendChild(bubble); threadDiv.appendChild(row);
-  });
-  viewer.appendChild(threadDiv);
-  const composer=document.createElement("div"); composer.className="viewer-composer";
-  composer.innerHTML=`<input type="text" id="replyInput" placeholder="Typ je reactie..."><button onclick="sendReply()">Verstuur</button>`;
-  viewer.appendChild(composer);
-  threadDiv.scrollTop=threadDiv.scrollHeight;
+function showMessage(msg){
+  const viewer=document.getElementById("viewer");
+  viewer.innerHTML=`<div class=\"gmail-viewer-header\">${msg.subject||'(geen onderwerp)'} — van ${msg.from}</div><div class=\"gmail-thread\"><div class=\"gmail-bubble\"><strong>${msg.from}</strong>: ${msg.text}<div class=\"gmail-time\">${new Date(msg.time).toLocaleString()}</div></div></div>`;
 }
 
-function sendReply(){
-  if(!currentThread) return;
-  const input=document.getElementById("replyInput"); const text=input.value.trim();
-  if(!text) return;
-  const all=getAllMessages(); const last=currentThread[currentThread.length-1];
-  const msg={from:user,to:last.from===user?last.to:last.from,subject:last.subject,text,time:Date.now()};
-  all.push(msg); saveAllMessages(all); input.value="";
-  showThread([...currentThread,msg]); renderConversations();
-}
-
-// Sidebar composer (new message)
-function toggleComposer(){
-  const to=prompt("Aan:"); if(!to) return;
-  const subject=prompt("Onderwerp:")||"(geen onderwerp)";
-  const text=prompt("Bericht:"); if(!text) return;
-  const all=getAllMessages(); all.push({from:user,to,subject,text,time:Date.now()});
-  saveAllMessages(all); renderConversations();
-}
-
-// Initialize
+// Initial render
 renderConversations();
 </script>
 </body>
