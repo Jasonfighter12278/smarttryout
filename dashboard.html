@@ -71,9 +71,6 @@
     .dropdown-content a:hover {
       background: #f9f9f9;
     }
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
 
     /* Profile dropdown */
     .profile {
@@ -399,6 +396,7 @@
   function showPage(id) {
     document.querySelectorAll(".container").forEach(div => div.classList.add("hidden"));
     document.getElementById(id).classList.remove("hidden");
+    if (id === "messages") renderMessages();
   }
 
   function logout() {
@@ -406,13 +404,22 @@
     window.location.href = "index.html";
   }
 
-  const messages = [];
+  // --- Messaging system ---
+  function getAllMessages() {
+    return JSON.parse(localStorage.getItem("messages") || "[]");
+  }
+  function saveAllMessages(arr) {
+    localStorage.setItem("messages", JSON.stringify(arr));
+  }
+
   function sendMessage() {
     const to = document.getElementById("toInput").value.trim();
     const subject = document.getElementById("subjectInput").value.trim();
     const text = document.getElementById("messageInput").value.trim();
     if (to && text) {
-      messages.push({ user, to, subject, text });
+      const all = getAllMessages();
+      all.push({ from: user, to, subject, text, time: Date.now() });
+      saveAllMessages(all);
       document.getElementById("toInput").value = "";
       document.getElementById("subjectInput").value = "";
       document.getElementById("messageInput").value = "";
@@ -421,20 +428,26 @@
       updateStats();
     }
   }
+
   function renderMessages() {
+    const all = getAllMessages();
+    const inbox = all.filter(m => m.to === user);
     const list = document.getElementById("messageList");
     list.innerHTML = "";
-    if (messages.length === 0) {
+    if (inbox.length === 0) {
       list.innerHTML = '<div class="empty-state">Geen berichten</div>';
       return;
     }
-    messages.forEach(m => {
+    inbox.forEach(m => {
       const div = document.createElement("div");
       div.className = "message";
+      div.style.display = "flex";
+      div.style.gap = "10px";
+      div.style.marginBottom = "12px";
       div.innerHTML = `
-        <img src="${profilePics[m.user]}" alt="pfp" style="width:40px;height:40px;border-radius:50%;margin-right:10px;">
+        <img src="${profilePics[m.from]}" alt="pfp" style="width:40px;height:40px;border-radius:50%;margin-right:10px;">
         <div>
-          <strong>${m.user} ➝ ${m.to}</strong>
+          <strong>${m.from} ➝ ${m.to}</strong>
           <div><em>${m.subject || "(geen onderwerp)"}</em></div>
           <div>${m.text}</div>
         </div>
@@ -445,12 +458,14 @@
   }
 
   // Stats
-  let msgCount = 0;
-  let linkClicks = 0;
   function updateStats() {
-    msgCount = messages.length;
-    document.getElementById("msgCount").textContent = msgCount + " verzonden";
+    const all = getAllMessages();
+    const sent = all.filter(m => m.from === user).length;
+    document.getElementById("msgCount").textContent = sent + " verzonden";
   }
+  updateStats();
+
+  let linkClicks = 0;
   function trackLink() {
     linkClicks++;
     document.getElementById("linkClicks").textContent = linkClicks + " keer bezocht";
@@ -475,7 +490,7 @@
     document.getElementById("inboxView").classList.remove("hidden");
   }
 
-  // Suggestions (only main accounts, no co-accounts)
+  // Suggestions
   const mainAccounts = Object.keys(profilePics);
   const toInput = document.getElementById("toInput");
   const suggestions = document.getElementById("suggestions");
@@ -499,6 +514,26 @@
     } else {
       suggestions.style.display = "none";
     }
+  });
+
+  // --- Dropdown fix ---
+  document.querySelectorAll(".dropdown").forEach(drop => {
+    let timer;
+    const menu = drop.querySelector(".dropdown-content");
+    function openMenu() {
+      clearTimeout(timer);
+      menu.style.display = "block";
+    }
+    function closeMenu() {
+      timer = setTimeout(() => { menu.style.display = "none"; }, 3000);
+    }
+    drop.addEventListener("mouseenter", openMenu);
+    drop.addEventListener("mouseleave", closeMenu);
+    menu.addEventListener("mouseenter", () => clearTimeout(timer));
+    menu.addEventListener("mouseleave", closeMenu);
+    menu.querySelectorAll("a").forEach(a => {
+      a.addEventListener("click", () => { menu.style.display = "none"; });
+    });
   });
 </script>
 
