@@ -4,9 +4,14 @@
   <meta charset="UTF-8">
   <title>Login</title>
   <style>
-    body {
+    /* Reset & setup */
+    * {
       margin: 0;
-      font-family: Arial, sans-serif;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -15,85 +20,104 @@
       background-size: cover;
     }
 
-    /* Centered login box with blur */
+    /* Login card */
     .login-box {
       width: 380px;
-      background: rgba(139, 0, 0, 0.7); /* semi-transparent */
-      backdrop-filter: blur(6px); /* blur effect */
-      -webkit-backdrop-filter: blur(6px); /* Safari support */
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 20px;
       padding: 40px 30px;
-      border-radius: 15px;
       text-align: center;
-      color: white;
-      box-shadow: 0px 10px 25px rgba(0,0,0,0.3);
+      color: #fff;
+      box-shadow: 0px 15px 35px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
     }
 
     .login-box img {
-      width: 160px;
-      margin-bottom: 10px;
+      width: 120px;
+      margin-bottom: 15px;
     }
 
     .school-name {
-      font-size: 15px;
+      font-size: 16px;
+      font-weight: 500;
       margin-bottom: 25px;
+      color: #f1f1f1;
     }
 
+    /* Inputs */
     .input-group {
       position: relative;
-      width: 100%;
       margin-bottom: 20px;
     }
 
     .input-group input {
       width: 100%;
-      padding: 12px 45px 12px 15px;
-      border: none;
-      border-radius: 8px;
+      padding: 14px 45px 14px 15px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 10px;
       font-size: 15px;
-      box-sizing: border-box;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+    }
+
+    .input-group input::placeholder {
+      color: rgba(255,255,255,0.7);
     }
 
     .input-group input:focus {
-      outline: 2px solid #3498db;
+      outline: none;
+      border-color: #3498db;
+      background: rgba(255,255,255,0.25);
     }
 
     .input-group .icon {
       position: absolute;
-      right: 12px;
+      right: 15px;
       top: 50%;
       transform: translateY(-50%);
       font-size: 18px;
-      color: #555;
+      color: rgba(255,255,255,0.7);
       cursor: pointer;
-      user-select: none;
     }
 
+    /* Forgot password */
     .forgot {
       font-size: 12px;
-      color: #ddd;
-      margin-bottom: 15px;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 20px;
       cursor: pointer;
       display: block;
       text-align: left;
+      transition: color 0.2s;
     }
 
+    .forgot:hover {
+      color: #fff;
+    }
+
+    /* Button */
     button {
       width: 100%;
-      padding: 12px;
-      background: #3498db;
+      padding: 14px;
+      background: linear-gradient(135deg, #3498db, #2ecc71);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
-      margin-bottom: 10px;
-      transition: background 0.2s;
+      margin-bottom: 15px;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
     button:hover {
-      background: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0px 8px 20px rgba(0,0,0,0.3);
     }
 
+    /* Error message */
     #error {
       color: #ffb3b3;
       margin-top: 10px;
@@ -129,7 +153,7 @@
   // Hardcoded users
   const users = {
     "test.account": "Lily1606",
-    "tristan.vansonhoven": "FlashFrost246#",
+    "test.account2": "Pass123",
     "test.account3": "Pass456"
   };
 
