@@ -1,251 +1,100 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Roboto, Arial, sans-serif;
-      background: #f6f7fb;
-      color: #333;
-    }
-    .hidden { display: none; }
+<meta charset="UTF-8">
+<title>Dashboard — Messaging v2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --brand:#7b0f14;
+  --bg:#f6f7fb;
+  --card:#fff;
+  --radius:12px;
+  --muted:#555;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);color:#222;}
+a{color:inherit;text-decoration:none;}
+button{cursor:pointer;border:none;background:none;font-family:inherit;}
 
-    /* Navbar */
-    .navbar {
-      background: #7b0f14;
-      color: #fff;
-      padding: 14px 30px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .nav-left, .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 25px;
-    }
-    .nav-links a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 15px;
-      padding: 6px 10px;
-      border-radius: 6px;
-      transition: background 0.2s;
-      cursor: pointer;
-    }
-    .nav-links a:hover {
-      background: rgba(255,255,255,0.15);
-    }
+/* NAVBAR */
+.navbar{background:var(--brand);color:#fff;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 3px 6px rgba(0,0,0,0.2);}
+.nav-left,.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-links{display:flex;gap:12px;align-items:center;}
+.nav-links a{padding:6px 10px;border-radius:6px;transition:background 0.2s;}
+.nav-links a:hover{background:rgba(255,255,255,0.15);}
 
-    /* Dropdown */
-    .dropdown {
-      position: relative;
-    }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background: #fff;
-      min-width: 220px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      border-radius: 8px;
-      overflow: hidden;
-      right: 0;
-      top: 45px;
-      z-index: 200;
-    }
-    .dropdown-content a {
-      color: #333;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-      font-size: 14px;
-      transition: background 0.2s;
-    }
-    .dropdown-content a:hover {
-      background: #f9f9f9;
-    }
+/* DROPDOWN */
+.dropdown{position:relative;}
+.dropdown-toggle{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;background:transparent;color:#fff;font-weight:500;cursor:pointer;}
+.dropdown-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.15);display:none;z-index:200;}
+.dropdown-menu.show{display:block;}
+.dropdown-menu a{display:block;padding:10px 14px;color:#222;font-size:14px;}
+.dropdown-menu a:hover{background:#f9f9f9;}
 
-    /* Profile dropdown */
-    .profile {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      gap: 8px;
-      font-weight: 500;
-    }
-    .profile img {
-      width: 35px; height: 35px; border-radius: 50%; border: 2px solid #fff;
-    }
+/* NOTIFICATIONS */
+.notif{position:relative;font-size:18px;}
+.notif-badge{position:absolute;top:-5px;right:-5px;background:#e74c3c;color:#fff;border-radius:50%;padding:2px 6px;font-size:11px;}
 
-    /* Notification bell */
-    .notif {
-      position: relative;
-      cursor: pointer;
-      font-size: 20px;
-    }
-    .notif-badge {
-      position: absolute;
-      top: -5px; right: -5px;
-      background: #e74c3c;
-      color: #fff;
-      border-radius: 50%;
-      padding: 2px 6px;
-      font-size: 11px;
-    }
+/* PROFILE */
+.profile{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;}
+.profile img{width:35px;height:35px;border-radius:50%;border:2px solid #fff;}
 
-    /* Content */
-    .container {
-      padding: 25px;
-      max-width: 1200px;
-      margin: auto;
-    }
-    h2 { color: #7b0f14; margin-bottom: 10px; }
-    p#quote { font-style: italic; color: #555; }
+/* DASHBOARD GRID */
+.container{max-width:1200px;margin:20px auto;padding:0 20px;}
+.dashboard-grid{display:grid;grid-template-columns:260px 1fr 400px;gap:20px;align-items:start;}
 
-    /* Dashboard overview */
-    .overview {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      margin-top: 25px;
-    }
-    .overview-item {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-      transition: transform 0.2s;
-    }
-    .overview-item:hover { transform: translateY(-3px); }
-    .overview-item h3 {
-      margin: 8px 0;
-      color: #7b0f14;
-      font-size: 20px;
-    }
-    .overview-item p { font-size: 14px; color: #666; }
+/* SIDEBAR */
+.sidebar{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 3px 10px rgba(0,0,0,0.06);}
+.compose-btn{width:100%;padding:10px;background:var(--brand);color:#fff;border-radius:10px;font-weight:600;margin-bottom:14px;}
+.folder-list{display:flex;flex-direction:column;gap:6px;}
+.folder{padding:10px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;color:#333;cursor:pointer;}
+.folder:hover{background:#f6f6f8;}
+.folder.active{background:rgba(123,15,20,0.08);border-left:3px solid var(--brand);}
 
-    /* Announcements */
-    .announcements {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 30px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-    }
-    .announcements h3 { margin-top: 0; color: #7b0f14; }
-    .announcement {
-      padding: 12px 0;
-      border-bottom: 1px solid #eee;
-    }
-    .announcement:last-child { border-bottom: none; }
+/* CONVERSATION LIST */
+.conversations{background:var(--card);border-radius:var(--radius);padding:12px;box-shadow:0 3px 10px rgba(0,0,0,0.06);display:flex;flex-direction:column;height:74vh;}
+.conv-top{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+.search{flex:1;display:flex;gap:6px;}
+.search input{flex:1;padding:8px;border-radius:6px;border:1px solid #ccc;}
+.conv-list{overflow:auto;flex:1;padding-right:6px;}
+.conv-item{display:flex;gap:10px;padding:10px;border-radius:8px;align-items:center;cursor:pointer;}
+.conv-item:hover{background:#f6f6f8;}
+.conv-item.active{background:rgba(123,15,20,0.08);}
+.avatar{width:44px;height:44px;border-radius:50%;flex-shrink:0;}
+.conv-body{flex:1;}
+.conv-sub{font-weight:600;color:var(--brand);}
+.conv-snippet{font-size:13px;color:var(--muted);margin-top:4px;}
+.conv-meta{font-size:12px;color:var(--muted);text-align:right;}
 
-    /* Quick links cards */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-      margin-top: 25px;
-    }
-    .card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 25px 15px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      transition: transform 0.2s;
-    }
-    .card:hover { transform: scale(1.05); }
-    .card img {
-      max-width: 70px;
-      margin-bottom: 12px;
-    }
-    .card p { font-weight: 500; }
+/* MESSAGE VIEWER */
+.viewer{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 3px 10px rgba(0,0,0,0.06);height:74vh;display:flex;flex-direction:column;position:relative;}
+.viewer-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:10px;margin-bottom:10px;}
+.thread{flex:1;overflow:auto;padding:6px;display:flex;flex-direction:column;gap:10px;}
+.bubble-row{display:flex;gap:10px;margin-bottom:12px;}
+.bubble{max-width:72%;padding:10px;border-radius:10px;background:#f3f3f5;}
+.bubble.me{margin-left:auto;background:linear-gradient(180deg,#fff,#f7f7f9);box-shadow:0 2px 6px rgba(0,0,0,0.04);}
+.msg-meta{font-size:12px;color:var(--muted);margin-top:6px;}
+.viewer-empty{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:var(--muted);height:100%;}
 
-    /* Messages */
-    .messages { max-width: 800px; margin: auto; margin-top: 20px; }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-    .topbar button {
-      background: #27ae60;
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .topbar select {
-      padding: 6px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    .message-list {
-      border: 1px solid #ddd;
-      padding: 12px;
-      min-height: 300px;
-      overflow-y: auto;
-      background: #fff;
-      border-radius: 10px;
-      margin-bottom: 12px;
-    }
-    .empty-state {
-      text-align: center;
-      color: #888;
-      margin-top: 100px;
-    }
-
-    /* Composer */
-    .composer {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .field { margin-bottom: 12px; }
-    .field label { display: block; margin-bottom: 4px; font-weight: 500; }
-    .suggestions {
-      position: absolute;
-      background: #fff;
-      border: 1px solid #ccc;
-      width: 100%;
-      max-height: 150px;
-      overflow-y: auto;
-      border-radius: 6px;
-      display: none;
-      z-index: 300;
-    }
-    .suggestions div {
-      padding: 8px;
-      cursor: pointer;
-    }
-    .suggestions div:hover {
-      background: #f0f0f0;
-    }
-  </style>
+/* COMPOSER AT BOTTOM OF VIEWER */
+.viewer-composer{display:flex;gap:8px;padding-top:10px;border-top:1px solid #eee;}
+.viewer-composer input,.viewer-composer textarea{flex:1;padding:8px;border-radius:6px;border:1px solid #ccc;}
+.viewer-composer button{padding:8px 12px;border-radius:6px;border:none;background:var(--brand);color:#fff;}
+.suggestions{position:absolute;background:#fff;border:1px solid #ccc;border-radius:6px;display:none;max-height:150px;overflow:auto;width:calc(100% - 16px);z-index:600;}
+.suggestions div{padding:8px;cursor:pointer;}
+.suggestions div:hover{background:#f0f0f0;}
+</style>
 </head>
 <body>
 
-<!-- Navbar -->
+<!-- NAVBAR -->
 <div class="navbar">
   <div class="nav-left nav-links">
     <a onclick="showPage('home')">🏠 Start</a>
     <div class="dropdown">
-      <a>🔗 Links ▾</a>
-      <div class="dropdown-content">
+      <button class="dropdown-toggle">🔗 Links ▾</button>
+      <div class="dropdown-menu">
         <a href="https://smg.smartschool.be" target="_blank">📘 Smartschool</a>
         <a href="https://youtube.com" target="_blank">🎥 YouTube</a>
         <a href="https://vrt.be" target="_blank">📺 VRT</a>
@@ -254,24 +103,20 @@
     </div>
     <a onclick="showPage('messages')">📩 Berichten</a>
   </div>
-
   <div class="nav-right">
-    <!-- Notifications -->
     <div class="dropdown">
-      <div class="notif">🔔<span class="notif-badge" id="notifCount">2</span></div>
-      <div class="dropdown-content" id="notifDropdown">
+      <div class="notif dropdown-toggle">🔔<span class="notif-badge" id="notifCount">2</span></div>
+      <div class="dropdown-menu" id="notifDropdown">
         <a href="#">📢 Nieuwe aankondiging beschikbaar</a>
         <a href="#">💬 Je hebt een nieuw bericht</a>
       </div>
     </div>
-
-    <!-- Profile -->
     <div class="dropdown">
-      <div class="profile">
+      <div class="profile dropdown-toggle">
         <img id="profilePic" src="" alt="Profiel">
-        <span class="profile-name" id="profileName"></span> ▾
+        <span id="profileName"></span> ▾
       </div>
-      <div class="dropdown-content">
+      <div class="dropdown-menu">
         <a href="#">👤 Profiel</a>
         <a onclick="logout()">🚪 Uitloggen</a>
       </div>
@@ -279,263 +124,175 @@
   </div>
 </div>
 
-<!-- Home -->
+<!-- MAIN CONTENT -->
 <div id="home" class="container">
   <h2>Welkom, <span id="userDisplay"></span> 🎉</h2>
   <p id="quote">"Leren is de sleutel tot succes!"</p>
+</div>
 
-  <!-- Overview widgets -->
-  <div class="overview">
-    <div class="overview-item">
-      <h3 id="todayDate"></h3>
-      <p id="clock"></p>
+<!-- MESSAGES PAGE -->
+<div id="messages" class="container hidden">
+  <div class="dashboard-grid">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <button class="compose-btn" onclick="toggleComposer()">+ Nieuw bericht</button>
+      <div class="folder-list">
+        <div class="folder active" data-folder="inbox">📥 Inbox</div>
+        <div class="folder" data-folder="sent">📤 Verzonden</div>
+      </div>
     </div>
-    <div class="overview-item">
-      <h3>📩 Berichten</h3>
-      <p id="msgCount">0 verzonden</p>
-    </div>
-    <div class="overview-item">
-      <h3>🔗 Links</h3>
-      <p id="linkClicks">0 keer bezocht</p>
-    </div>
-  </div>
 
-  <!-- Announcements -->
-  <div class="announcements">
-    <h3>📢 Aankondigingen</h3>
-    <div class="announcement">Nieuwe schoolreglement update – bekijk Smartschool.</div>
-    <div class="announcement">Sportdag op 23 september!</div>
-    <div class="announcement">Have fun!</div>
-  </div>
+    <!-- Conversations -->
+    <div class="conversations">
+      <div class="conv-top">
+        <div class="search">
+          <input type="text" id="searchConv" placeholder="Zoeken...">
+        </div>
+      </div>
+      <div class="conv-list" id="convList">
+        <div class="conv-item empty">Geen berichten</div>
+      </div>
+    </div>
 
-  <!-- Quick links cards -->
-  <div class="card-grid">
-    <div class="card">
-      <a href="https://smg.smartschool.be" target="_blank" onclick="trackLink()">
-        <img src="https://cdn-icons-png.flaticon.com/512/1055/1055687.png">
-        <p>Smartschool</p>
-      </a>
-    </div>
-    <div class="card">
-      <a href="https://youtube.com" target="_blank" onclick="trackLink()">
-        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
-        <p>YouTube</p>
-      </a>
-    </div>
-    <div class="card">
-      <a href="https://vrt.be" target="_blank" onclick="trackLink()">
-        <img src="https://cdn-icons-png.flaticon.com/512/888/888879.png">
-        <p>VRT</p>
-      </a>
-    </div>
-    <div class="card">
-      <a href="https://wikipedia.org" target="_blank" onclick="trackLink()">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733553.png">
-        <p>Wikipedia</p>
-      </a>
+    <!-- Message Viewer -->
+    <div class="viewer" id="viewer">
+      <div class="viewer-empty">
+        <p>Selecteer een bericht om te bekijken</p>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Messages -->
-<div id="messages" class="container hidden">
-  <h2>Berichten</h2>
-  <div class="messages">
-    <!-- Inbox -->
-    <div id="inboxView">
-      <div class="topbar">
-        <span>📥 Inbox</span>
-        <button id="newMessageBtn">+ Nieuw bericht</button>
-        <select>
-          <option>Sorteren</option>
-          <option>Datum</option>
-          <option>Naam</option>
-        </select>
-      </div>
-      <div class="message-list" id="messageList">
-        <div class="empty-state">Geen berichten</div>
-      </div>
-    </div>
-
-    <!-- Composer -->
-    <div id="composerView" class="composer hidden">
-      <h3 style="color:#7b0f14;">Nieuw bericht</h3>
-      <div class="field" style="position:relative;">
-        <label for="toInput">Aan:</label>
-        <input type="text" id="toInput" autocomplete="off" placeholder="Typ een naam...">
-        <div id="suggestions" class="suggestions"></div>
-      </div>
-      <div class="field">
-        <label for="subjectInput">Onderwerp:</label>
-        <input type="text" id="subjectInput">
-      </div>
-      <div class="field">
-        <label for="messageInput">Bericht:</label>
-        <textarea id="messageInput" rows="4"></textarea>
-      </div>
-      <button onclick="sendMessage()">Verstuur</button>
-      <button onclick="cancelComposer()" style="background:#ccc;color:#333;margin-left:8px;">Annuleren</button>
-    </div>
+<!-- COMPOSER PANEL -->
+<div class="composer-panel" id="composerPanel">
+  <h3>Nieuw bericht</h3>
+  <div class="field" style="position:relative;">
+    <label>Aan:</label>
+    <input type="text" id="toInput" placeholder="Typ een naam...">
+    <div id="suggestions" class="suggestions"></div>
+  </div>
+  <div class="field">
+    <label>Onderwerp:</label>
+    <input type="text" id="subjectInput">
+  </div>
+  <div class="field">
+    <label>Bericht:</label>
+    <textarea id="messageInput" rows="5"></textarea>
+  </div>
+  <div class="composer-actions">
+    <button class="btn ghost" onclick="toggleComposer()">Annuleren</button>
+    <button class="btn primary" onclick="sendMessage()">Verstuur</button>
   </div>
 </div>
 
 <script>
-  const user = localStorage.getItem("loggedInUser");
-  if (!user) { window.location.href = "index.html"; }
+const user = localStorage.getItem("loggedInUser") || "test.account";
+document.getElementById("userDisplay").textContent = user;
+document.getElementById("profileName").textContent = user;
+const profilePics = {
+  "test.account":"https://cdn-icons-png.flaticon.com/512/194/194915.png",
+  "test.account2":"https://static.wikia.nocookie.net/h__/images/0/09/Vorhees.jpg",
+  "test.account3":"https://cdn-icons-png.flaticon.com/512/194/194915.png"
+};
+document.getElementById("profilePic").src = profilePics[user]||profilePics["test.account"];
 
-  document.getElementById("userDisplay").textContent = user;
-  document.getElementById("profileName").textContent = user;
+function logout(){localStorage.removeItem("loggedInUser");window.location.href="index.html";}
+function showPage(id){document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");}
+function toggleComposer(){document.getElementById("composerPanel").classList.toggle("open");}
 
-  const profilePics = {
-    "test.account": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGF51WuYpwHQf8uqe0cZTHfmp1KHqbgQyDnw&s",
-    "test.account2": "https://static.wikia.nocookie.net/h__/images/0/09/Vorhees.jpg/revision/latest/scale-to-width-down/284?cb=20120826172608&path-prefix=halloween",
-    "test.account3": "https://cdn-icons-png.flaticon.com/512/194/194915.png"
-  };
-  document.getElementById("profilePic").src = profilePics[user] || profilePics["test.account"];
+// Dropdowns
+document.querySelectorAll(".dropdown").forEach(drop=>{
+  const toggle=drop.querySelector(".dropdown-toggle");
+  const menu=drop.querySelector(".dropdown-menu");
+  toggle.addEventListener("click",()=>menu.classList.toggle("show"));
+  document.addEventListener("click",e=>{if(!drop.contains(e.target)){menu.classList.remove("show");}});
+});
 
-  function showPage(id) {
-    document.querySelectorAll(".container").forEach(div => div.classList.add("hidden"));
-    document.getElementById(id).classList.remove("hidden");
-    if (id === "messages") renderMessages();
+// Messaging system with threads
+function getAllMessages(){return JSON.parse(localStorage.getItem("messages")||"[]");}
+function saveAllMessages(arr){localStorage.setItem("messages",JSON.stringify(arr));}
+
+const mainAccounts=Object.keys(profilePics);
+const toInput=document.getElementById("toInput");
+const suggestions=document.getElementById("suggestions");
+toInput.addEventListener("input",()=>{
+  const q=toInput.value.toLowerCase();suggestions.innerHTML="";
+  if(!q){suggestions.style.display="none";return;}
+  const res=mainAccounts.filter(a=>a.toLowerCase().includes(q)&&a!==user);
+  if(res.length){res.forEach(a=>{const div=document.createElement("div");div.textContent=a;div.onclick=()=>{toInput.value=a;suggestions.style.display="none";};suggestions.appendChild(div);});suggestions.style.display="block";} 
+  else suggestions.style.display="none";
+});
+
+function sendMessage(){
+  const to=toInput.value.trim();
+  const subj=document.getElementById("subjectInput").value.trim();
+  const text=document.getElementById("messageInput").value.trim();
+  if(to&&text){
+    const all=getAllMessages();
+    all.push({from:user,to,subject:subj,text,time:Date.now()});
+    saveAllMessages(all);
+    toInput.value="";document.getElementById("subjectInput").value="";document.getElementById("messageInput").value="";
+    toggleComposer();renderConversations();
   }
+}
 
-  function logout() {
-    localStorage.removeItem("loggedInUser");
-    window.location.href = "index.html";
-  }
-
-  // --- Messaging system ---
-  function getAllMessages() {
-    return JSON.parse(localStorage.getItem("messages") || "[]");
-  }
-  function saveAllMessages(arr) {
-    localStorage.setItem("messages", JSON.stringify(arr));
-  }
-
-  function sendMessage() {
-    const to = document.getElementById("toInput").value.trim();
-    const subject = document.getElementById("subjectInput").value.trim();
-    const text = document.getElementById("messageInput").value.trim();
-    if (to && text) {
-      const all = getAllMessages();
-      all.push({ from: user, to, subject, text, time: Date.now() });
-      saveAllMessages(all);
-      document.getElementById("toInput").value = "";
-      document.getElementById("subjectInput").value = "";
-      document.getElementById("messageInput").value = "";
-      cancelComposer();
-      renderMessages();
-      updateStats();
-    }
-  }
-
-  function renderMessages() {
-    const all = getAllMessages();
-    const inbox = all.filter(m => m.to === user);
-    const list = document.getElementById("messageList");
-    list.innerHTML = "";
-    if (inbox.length === 0) {
-      list.innerHTML = '<div class="empty-state">Geen berichten</div>';
-      return;
-    }
-    inbox.forEach(m => {
-      const div = document.createElement("div");
-      div.className = "message";
-      div.style.display = "flex";
-      div.style.gap = "10px";
-      div.style.marginBottom = "12px";
-      div.innerHTML = `
-        <img src="${profilePics[m.from]}" alt="pfp" style="width:40px;height:40px;border-radius:50%;margin-right:10px;">
-        <div>
-          <strong>${m.from} ➝ ${m.to}</strong>
-          <div><em>${m.subject || "(geen onderwerp)"}</em></div>
-          <div>${m.text}</div>
-        </div>
-      `;
-      list.appendChild(div);
-    });
-    list.scrollTop = list.scrollHeight;
-  }
-
-  // Stats
-  function updateStats() {
-    const all = getAllMessages();
-    const sent = all.filter(m => m.from === user).length;
-    document.getElementById("msgCount").textContent = sent + " verzonden";
-  }
-  updateStats();
-
-  let linkClicks = 0;
-  function trackLink() {
-    linkClicks++;
-    document.getElementById("linkClicks").textContent = linkClicks + " keer bezocht";
-  }
-
-  // Clock
-  function updateClock() {
-    const now = new Date();
-    document.getElementById("todayDate").textContent = now.toLocaleDateString("nl-BE", { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-    document.getElementById("clock").textContent = now.toLocaleTimeString("nl-BE");
-  }
-  setInterval(updateClock, 1000);
-  updateClock();
-
-  // Inbox/composer toggle
-  document.getElementById("newMessageBtn").onclick = () => {
-    document.getElementById("inboxView").classList.add("hidden");
-    document.getElementById("composerView").classList.remove("hidden");
-  };
-  function cancelComposer() {
-    document.getElementById("composerView").classList.add("hidden");
-    document.getElementById("inboxView").classList.remove("hidden");
-  }
-
-  // Suggestions
-  const mainAccounts = Object.keys(profilePics);
-  const toInput = document.getElementById("toInput");
-  const suggestions = document.getElementById("suggestions");
-
-  toInput.addEventListener("input", () => {
-    const query = toInput.value.toLowerCase();
-    suggestions.innerHTML = "";
-    if (!query) { suggestions.style.display = "none"; return; }
-    const results = mainAccounts.filter(acc => acc.toLowerCase().includes(query) && acc !== user);
-    if (results.length) {
-      results.forEach(acc => {
-        const div = document.createElement("div");
-        div.textContent = acc;
-        div.onclick = () => {
-          toInput.value = acc;
-          suggestions.style.display = "none";
-        };
-        suggestions.appendChild(div);
-      });
-      suggestions.style.display = "block";
-    } else {
-      suggestions.style.display = "none";
-    }
+// Threads
+let currentThread=null;
+function renderConversations(){
+  const convList=document.getElementById("convList");
+  const all=getAllMessages();
+  const inbox=all.filter(m=>m.to===user).sort((a,b)=>b.time-a.time);
+  convList.innerHTML="";
+  if(inbox.length===0){convList.innerHTML='<div class="conv-item empty">Geen berichten</div>';return;}
+  const threads={};
+  inbox.forEach(m=>{
+    const key=[m.from,m.to].sort().join('|');
+    if(!threads[key]) threads[key]=[]; threads[key].push(m);
   });
-
-  // --- Dropdown fix ---
-  document.querySelectorAll(".dropdown").forEach(drop => {
-    let timer;
-    const menu = drop.querySelector(".dropdown-content");
-    function openMenu() {
-      clearTimeout(timer);
-      menu.style.display = "block";
-    }
-    function closeMenu() {
-      timer = setTimeout(() => { menu.style.display = "none"; }, 3000);
-    }
-    drop.addEventListener("mouseenter", openMenu);
-    drop.addEventListener("mouseleave", closeMenu);
-    menu.addEventListener("mouseenter", () => clearTimeout(timer));
-    menu.addEventListener("mouseleave", closeMenu);
-    menu.querySelectorAll("a").forEach(a => {
-      a.addEventListener("click", () => { menu.style.display = "none"; });
-    });
+  Object.keys(threads).forEach(k=>{
+    const msgs=threads[k]; const latest=msgs[msgs.length-1];
+    const div=document.createElement("div");
+    div.className="conv-item";
+    div.innerHTML=`<img src="${profilePics[latest.from]}" class="avatar"><div class="conv-body"><div class="conv-sub">${latest.from} ➝ ${latest.to}</div><div class="conv-snippet">${latest.subject||'(geen onderwerp)'} - ${latest.text.substring(0,40)}</div></div><div class="conv-meta">${new Date(latest.time).toLocaleTimeString()}</div>`;
+    div.onclick=()=>showThread(msgs); convList.appendChild(div);
   });
+}
+
+function showThread(messages){
+  currentThread=messages;
+  const viewer=document.getElementById("viewer"); viewer.innerHTML='';
+  const header=document.createElement("div"); header.className="viewer-header";
+  header.innerHTML=`<strong>Conversatie: ${messages[0].from} & ${messages[0].to}</strong>`;
+  viewer.appendChild(header);
+  const threadDiv=document.createElement("div"); threadDiv.className="thread";
+  messages.forEach(m=>{
+    const row=document.createElement("div"); row.className="bubble-row";
+    const bubble=document.createElement("div"); bubble.className="bubble"+(m.from===user?" me":"");
+    bubble.innerHTML=`<strong>${m.from}</strong>: ${m.text}<div class="msg-meta">${new Date(m.time).toLocaleString()}</div>`;
+    row.appendChild(bubble); threadDiv.appendChild(row);
+  });
+  viewer.appendChild(threadDiv);
+  // composer at bottom
+  const composer=document.createElement("div"); composer.className="viewer-composer";
+  composer.innerHTML=`<input type="text" id="replyInput" placeholder="Typ je reactie..."><button onclick="sendReply()">Verstuur</button>`;
+  viewer.appendChild(composer);
+  threadDiv.scrollTop=threadDiv.scrollHeight;
+}
+
+function sendReply(){
+  if(!currentThread) return;
+  const input=document.getElementById("replyInput"); const text=input.value.trim();
+  if(!text) return;
+  const all=getAllMessages();
+  const last=currentThread[currentThread.length-1];
+  const msg={from:user,to:last.from===user?last.to:last.from,subject:last.subject,text,time:Date.now()};
+  all.push(msg); saveAllMessages(all); input.value="";
+  showThread([...currentThread,msg]);
+  renderConversations();
+}
+
+// Initial
+renderConversations();
 </script>
-
 </body>
 </html>
