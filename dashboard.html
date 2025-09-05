@@ -33,11 +33,10 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
 #todayDate{font-weight:700}
 #todayTime{font-size:18px;margin-top:6px}
 .agenda-list{display:grid;grid-template-columns:1fr;gap:10px}
-.agenda-item{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px;min-height:84px}
-.agenda-time{font-weight:700;min-width:80px}
+.agenda-item{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px;min-height:84px}
 .agenda-title{font-weight:700}
-.row{display:flex;gap:10px;align-items:center}
 .small{font-size:13px;color:var(--muted)}
+.row{display:flex;gap:10px;align-items:center}
 .btn{background:var(--brand);color:#fff;padding:8px 12px;border-radius:8px;font-weight:700;border:none;cursor:pointer}
 .btn-ghost{background:#f3f4f6;padding:6px 10px;border-radius:8px;border:none;cursor:pointer}
 .timetable-wrap{overflow:auto}
@@ -47,8 +46,9 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
 .timetable .slot-cell{min-height:88px;padding:10px;border-right:1px solid var(--line);background:#fff;cursor:pointer}
 .slot-inner{height:100%;border-radius:8px;padding:8px;border-left:8px solid transparent;display:flex;flex-direction:column;justify-content:center}
 .modal{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:999}
-.modal .box{background:#fff;padding:16px;border-radius:10px;width:340px;box-shadow:0 12px 40px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:8px}
-.modal input[type=text],.modal input[type=color]{padding:8px;border-radius:8px;border:1px solid #ddd}
+.modal .box{background:#fff;padding:16px;border-radius:10px;width:360px;box-shadow:0 12px 40px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:8px}
+.modal input,.modal textarea,.modal select{padding:8px;border-radius:8px;border:1px solid #ddd}
+.modal textarea{resize:vertical;min-height:80px}
 .modal .actions{display:flex;gap:8px;justify-content:flex-end}
 .week-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 </style>
@@ -90,7 +90,6 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
     <div class="nav-item"><span id="logoutBtn" class="logout-btn" onclick="logout()">⎋</span></div>
   </div>
 </div>
-
 <div id="home" class="container">
   <div class="center-time">
     <div id="todayDate"></div>
@@ -136,17 +135,15 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
     </div>
   </div>
 </div>
-
 <div id="agenda" class="container hidden">
   <div class="card">
     <div class="row" style="justify-content:space-between">
       <h2>Agenda</h2>
-      <button class="btn" onclick="promptAddAgenda()">+ Item</button>
+      <button class="btn" onclick="openAgendaModal()">+ Item</button>
     </div>
     <div id="agendaItems" class="agenda-list">Geen items</div>
   </div>
 </div>
-
 <div id="lessenrooster" class="container hidden">
   <div class="card">
     <div class="week-nav">
@@ -159,7 +156,6 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
     </div>
   </div>
 </div>
-
 <div id="messages" class="container hidden">
   <div class="card">
     <h2>Berichten</h2>
@@ -167,7 +163,6 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
     <button class="btn" onclick="openCompose()">Nieuw bericht</button>
   </div>
 </div>
-
 <div id="notifications" class="container hidden">
   <div class="card">
     <h2>Meldingen</h2>
@@ -175,7 +170,6 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
     <button class="btn-ghost" onclick="markAllNotifsRead()">Alles als gelezen</button>
   </div>
 </div>
-
 <div id="lessonModal" class="modal">
   <div class="box">
     <input id="modalSubject" type="text" placeholder="Vak">
@@ -184,11 +178,22 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
     <input id="modalColor" type="color" value="#ffd166">
     <div class="actions">
       <button class="btn" id="saveLessonBtn">Opslaan</button>
-      <button class="btn-ghost" onclick="closeModal()">Annuleer</button>
+      <button class="btn-ghost" onclick="closeLessonModal()">Annuleer</button>
     </div>
   </div>
 </div>
-
+<div id="agendaModal" class="modal">
+  <div class="box">
+    <input id="agendaTitle" type="text" placeholder="Titel">
+    <input id="agendaDate" type="date">
+    <input id="agendaTime" type="time">
+    <textarea id="agendaDesc" placeholder="Beschrijving"></textarea>
+    <div class="actions">
+      <button class="btn" onclick="saveAgendaItem()">Opslaan</button>
+      <button class="btn-ghost" onclick="closeAgendaModal()">Annuleer</button>
+    </div>
+  </div>
+</div>
 <script>
 const ACCOUNTS={"admin":{name:"Beheerder",img:"https://cdn-icons-png.flaticon.com/512/147/147144.png",admin:true}};
 let user=localStorage.getItem('loggedInUser')||'admin';
@@ -197,60 +202,48 @@ document.getElementById('userDisplay').textContent=currentUserObj.name;
 document.getElementById('profileName').textContent=currentUserObj.name;
 document.getElementById('roleText').textContent=currentUserObj.admin?'Beheerder':'Leerling';
 document.getElementById('profilePic').src=currentUserObj.img;
-
 const STORAGE={schedule:'school.schedule',messages:'school.messages',notifications:'school.notifications',agenda:'school.agenda'};
 function save(key,val){localStorage.setItem(key,JSON.stringify(val))}
 function load(key,def){try{return JSON.parse(localStorage.getItem(key))||def}catch(e){return def}}
 if(!localStorage.getItem(STORAGE.schedule))save(STORAGE.schedule,{});
-if(!localStorage.getItem(STORAGE.messages))save(STORAGE.messages,{});
+if(!localStorage.getItem(STORAGE.messages))save(STORAGE.messages,[]);
 if(!localStorage.getItem(STORAGE.notifications))save(STORAGE.notifications,[]);
-if(!localStorage.getItem(STORAGE.agenda))save(STORAGE.agenda,{});
-
+if(!localStorage.getItem(STORAGE.agenda))save(STORAGE.agenda,[]);
 function pad(n){return n<10?'0'+n:n;}
 function fmtDate(d){return d.toLocaleDateString('nl-NL',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
 function fmtTime(d){return pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());}
 function tick(){const n=new Date();document.getElementById('todayDate').textContent=fmtDate(n);document.getElementById('todayTime').textContent=fmtTime(n);setTimeout(tick,1000);}
 tick();
-
 function showPage(id){document.querySelectorAll('.container').forEach(c=>c.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
 function logout(){localStorage.removeItem('loggedInUser');location.reload();}
 document.querySelectorAll('.has-dropdown').forEach(dd=>{const menu=dd.querySelector('.dropdown-menu');dd.addEventListener('click',e=>{e.stopPropagation();menu.classList.toggle('open');document.addEventListener('click',function h(ev){if(!dd.contains(ev.target)){menu.classList.remove('open');document.removeEventListener('click',h)}})})})
 const userMenu=document.getElementById('userMenu');userMenu.innerHTML=Object.keys(ACCOUNTS).map(k=>`<button onclick="switchAccount('${k}')">${ACCOUNTS[k].name}</button>`).join('');
 function switchAccount(id){user=id;localStorage.setItem('loggedInUser',id);location.reload();}
-
-// Agenda
-function renderAgenda(){const data=load(STORAGE.agenda,{});const el=document.getElementById('agendaItems');el.innerHTML='';if(Object.keys(data).length===0){el.textContent='Geen items'}else{for(const k in data){const item=data[k];const div=document.createElement('div');div.className='agenda-item';div.innerHTML=`<div class="agenda-time">${item.time||'--:--'}</div><div class="agenda-title">${item.title}</div>`;el.appendChild(div)}}}
-function promptAddAgenda(){const title=prompt('Titel van item?');if(!title)return;const time=prompt('Tijd (bv. 12:30)?');const data=load(STORAGE.agenda,{});const id='a'+Date.now();data[id]={title,time};save(STORAGE.agenda,data);renderAgenda();renderMiniAgenda();}
-function renderMiniAgenda(){const data=load(STORAGE.agenda,{});const el=document.getElementById('todayAgendaList');el.innerHTML='';let any=false;for(const k in data){const it=data[k];const div=document.createElement('div');div.className='agenda-item';div.innerHTML=`<div class="agenda-time">${it.time||'--:--'}</div><div class="agenda-title">${it.title}</div>`;el.appendChild(div);any=true;}if(!any)el.textContent='Geen items voor vandaag';}
+function renderAgenda(){const data=load(STORAGE.agenda,[]);const el=document.getElementById('agendaItems');el.innerHTML='';if(data.length===0){el.textContent='Geen items'}else{data.sort((a,b)=>new Date(a.date+" "+a.time)-new Date(b.date+" "+b.time));data.forEach(it=>{const div=document.createElement('div');div.className='agenda-item';div.innerHTML=`<div class="agenda-title">${it.title}</div><div class="small">${it.date} ${it.time}</div><div>${it.desc||''}</div>`;el.appendChild(div)})}}
+function renderMiniAgenda(){const data=load(STORAGE.agenda,[]);const el=document.getElementById('todayAgendaList');el.innerHTML='';let today=new Date().toISOString().split('T')[0];let any=false;data.forEach(it=>{if(it.date===today){const div=document.createElement('div');div.className='agenda-item';div.innerHTML=`<div class="agenda-title">${it.title}</div><div class="small">${it.time}</div>`;el.appendChild(div);any=true}});if(!any)el.textContent='Geen items voor vandaag';}
+function openAgendaModal(){document.getElementById('agendaModal').style.display='flex'}
+function closeAgendaModal(){document.getElementById('agendaModal').style.display='none'}
+function saveAgendaItem(){const title=document.getElementById('agendaTitle').value;const date=document.getElementById('agendaDate').value;const time=document.getElementById('agendaTime').value;const desc=document.getElementById('agendaDesc').value;if(!title||!date)return;const data=load(STORAGE.agenda,[]);data.push({title,date,time,desc});save(STORAGE.agenda,data);closeAgendaModal();renderAgenda();renderMiniAgenda();}
 renderAgenda();renderMiniAgenda();
-
-// Messages
 function renderMessages(){const msgs=load(STORAGE.messages,[]);const el=document.getElementById('messageList');el.innerHTML='';if(msgs.length===0){el.textContent='Geen berichten'}else{msgs.forEach(m=>{const div=document.createElement('div');div.className='agenda-item';div.innerHTML=`<div class="agenda-title">${m.title}</div><div class="small">${m.time}</div>`;el.appendChild(div)})}}
 function openCompose(){const title=prompt('Titel bericht?');if(!title)return;const time=fmtTime(new Date());const msgs=load(STORAGE.messages,[]);msgs.push({title,time});save(STORAGE.messages,msgs);renderMessages();updateKPI();}
 renderMessages();
-
-// Notifications
 function renderNotifications(){const notifs=load(STORAGE.notifications,[]);const el=document.getElementById('notifList');el.innerHTML='';if(notifs.length===0){el.textContent='Geen meldingen'}else{notifs.forEach(n=>{const div=document.createElement('div');div.className='agenda-item';div.textContent=n})}document.getElementById('notifCountHome').textContent=notifs.length;document.getElementById('notifBadge').textContent=notifs.length;document.getElementById('notifBadge').classList.toggle('hidden',notifs.length===0);}
 function markAllNotifsRead(){save(STORAGE.notifications,[]);renderNotifications();}
 renderNotifications();
-
-// KPIs
 function updateKPI(){const msgs=load(STORAGE.messages,[]);document.getElementById('unreadMsgs').textContent=msgs.length;}
 updateKPI();
-
-// Timetable
 let currentWeek=0;
 const days=['Ma','Di','Wo','Do','Vr'];
 const hours=['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00'];
-function renderTimetable(){const data=load(STORAGE.schedule,{});const el=document.getElementById('timetable');el.innerHTML='';el.appendChild(document.createElement('div')); // clear
-const headerRow=document.createElement('div');headerRow.className='timetable';headerRow.innerHTML='<div class="col-header">Uur</div>'+days.map(d=>`<div class="col-header">${d}</div>`).join('');el.appendChild(headerRow);hours.forEach(h=>{const row=document.createElement('div');row.className='timetable';row.innerHTML=`<div class="time-cell">${h}</div>`+days.map((d,i)=>`<div class="slot-cell" onclick="editSlot('${d}','${h}')"><div class="slot-inner"></div></div>`).join('');el.appendChild(row)})}
-function editSlot(day,hour){const subj=prompt('Vak:');if(!subj)return;const color=prompt('Kleur (hex):','#ffd166');const data=load(STORAGE.schedule,{});data[`${day}-${hour}`]={subj,color};save(STORAGE.schedule,data);renderTimetable();}
+function renderTimetable(){const data=load(STORAGE.schedule,{});const el=document.getElementById('timetable');el.innerHTML='';el.appendChild(document.createElement('div'));const headerRow=document.createElement('div');headerRow.className='timetable';headerRow.innerHTML='<div class="col-header">Uur</div>'+days.map(d=>`<div class="col-header">${d}</div>`).join('');el.appendChild(headerRow);hours.forEach(h=>{const row=document.createElement('div');row.className='timetable';row.innerHTML=`<div class="time-cell">${h}</div>`+days.map(d=>{const key=`${d}-${h}`;const slot=data[key];if(slot){return `<div class="slot-cell" onclick="editSlot('${d}','${h}')"><div class="slot-inner" style="border-left-color:${slot.color}"><b>${slot.subj}</b><span class="small">${slot.teacher||''} ${slot.room||''}</span></div></div>`}else{return `<div class="slot-cell" onclick="editSlot('${d}','${h}')"><div class="slot-inner"></div></div>`}}).join('');el.appendChild(row)})}
+function editSlot(day,hour){editingDay=day;editingHour=hour;document.getElementById('lessonModal').style.display='flex'}
+function closeLessonModal(){document.getElementById('lessonModal').style.display='none'}
+let editingDay=null,editingHour=null;
+document.getElementById('saveLessonBtn').onclick=function(){const subj=document.getElementById('modalSubject').value;if(!subj){closeLessonModal();return}const teacher=document.getElementById('modalTeacher').value;const room=document.getElementById('modalRoom').value;const color=document.getElementById('modalColor').value;const data=load(STORAGE.schedule,{});data[`${editingDay}-${editingHour}`]={subj,teacher,room,color};save(STORAGE.schedule,data);closeLessonModal();renderTimetable();}
 function prevWeek(){currentWeek--;document.getElementById('weekLabel').textContent='Week '+currentWeek;renderTimetable();}
 function nextWeek(){currentWeek++;document.getElementById('weekLabel').textContent='Week '+currentWeek;renderTimetable();}
 renderTimetable();
-
-// Modal helpers
-function closeModal(){document.getElementById('lessonModal').style.display='none';}
 </script>
 </body>
 </html>
