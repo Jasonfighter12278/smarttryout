@@ -53,7 +53,8 @@
     .agenda-item{background:#922;padding:8px;border-radius:6px;display:flex;justify-content:space-between;align-items:center}
     .agenda-item span{font-size:14px}
     .agenda-item button{background:#a31d1d;border:none;color:#fff;padding:4px 8px;border-radius:4px;cursor:pointer}
-    .mail-container{display:flex;height:calc(100vh - 56px)}
+    .mail-container{display:none;height:calc(100vh - 56px)}
+    .mail-container.active{display:flex}
     .mail-sidebar{width:220px;background:#922;padding:12px;display:flex;flex-direction:column;gap:10px}
     .mail-sidebar button{background:none;border:none;color:#fff;padding:8px;text-align:left;cursor:pointer;border-radius:6px}
     .mail-sidebar button:hover{background:rgba(255,255,255,0.1)}
@@ -77,8 +78,49 @@
   </div>
   <div class="nav-right">
     <div class="nav-item" onclick="showPage('home')">Start</div>
-    <div class="nav-item" onclick="showPage('agenda')">Agenda</div>
+    <div class="nav-item has-dropdown" id="gotoItem">Ga naar ▾
+      <div class="dropdown-menu simple" id="gotoMenu">
+        <a href="#" onclick="showPage('agenda')">📅 Agenda</a>
+        <a href="#">📘 Lesrooster</a>
+        <a href="#" onclick="showPage('berichten')">✉️ Berichten</a>
+      </div>
+    </div>
+    <div class="nav-item has-dropdown" id="linksItem">Links ▾
+      <div class="dropdown-menu links" id="linksMenu">
+        <a href="https://leerling.appwel.be/login" target="_blank">Appwel</a>
+        <a href="https://www.diddit.be/login" target="_blank">diddit</a>
+        <a href="https://redwood.e-ducate.me/login" target="_blank">e-ducate.me</a>
+        <a href="https://platform.ftrprf.be" target="_blank">FTRPRF</a>
+        <a href="https://myway.i-learn.be/login" target="_blank">i-Learn</a>
+        <a href="https://platform.ididdit.be/login" target="_blank">iDiddit</a>
+        <a href="#">Lernova</a>
+        <a href="https://www.pelckmansportaal.be" target="_blank">Pelckmans Portaal</a>
+        <a href="https://www.scholierenkoepel.be" target="_blank">Scholierenkoepel</a>
+        <a href="https://apps.plantyn.com" target="_blank">Scoodle</a>
+        <a href="https://onderwijs.hetarchief.be" target="_blank">Uitgeklaard</a>
+        <a href="https://onderwijs.vrt.be/edubox-bib" target="_blank">VRT Leer mee</a>
+      </div>
+    </div>
+    <div class="nav-item has-dropdown" id="meldingenItem">Meldingen ▾
+      <div class="dropdown-menu meldingen" id="meldingenMenu">
+        <div class="meldingen-top">
+          <div class="toggle">
+            <button id="aanBtn" class="active">Aan</button>
+            <button id="uitBtn">Uit</button>
+          </div>
+          <div>
+            <button>Instellingen</button>
+            <button>Alles wissen</button>
+          </div>
+        </div>
+        <div class="melding-body">
+          <div style="font-size:48px">💬</div>
+          <p>Er zijn geen meldingen. Je bent volledig up-to-date!</p>
+        </div>
+      </div>
+    </div>
     <div class="nav-item" onclick="showPage('berichten')">Berichten<span class="badge" id="mailCount">0</span></div>
+    <div class="nav-item" title="Afmelden">⎋</div>
   </div>
 </div>
 
@@ -141,6 +183,18 @@
 </div>
 
 <script>
+document.querySelectorAll('.has-dropdown').forEach(item=>{
+  item.addEventListener('click',e=>{
+    e.stopPropagation();
+    const menu=item.querySelector('.dropdown-menu');
+    document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'));
+    menu.classList.toggle('open');
+  });
+});
+document.addEventListener('click',()=>{document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'))});
+document.getElementById('aanBtn').addEventListener('click',()=>{document.getElementById('aanBtn').classList.add('active');document.getElementById('uitBtn').classList.remove('active')});
+document.getElementById('uitBtn').addEventListener('click',()=>{document.getElementById('uitBtn').classList.add('active');document.getElementById('aanBtn').classList.remove('active')});
+
 function showPage(id){
   document.querySelectorAll('.shell,.mail-container').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
