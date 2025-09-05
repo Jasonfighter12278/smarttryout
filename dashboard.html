@@ -19,138 +19,116 @@ body{font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var
 .nav-right{display:flex;align-items:center;gap:18px}
 .nav-item{position:relative;cursor:pointer}
 .nav-item:hover{opacity:.85}
-.badge{background:#1e90ff;color:#fff;border-radius:999px;font-size:12px;padding:2px 6px;margin-left:4px}
-.dropdown-menu{display:none;position:absolute;top:100%;left:0;background:#922;border:1px solid var(--border);border-radius:8px;z-index:1000}
-.dropdown-menu.open{display:block}
-.dropdown-menu.links{display:none;grid-template-columns:1fr 1fr;gap:8px;min-width:360px;padding:10px}
-.dropdown-menu.links.open{display:grid}
-.dropdown-menu.simple{min-width:180px;padding:6px}
-.dropdown-menu a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;color:#ddd;text-decoration:none;font-size:14px}
-.dropdown-menu a:hover{background:rgba(255,255,255,.1)}
-.dropdown-menu.meldingen{width:420px;background:#922;padding:12px;border-radius:8px}
-.meldingen-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.toggle{display:inline-flex;border:1px solid #fff;border-radius:6px;overflow:hidden}
-.toggle button{padding:4px 12px;background:none;border:none;color:#fff;cursor:pointer}
-.toggle button.active{background:#fff;color:#922}
-.melding-body{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;color:#ccc;text-align:center}
 .shell{display:grid;grid-template-columns:280px 1fr 320px;min-height:calc(100vh - 56px)}
 .left-pane,.center-pane,.right-pane{padding:18px;border-color:var(--border)}
 .left-pane{border-right:1px solid var(--border)}
 .right-pane{border-left:1px solid var(--border)}
-.clock{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:52px;font-weight:700}
-.clock small{margin-top:12px;font-size:20px;color:var(--muted)}
-.calendar{}
-.cal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.cal-cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:50%;font-size:14px;color:#fff}
-.cal-head{border:none;font-weight:700}
-.cal-cell.today{outline:2px solid #fff}
-.cal-cell.muted{opacity:.4}
+.clock-top{font-size:26px;font-weight:700;text-align:center;padding:12px;background:#922}
+.clock-top small{display:block;font-size:14px;color:var(--muted)}
+/* agenda */
+#agenda{display:none;padding:18px}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #ccc;padding:8px;text-align:center;vertical-align:middle}
+th{background:#922;color:#fff}
+.lesson{cursor:pointer;transition:.2s}
+.lesson.active{background:#ffd9d9;color:#000}
+.popup{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+       background:#fff;color:#000;padding:20px;border-radius:10px;z-index:1000;max-width:400px}
+.popup h3{margin-bottom:10px}
+.popup button{margin-top:10px;padding:6px 12px;border:none;background:#922;color:#fff;cursor:pointer}
 </style>
 </head>
 <body>
 <div class="navbar">
-  <div class="nav-left">
-    <img src="https://via.placeholder.com/36" style="border-radius:50%">
-    <span><b>&lt;username&gt;</b></span>
-  </div>
+  <div class="nav-left"><b>&lt;username&gt;</b></div>
   <div class="nav-right">
     <div class="nav-item" onclick="showPage('home')">Start</div>
-    <div class="nav-item has-dropdown" id="gotoItem">
-      Ga naar ▾
-      <div class="dropdown-menu simple" id="gotoMenu">
-        <a href="#">📅 Agenda</a>
-        <a href="#">📘 Lesrooster</a>
-        <a href="#">✉️ Berichten</a>
-      </div>
-    </div>
-    <div class="nav-item has-dropdown" id="linksItem">
-      Links ▾
-      <div class="dropdown-menu links" id="linksMenu">
-        <a href="https://leerling.appwel.be/login" target="_blank">Appwel</a>
-        <a href="https://www.diddit.be/login" target="_blank">diddit</a>
-        <a href="https://redwood.e-ducate.me/login" target="_blank">e-ducate.me</a>
-        <a href="https://platform.ftrprf.be" target="_blank">FTRPRF</a>
-        <a href="https://myway.i-learn.be/login" target="_blank">i-Learn</a>
-        <a href="https://platform.ididdit.be/login" target="_blank">iDiddit</a>
-        <a href="#">Lernova</a>
-        <a href="https://www.pelckmansportaal.be" target="_blank">Pelckmans Portaal</a>
-        <a href="https://www.scholierenkoepel.be" target="_blank">Scholierenkoepel</a>
-        <a href="https://apps.plantyn.com" target="_blank">Scoodle</a>
-        <a href="https://onderwijs.hetarchief.be" target="_blank">Uitgeklaard</a>
-        <a href="https://onderwijs.vrt.be/edubox-bib" target="_blank">VRT Leer mee</a>
-      </div>
-    </div>
-    <div class="nav-item">Berichten<span class="badge">1</span></div>
-    <div class="nav-item has-dropdown" id="meldingenItem">
-      Meldingen ▾
-      <div class="dropdown-menu meldingen" id="meldingenMenu">
-        <div class="meldingen-top">
-          <div class="toggle">
-            <button id="aanBtn" class="active">Aan</button>
-            <button id="uitBtn">Uit</button>
-          </div>
-          <div>
-            <button>Instellingen</button>
-            <button>Alles wissen</button>
-          </div>
-        </div>
-        <div class="melding-body">
-          <div style="font-size:48px">💬</div>
-          <p>Er zijn geen meldingen. Je bent volledig up-to-date!</p>
-        </div>
-      </div>
-    </div>
-    <div class="nav-item" title="Afmelden">⎋</div>
+    <div class="nav-item" onclick="showPage('agenda')">Agenda</div>
   </div>
 </div>
+
+<!-- clock on top -->
+<div class="clock-top">
+  <div id="clockTime">00:00:00</div>
+  <small id="clockDate">-</small>
+</div>
+
+<!-- pages -->
 <div id="home" class="shell">
   <aside class="left-pane">
     <h3>Schoolkalender</h3>
-    <p><a href="#" style="color:#00f">Link naar de SCHOOLKALENDER</a></p>
-    <hr style="margin:12px 0;border:0;border-top:1px solid var(--border)">
-    <h3>Contactinformatie</h3>
-    <p>Sint Maria Geel<br>Pas 110<br>2440 Geel</p>
-    <p>Tel.: 014 58 86 72<br>Fax: 014 58 69 25<br>
-      E-mail: <a href="mailto:smg@kogeka.be" style="color:#ffd9d9">smg@kogeka.be</a><br>
-      Web: <a href="http://www.kogeka.be/sint..." style="color:#ffd9d9">http://www.kogeka.be/sint…</a>
-    </p>
+    <p><a href="#">Link naar de SCHOOLKALENDER</a></p>
   </aside>
   <main class="center-pane">
-    <div class="clock">
-      <div id="clockTime">00:00:00</div>
-      <small id="clockDate">-</small>
-    </div>
+    <h2>Welkom bij Smartschool Dashboard</h2>
   </main>
-  <aside class="right-pane">
-    <div class="calendar">
-      <div class="cal-top">
-        <button onclick="shiftMonth(-1)">◀</button>
-        <h3 id="calTitle"></h3>
-        <button onclick="shiftMonth(1)">▶</button>
-      </div>
-      <div id="calGrid" class="cal-grid"></div>
-    </div>
-  </aside>
+  <aside class="right-pane"></aside>
 </div>
+
+<div id="agenda">
+  <h2>Lesrooster 4A-ZWA</h2>
+  <table>
+    <tr>
+      <th>Uur</th>
+      <th>Maandag</th>
+    </tr>
+    <tr>
+      <td>08:25 - 10:05</td>
+      <td class="lesson" data-info="ZW-Praktijk<br>Leerkracht: Klara Pauwels<br>Klas: 4A-ZWA<br>Lokaal: A207 Keuken Groot">ZW-Praktijk</td>
+    </tr>
+    <tr>
+      <td>10:15 - 11:55</td>
+      <td class="lesson" data-info="ZW-Praktijk (koken)<br>Leerkracht: Klara Pauwels<br>Klas: 4A-ZWA<br>Lokaal: A207 Keuken Groot">ZW-Praktijk</td>
+    </tr>
+    <tr>
+      <td>12:45 - 13:35</td>
+      <td class="lesson" data-info="ZW-Pedagogisch handelen<br>Leerkracht: Charlien Mertens<br>Klas: 4A-ZWA<br>Lokaal: A204">ZW-Pedagogisch handelen</td>
+    </tr>
+    <tr>
+      <td>13:35 - 14:25</td>
+      <td class="lesson" data-info="Nederlands<br>Leerkracht: Marleen Holvoet<br>Klas: 4A-ZWA<br>Lokaal: A204">Nederlands</td>
+    </tr>
+    <tr>
+      <td>14:35 - 15:25</td>
+      <td class="lesson" data-info="ZW-Gezondheid en welzijn<br>Leerkracht: An Vervrangen<br>Klas: 4A-ZWA<br>Lokaal: A204">ZW-Gezondheid en welzijn</td>
+    </tr>
+  </table>
+</div>
+
+<!-- popup -->
+<div id="popup" class="popup">
+  <h3>Lesinformatie</h3>
+  <div id="popupContent"></div>
+  <button onclick="closePopup()">Sluiten</button>
+</div>
+
 <script>
-document.querySelectorAll('.has-dropdown').forEach(item=>{
-  item.addEventListener('click',e=>{
-    e.stopPropagation();
-    const menu=item.querySelector('.dropdown-menu');
-    document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'));
-    menu.classList.toggle('open');
+function showPage(id){
+  document.getElementById("home").style.display="none";
+  document.getElementById("agenda").style.display="none";
+  document.getElementById(id).style.display="block";
+}
+function updateClock(){
+  const now=new Date();
+  document.getElementById('clockTime').textContent=now.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('clockDate').textContent=now.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+setInterval(updateClock,1000);updateClock();
+
+let selected=null;
+document.querySelectorAll('.lesson').forEach(cell=>{
+  cell.addEventListener('click',()=>{
+    if(selected!==cell){
+      if(selected)selected.classList.remove('active');
+      cell.classList.add('active');
+      selected=cell;
+    }else{
+      document.getElementById('popupContent').innerHTML=cell.dataset.info;
+      document.getElementById('popup').style.display="block";
+    }
   });
 });
-document.addEventListener('click',()=>{document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'))});
-document.getElementById('aanBtn').addEventListener('click',()=>{document.getElementById('aanBtn').classList.add('active');document.getElementById('uitBtn').classList.remove('active')});
-document.getElementById('uitBtn').addEventListener('click',()=>{document.getElementById('uitBtn').classList.add('active');document.getElementById('aanBtn').classList.remove('active')});
-function updateClock(){const now=new Date();document.getElementById('clockTime').textContent=now.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit',second:'2-digit'});document.getElementById('clockDate').textContent=now.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
-setInterval(updateClock,1000);updateClock();
-let calPointer=new Date();
-function renderCalendar(){const title=document.getElementById('calTitle');const grid=document.getElementById('calGrid');title.textContent=new Intl.DateTimeFormat('nl-NL',{month:'long',year:'numeric'}).format(calPointer);grid.innerHTML='';const weekDays=['ma','di','wo','do','vr','za','zo'];weekDays.forEach(d=>{let h=document.createElement('div');h.className='cal-cell cal-head';h.textContent=d;grid.appendChild(h)});const first=new Date(calPointer.getFullYear(),calPointer.getMonth(),1);const startIndex=(first.getDay()+6)%7;const daysInMonth=new Date(calPointer.getFullYear(),calPointer.getMonth()+1,0).getDate();const prevDays=new Date(calPointer.getFullYear(),calPointer.getMonth(),0).getDate();for(let i=startIndex-1;i>=0;i--){let c=document.createElement('div');c.className='cal-cell muted';c.textContent=prevDays-i;grid.appendChild(c)}const today=new Date();const isThisMonth=today.getFullYear()===calPointer.getFullYear()&&today.getMonth()===calPointer.getMonth();for(let d=1;d<=daysInMonth;d++){let c=document.createElement('div');c.className='cal-cell';c.textContent=d;if(isThisMonth&&d===today.getDate())c.classList.add('today');grid.appendChild(c)}}
-function shiftMonth(delta){calPointer.setMonth(calPointer.getMonth()+delta);renderCalendar()}
-renderCalendar();
+function closePopup(){document.getElementById('popup').style.display="none"}
 </script>
 </body>
 </html>
