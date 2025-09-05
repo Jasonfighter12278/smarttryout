@@ -2,262 +2,255 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8" />
-<title>Smartschool Dashboard — Live Meldingen</title>
+<title>Smartschool Dashboard — Homepage</title>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <style>
-:root{
-  --brand:#a61b1b;
-  --brand-dark:#7b0f14;
-  --bg:#f4f5f9;
-  --card:#fff;
-  --radius:12px;
-  --muted:#666;
-  --line:#e6e6ea;
-  --accent:#e74c3c;
-}
+:root{--brand:#a61b1b;--bg:#ffe5e5;--card:#fff;--radius:12px;--muted:#666;--line:#e6e6ea;--accent:#e74c3c}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{
-  font-family:"Segoe UI", Roboto, Arial, sans-serif;
-  background:var(--bg);
-  color:#222;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
-
-/* NAVBAR */
-.navbar{
-  background:var(--brand);
-  color:#fff;
-  padding:10px 18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  position:sticky;
-  top:0;
-  z-index:400;
-  box-shadow:0 2px 8px rgba(0,0,0,.12);
-}
+body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);color:#222;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.navbar{background:var(--brand);color:#fff;padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:400;box-shadow:0 2px 8px rgba(0,0,0,.12)}
 .nav-left{display:flex;align-items:center;gap:12px}
 .profile-img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.12)}
 .profile-name{font-weight:600}
-.nav-right{display:flex;align-items:center;gap:18px}
+.nav-right{display:flex;align-items:center;gap:10px}
 .nav-item{position:relative;cursor:pointer;padding:6px 8px;border-radius:6px;user-select:none}
 .nav-item > span{font-weight:600}
 .nav-item:hover{background:rgba(255,255,255,.06)}
-.dropdown-menu{
-  display:none;
-  position:absolute;
-  top:calc(100% + 8px);
-  left:0;
-  min-width:220px;
-  background:var(--card);
-  color:#222;
-  border-radius:10px;
-  box-shadow:0 10px 30px rgba(0,0,0,.18);
-  overflow:hidden;
-  z-index:500;
-}
-.dropdown-menu a{display:block;padding:10px 12px;color:#222;text-decoration:none;font-size:14px}
-.dropdown-menu a:hover{background:#f4f4f6}
+.dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;min-width:220px;background:var(--card);color:#222;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.18);overflow:hidden;z-index:500}
+.dropdown-menu.open{display:block}
+.dropdown-menu a,.dropdown-menu button{display:block;width:100%;text-align:left;padding:10px 12px;color:#222;text-decoration:none;background:none;border:none;cursor:pointer}
+.dropdown-menu a:hover,.dropdown-menu button:hover{background:#f4f4f6}
 .logout-btn{font-size:18px;cursor:pointer;padding:6px 8px;border-radius:6px}
-.badge{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-width:20px;
-  height:20px;
-  padding:0 6px;
-  border-radius:999px;
-  background:var(--accent);
-  color:white;
-  font-size:12px;
-  position:absolute;
-  top:-6px;
-  right:-6px;
-}
-
-/* Buttons */
-button,.btn,.btn-ghost,.compose-btn{
-  transition:all .2s ease;
-}
-.btn{background:var(--brand);color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;border:none;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
-.btn:hover{background:var(--brand-dark);transform:translateY(-2px)}
-.btn-ghost{background:#f3f4f6;padding:8px 12px;border-radius:10px;cursor:pointer;border:none}
-.btn-ghost:hover{background:#e0e1e5}
-.compose-btn{background:var(--brand);color:white;padding:12px;border-radius:12px;text-align:center;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
-.compose-btn:hover{background:var(--brand-dark);transform:translateY(-2px)}
-
-/* Containers */
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--accent);color:white;font-size:12px;position:absolute;top:-6px;right:-6px}
 .container{max-width:1200px;margin:20px auto;padding:20px}
 .hidden{display:none!important}
-.card{
-  background:var(--card);
-  border-radius:var(--radius);
-  padding:18px;
-  box-shadow:0 3px 10px rgba(0,0,0,.06);
-  margin-bottom:18px;
-}
-
-/* Page titles */
-.page-title{font-size:22px;font-weight:700;margin-bottom:16px}
-
-/* Notifications */
-#notifDropdown{max-height:260px;overflow-y:auto}
-.notif-item{padding:10px 12px;border-bottom:1px solid var(--line);font-size:14px;cursor:pointer;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
-.notif-item:hover{background:#f8f8f8}
-
-/* Agenda/rooster */
-schedule-item{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--line)}
-.schedule-item:last-child{border-bottom:none}
-
-/* Inbox */
-.inbox-list{border-top:1px solid var(--line)}
-.inbox-item{display:flex;flex-direction:column;padding:14px;border-bottom:1px solid var(--line);cursor:pointer;transition:.2s}
-.inbox-item:hover{background:#fafafa}
-.inbox-item strong{margin-bottom:4px}
+.card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:0 3px 10px rgba(0,0,0,.06);margin-bottom:18px}
+.home-layout{display:grid;grid-template-columns:1fr 260px;gap:18px;align-items:start}
+.center-time{text-align:center;margin:20px 0;font-size:22px;font-weight:700}
+.kpis{display:flex;gap:12px;margin-top:10px}
+.kpi{background:#fafbff;border:1px solid var(--line);border-radius:10px;padding:10px;flex:1}
+#todayDate{font-weight:700}
+#todayTime{font-size:18px;margin-top:6px}
+.agenda-list{display:grid;grid-template-columns:1fr;gap:10px}
+.agenda-item{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px;min-height:84px}
+.agenda-time{font-weight:700;min-width:80px}
+.agenda-title{font-weight:700}
+.row{display:flex;gap:10px;align-items:center}
+.small{font-size:13px;color:var(--muted)}
+.btn{background:var(--brand);color:#fff;padding:8px 12px;border-radius:8px;font-weight:700;border:none;cursor:pointer}
+.btn-ghost{background:#f3f4f6;padding:6px 10px;border-radius:8px;border:none;cursor:pointer}
+.timetable-wrap{overflow:auto}
+.timetable{display:grid;grid-template-columns:120px repeat(5,1fr);border:1px solid var(--line);border-radius:10px;overflow:visible}
+.timetable .col-header{padding:12px;text-align:center;background:#f4f4f6;font-weight:700;border-right:1px solid var(--line)}
+.timetable .time-cell{padding:12px;border-right:1px solid var(--line);background:#fff;font-weight:700}
+.timetable .slot-cell{min-height:88px;padding:10px;border-right:1px solid var(--line);background:#fff;cursor:pointer}
+.slot-inner{height:100%;border-radius:8px;padding:8px;border-left:8px solid transparent;display:flex;flex-direction:column;justify-content:center}
+.modal{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:999}
+.modal .box{background:#fff;padding:16px;border-radius:10px;width:340px;box-shadow:0 12px 40px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:8px}
+.modal input[type=text],.modal input[type=color]{padding:8px;border-radius:8px;border:1px solid #ddd}
+.modal .actions{display:flex;gap:8px;justify-content:flex-end}
+.week-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 </style>
 </head>
 <body>
-
-<!-- NAVBAR -->
 <div class="navbar">
   <div class="nav-left">
-    <img id="profilePic" class="profile-img" src="https://cdn-icons-png.flaticon.com/512/194/194915.png" alt="profiel">
+    <img id="profilePic" class="profile-img" src="" alt="profiel">
     <div>
-      <div class="profile-name" id="profileName">Naam</div>
-      <div class="small" id="roleText">Leerling</div>
+      <div class="profile-name" id="profileName"></div>
+      <div class="small" id="roleText"></div>
     </div>
   </div>
-
   <div class="nav-right">
     <div class="nav-item" onclick="showPage('home')"><span>Start</span></div>
-
-    <div class="nav-item has-dropdown">
+    <div class="nav-item has-dropdown" id="gotoItem">
       <span>Ga naar ▾</span>
-      <div class="dropdown-menu">
-        <a onclick="showPage('agenda')">📅 Agenda</a>
-        <a onclick="showPage('rooster')">📘 Lesrooster</a>
+      <div class="dropdown-menu" id="gotoMenu">
+        <a onclick="showPage('agenda'); keepDropdownOpen('gotoItem')">📅 Agenda</a>
+        <a onclick="showPage('lessenrooster'); keepDropdownOpen('gotoItem')">📘 Lesrooster</a>
+        <a onclick="showPage('messages'); keepDropdownOpen('gotoItem')">✉️ Berichten</a>
       </div>
     </div>
-
-    <div class="nav-item has-dropdown">
+    <div class="nav-item has-dropdown" id="linksItem">
       <span>Links ▾</span>
-      <div class="dropdown-menu">
-        <a href="https://www.youtube.com" target="_blank">▶️ YouTube</a>
+      <div class="dropdown-menu" id="linksMenu">
+        <a href="https://www.youtube.com" target="_blank">🔗 YouTube</a>
         <a href="https://www.smartschool.be" target="_blank">🔗 Smartschool</a>
       </div>
     </div>
-
-    <div class="nav-item has-dropdown">
+    <div class="nav-item" id="notifNav" onclick="showPage('notifications')" style="position:relative">
       <span>Meldingen 🔔</span>
       <div id="notifBadge" class="badge hidden" title="meldingen">0</div>
-      <div class="dropdown-menu" id="notifDropdown">
-        <!-- Meldingen komen hier live -->
-        <div id="noNotif" class="notif-item">Geen meldingen</div>
-      </div>
     </div>
-
+    <div class="nav-item has-dropdown" id="userSwitch">
+      <span>Account ▾</span>
+      <div class="dropdown-menu" id="userMenu"></div>
+    </div>
     <div class="nav-item"><span id="logoutBtn" class="logout-btn" onclick="logout()">⎋</span></div>
   </div>
 </div>
 
-<!-- PAGES -->
-<div class="container">
-  <div id="home" class="page">
-    <div class="page-title">Welkom bij Smartschool</div>
-    <div class="card">Dit is je startpagina.</div>
+<div id="home" class="container">
+  <div class="center-time">
+    <div id="todayDate"></div>
+    <div id="todayTime"></div>
   </div>
-  <div id="agenda" class="page hidden">
-    <div class="page-title">Agenda</div>
-    <div class="card schedule-item"><span>Wiskunde</span><span>09:00 - 10:00</span></div>
-    <div class="card schedule-item"><span>Nederlands</span><span>10:15 - 11:15</span></div>
+  <div class="home-layout">
+    <div>
+      <div class="card">
+        <h2>Welkom, <span id="userDisplay">User</span> 🎉</h2>
+        <div class="kpis">
+          <div class="kpi">
+            <div class="small">Volgende les</div>
+            <div id="nextLesson" class="small">--</div>
+          </div>
+          <div class="kpi">
+            <div class="small">Ongelezen berichten</div>
+            <div id="unreadMsgs" class="small">0</div>
+          </div>
+          <div class="kpi">
+            <div class="small">Meldingen</div>
+            <div id="notifCountHome" class="small">0</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Recent</h3>
+        <div id="recentList">Geen recente gebeurtenissen</div>
+      </div>
+      <div class="card">
+        <h3>Snelle acties</h3>
+        <div class="row">
+          <button class="btn" onclick="showPage('agenda')">Open Agenda</button>
+          <button class="btn" onclick="showPage('lessenrooster')">Open Rooster</button>
+          <button class="btn" onclick="showPage('messages')">Open Berichten</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h3>Mini Agenda</h3>
+        <div id="todayAgendaList">Geen items voor vandaag</div>
+      </div>
+    </div>
   </div>
-  <div id="rooster" class="page hidden">
-    <div class="page-title">Lesrooster</div>
-    <div class="card">Maandag: Wiskunde, Nederlands</div>
-    <div class="card">Dinsdag: Engels, Geschiedenis</div>
+</div>
+
+<div id="agenda" class="container hidden">
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <h2>Agenda</h2>
+      <button class="btn" onclick="promptAddAgenda()">+ Item</button>
+    </div>
+    <div id="agendaItems" class="agenda-list">Geen items</div>
   </div>
-  <div id="notifications" class="page hidden">
-    <div class="page-title">Meldingen</div>
-    <div id="allNotifs"></div>
+</div>
+
+<div id="lessenrooster" class="container hidden">
+  <div class="card">
+    <div class="week-nav">
+      <button class="btn-ghost" onclick="prevWeek()">◀</button>
+      <div id="weekLabel" class="small">Week</div>
+      <button class="btn-ghost" onclick="nextWeek()">▶</button>
+    </div>
+    <div class="timetable-wrap">
+      <div id="timetable" class="timetable"></div>
+    </div>
+  </div>
+</div>
+
+<div id="messages" class="container hidden">
+  <div class="card">
+    <h2>Berichten</h2>
+    <div id="messageList">Geen berichten</div>
+    <button class="btn" onclick="openCompose()">Nieuw bericht</button>
+  </div>
+</div>
+
+<div id="notifications" class="container hidden">
+  <div class="card">
+    <h2>Meldingen</h2>
+    <div id="notifList">Geen meldingen</div>
+    <button class="btn-ghost" onclick="markAllNotifsRead()">Alles als gelezen</button>
+  </div>
+</div>
+
+<div id="lessonModal" class="modal">
+  <div class="box">
+    <input id="modalSubject" type="text" placeholder="Vak">
+    <input id="modalTeacher" type="text" placeholder="Docent">
+    <input id="modalRoom" type="text" placeholder="Lokaal">
+    <input id="modalColor" type="color" value="#ffd166">
+    <div class="actions">
+      <button class="btn" id="saveLessonBtn">Opslaan</button>
+      <button class="btn-ghost" onclick="closeModal()">Annuleer</button>
+    </div>
   </div>
 </div>
 
 <script>
-/* --- Dropdown behaviour --- */
-function attachDropdownBehavior(){
-  document.querySelectorAll('.nav-item.has-dropdown').forEach(item=>{
-    const menu = item.querySelector('.dropdown-menu');
-    let timeout = null;
-    item.addEventListener('mouseenter', ()=> {
-      if(timeout) { clearTimeout(timeout); timeout = null; }
-      menu.style.display = 'block';
-    });
-    item.addEventListener('mouseleave', ()=> {
-      timeout = setTimeout(()=>{ menu.style.display = 'none'; timeout = null; }, 300);
-    });
-    menu.addEventListener('mouseenter', ()=> {
-      if(timeout) { clearTimeout(timeout); timeout = null; }
-      menu.style.display = 'block';
-    });
-    menu.addEventListener('mouseleave', ()=> {
-      timeout = setTimeout(()=>{ menu.style.display = 'none'; timeout = null; }, 300);
-    });
-  });
-}
-attachDropdownBehavior();
+const ACCOUNTS={"admin":{name:"Beheerder",img:"https://cdn-icons-png.flaticon.com/512/147/147144.png",admin:true}};
+let user=localStorage.getItem('loggedInUser')||'admin';
+const currentUserObj=ACCOUNTS[user]||{name:user,img:'',admin:false};
+document.getElementById('userDisplay').textContent=currentUserObj.name;
+document.getElementById('profileName').textContent=currentUserObj.name;
+document.getElementById('roleText').textContent=currentUserObj.admin?'Beheerder':'Leerling';
+document.getElementById('profilePic').src=currentUserObj.img;
 
-/* --- Page switching --- */
-function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-}
+const STORAGE={schedule:'school.schedule',messages:'school.messages',notifications:'school.notifications',agenda:'school.agenda'};
+function save(key,val){localStorage.setItem(key,JSON.stringify(val))}
+function load(key,def){try{return JSON.parse(localStorage.getItem(key))||def}catch(e){return def}}
+if(!localStorage.getItem(STORAGE.schedule))save(STORAGE.schedule,{});
+if(!localStorage.getItem(STORAGE.messages))save(STORAGE.messages,{});
+if(!localStorage.getItem(STORAGE.notifications))save(STORAGE.notifications,[]);
+if(!localStorage.getItem(STORAGE.agenda))save(STORAGE.agenda,{});
 
-/* --- Notifications --- */
-function addNotification(text){
-  const dropdown = document.getElementById('notifDropdown');
-  const allNotifs = document.getElementById('allNotifs');
-  const noNotif = document.getElementById('noNotif');
-  if(noNotif) noNotif.remove();
+function pad(n){return n<10?'0'+n:n;}
+function fmtDate(d){return d.toLocaleDateString('nl-NL',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
+function fmtTime(d){return pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());}
+function tick(){const n=new Date();document.getElementById('todayDate').textContent=fmtDate(n);document.getElementById('todayTime').textContent=fmtTime(n);setTimeout(tick,1000);}
+tick();
 
-  // maak item
-  const item = document.createElement('div');
-  item.className = 'notif-item';
-  item.textContent = text;
-  dropdown.prepend(item);
+function showPage(id){document.querySelectorAll('.container').forEach(c=>c.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+function logout(){localStorage.removeItem('loggedInUser');location.reload();}
+document.querySelectorAll('.has-dropdown').forEach(dd=>{const menu=dd.querySelector('.dropdown-menu');dd.addEventListener('click',e=>{e.stopPropagation();menu.classList.toggle('open');document.addEventListener('click',function h(ev){if(!dd.contains(ev.target)){menu.classList.remove('open');document.removeEventListener('click',h)}})})})
+const userMenu=document.getElementById('userMenu');userMenu.innerHTML=Object.keys(ACCOUNTS).map(k=>`<button onclick="switchAccount('${k}')">${ACCOUNTS[k].name}</button>`).join('');
+function switchAccount(id){user=id;localStorage.setItem('loggedInUser',id);location.reload();}
 
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.textContent = text;
-  allNotifs.prepend(card);
+// Agenda
+function renderAgenda(){const data=load(STORAGE.agenda,{});const el=document.getElementById('agendaItems');el.innerHTML='';if(Object.keys(data).length===0){el.textContent='Geen items'}else{for(const k in data){const item=data[k];const div=document.createElement('div');div.className='agenda-item';div.innerHTML=`<div class="agenda-time">${item.time||'--:--'}</div><div class="agenda-title">${item.title}</div>`;el.appendChild(div)}}}
+function promptAddAgenda(){const title=prompt('Titel van item?');if(!title)return;const time=prompt('Tijd (bv. 12:30)?');const data=load(STORAGE.agenda,{});const id='a'+Date.now();data[id]={title,time};save(STORAGE.agenda,data);renderAgenda();renderMiniAgenda();}
+function renderMiniAgenda(){const data=load(STORAGE.agenda,{});const el=document.getElementById('todayAgendaList');el.innerHTML='';let any=false;for(const k in data){const it=data[k];const div=document.createElement('div');div.className='agenda-item';div.innerHTML=`<div class="agenda-time">${it.time||'--:--'}</div><div class="agenda-title">${it.title}</div>`;el.appendChild(div);any=true;}if(!any)el.textContent='Geen items voor vandaag';}
+renderAgenda();renderMiniAgenda();
 
-  updateNotifications();
-}
+// Messages
+function renderMessages(){const msgs=load(STORAGE.messages,[]);const el=document.getElementById('messageList');el.innerHTML='';if(msgs.length===0){el.textContent='Geen berichten'}else{msgs.forEach(m=>{const div=document.createElement('div');div.className='agenda-item';div.innerHTML=`<div class="agenda-title">${m.title}</div><div class="small">${m.time}</div>`;el.appendChild(div)})}}
+function openCompose(){const title=prompt('Titel bericht?');if(!title)return;const time=fmtTime(new Date());const msgs=load(STORAGE.messages,[]);msgs.push({title,time});save(STORAGE.messages,msgs);renderMessages();updateKPI();}
+renderMessages();
 
-function updateNotifications(){
-  const notifItems = document.querySelectorAll('#notifDropdown .notif-item');
-  const badge = document.getElementById('notifBadge');
-  if(notifItems.length > 0){
-    badge.textContent = notifItems.length;
-    badge.classList.remove('hidden');
-  } else {
-    badge.classList.add('hidden');
-  }
-}
+// Notifications
+function renderNotifications(){const notifs=load(STORAGE.notifications,[]);const el=document.getElementById('notifList');el.innerHTML='';if(notifs.length===0){el.textContent='Geen meldingen'}else{notifs.forEach(n=>{const div=document.createElement('div');div.className='agenda-item';div.textContent=n})}document.getElementById('notifCountHome').textContent=notifs.length;document.getElementById('notifBadge').textContent=notifs.length;document.getElementById('notifBadge').classList.toggle('hidden',notifs.length===0);}
+function markAllNotifsRead(){save(STORAGE.notifications,[]);renderNotifications();}
+renderNotifications();
 
-/* Example: simulate new notifications */
-setTimeout(()=> addNotification('📧 Nieuw bericht van docent'), 2000);
-setTimeout(()=> addNotification('📅 Herinnering: toets morgen'), 5000);
-setTimeout(()=> addNotification('⚠️ Opmerking van de directeur'), 8000);
+// KPIs
+function updateKPI(){const msgs=load(STORAGE.messages,[]);document.getElementById('unreadMsgs').textContent=msgs.length;}
+updateKPI();
 
-/* --- Logout --- */
-function logout(){
-  localStorage.clear();
-  alert("Je bent uitgelogd.");
-  location.reload();
-}
+// Timetable
+let currentWeek=0;
+const days=['Ma','Di','Wo','Do','Vr'];
+const hours=['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00'];
+function renderTimetable(){const data=load(STORAGE.schedule,{});const el=document.getElementById('timetable');el.innerHTML='';el.appendChild(document.createElement('div')); // clear
+const headerRow=document.createElement('div');headerRow.className='timetable';headerRow.innerHTML='<div class="col-header">Uur</div>'+days.map(d=>`<div class="col-header">${d}</div>`).join('');el.appendChild(headerRow);hours.forEach(h=>{const row=document.createElement('div');row.className='timetable';row.innerHTML=`<div class="time-cell">${h}</div>`+days.map((d,i)=>`<div class="slot-cell" onclick="editSlot('${d}','${h}')"><div class="slot-inner"></div></div>`).join('');el.appendChild(row)})}
+function editSlot(day,hour){const subj=prompt('Vak:');if(!subj)return;const color=prompt('Kleur (hex):','#ffd166');const data=load(STORAGE.schedule,{});data[`${day}-${hour}`]={subj,color};save(STORAGE.schedule,data);renderTimetable();}
+function prevWeek(){currentWeek--;document.getElementById('weekLabel').textContent='Week '+currentWeek;renderTimetable();}
+function nextWeek(){currentWeek++;document.getElementById('weekLabel').textContent='Week '+currentWeek;renderTimetable();}
+renderTimetable();
+
+// Modal helpers
+function closeModal(){document.getElementById('lessonModal').style.display='none';}
 </script>
 </body>
 </html>
