@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8" />
-<title>Smartschool Dashboard — Full</title>
+<title>Smartschool Dashboard — Live Meldingen</title>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <style>
 :root{
@@ -25,7 +25,7 @@ body{
   -moz-osx-font-smoothing:grayscale;
 }
 
-/* NAVBAR (matches screenshot feel) */
+/* NAVBAR */
 .navbar{
   background:var(--brand);
   color:#fff;
@@ -51,7 +51,7 @@ body{
   position:absolute;
   top:calc(100% + 8px);
   left:0;
-  min-width:200px;
+  min-width:220px;
   background:var(--card);
   color:#222;
   border-radius:10px;
@@ -59,7 +59,7 @@ body{
   overflow:hidden;
   z-index:500;
 }
-.dropdown-menu a{display:block;padding:10px 12px;color:#222;text-decoration:none}
+.dropdown-menu a{display:block;padding:10px 12px;color:#222;text-decoration:none;font-size:14px}
 .dropdown-menu a:hover{background:#f4f4f6}
 .logout-btn{font-size:18px;cursor:pointer;padding:6px 8px;border-radius:6px}
 .badge{
@@ -78,7 +78,18 @@ body{
   right:-6px;
 }
 
-/* Page containers */
+/* Buttons */
+button,.btn,.btn-ghost,.compose-btn{
+  transition:all .2s ease;
+}
+.btn{background:var(--brand);color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;border:none;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.btn:hover{background:var(--brand-dark);transform:translateY(-2px)}
+.btn-ghost{background:#f3f4f6;padding:8px 12px;border-radius:10px;cursor:pointer;border:none}
+.btn-ghost:hover{background:#e0e1e5}
+.compose-btn{background:var(--brand);color:white;padding:12px;border-radius:12px;text-align:center;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.compose-btn:hover{background:var(--brand-dark);transform:translateY(-2px)}
+
+/* Containers */
 .container{max-width:1200px;margin:20px auto;padding:20px}
 .hidden{display:none!important}
 .card{
@@ -89,69 +100,23 @@ body{
   margin-bottom:18px;
 }
 
-/* Home layout */
-.home-grid{display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:start}
-@media(max-width:980px){.home-grid{grid-template-columns:1fr}}
-.kpis{display:flex;gap:12px;margin-top:10px}
-.kpi{background:#fafbff;border:1px solid var(--line);border-radius:10px;padding:10px;flex:1}
-#todayDate{font-weight:700}
-#todayTime{font-size:18px;margin-top:6px}
-
-/* Calendar (Agenda) */
-.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;text-align:center}
-.calendar .cell{background:#fff;border:1px solid var(--line);border-radius:10px;min-height:120px;display:flex;flex-direction:column;align-items:stretch;padding:8px;cursor:default}
-.calendar .header{font-weight:700;padding:6px;text-align:center;background:transparent}
-.calendar .date-num{font-weight:700;margin-bottom:6px;text-align:left}
-.lesson{
-  height:56px;            /* equal-sized frames */
-  border-radius:8px;
-  margin-bottom:6px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:flex-start;
-  padding:6px 8px;
-  color:#0b0b0b;
-  overflow:hidden;
-  cursor:pointer;
-}
-.lesson .lt{font-weight:700;font-size:13px}
-.lesson .lo{font-size:12px;opacity:.9}
-.day-today{box-shadow:0 0 0 3px rgba(166,27,27,.06);border-color:var(--brand)}
-
-/* Rooster table */
-.rooster{overflow:auto}
-.rooster table{width:100%;border-collapse:separate;border-spacing:10px}
-.rooster th{font-weight:700;text-transform:capitalize;padding:8px 6px;text-align:left}
-.slot-wrap{background:#fff;border:1px solid #d9d9de;border-radius:12px;min-height:82px}
-.slot{padding:8px;border-radius:8px;height:100%;cursor:pointer;overflow:hidden}
-.slot-empty{color:#9aa0a6;font-size:13px}
-
-/* Messages */
-.gmail-container{display:grid;grid-template-columns:240px 1fr 340px;gap:18px;align-items:start}
-@media(max-width:1100px){.gmail-container{grid-template-columns:220px 1fr}}
-@media(max-width:800px){.gmail-container{grid-template-columns:1fr}}
-.gmail-sidebar{display:flex;flex-direction:column;gap:10px}
-.compose-btn{background:var(--brand);color:white;padding:10px;border-radius:12px;text-align:center;font-weight:700;cursor:pointer}
-.folder{padding:10px;border-radius:10px;cursor:pointer}
-.folder.active{background:#fff;border:1px solid var(--line);font-weight:700}
-.gmail-list{background:var(--card);border-radius:12px;box-shadow:0 3px 10px rgba(0,0,0,.06);height:60vh;display:flex;flex-direction:column}
-.gmail-list-header{padding:10px;border-bottom:1px solid #eee;display:flex;gap:10px;align-items:center}
-.gmail-messages{overflow:auto;flex:1}
-.gmail-message{padding:10px;border-bottom:1px solid #f0f0f0;cursor:pointer}
-.gmail-viewer{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 3px 10px rgba(0,0,0,.06);height:60vh;display:flex;flex-direction:column}
-.gmail-bubble{margin-bottom:12px;padding:10px;border-radius:10px;background:#f3f3f5}
+/* Page titles */
+.page-title{font-size:22px;font-weight:700;margin-bottom:16px}
 
 /* Notifications */
-.notif{padding:10px;border-radius:8px;background:#fff;border:1px solid var(--line);margin-bottom:8px}
+#notifDropdown{max-height:260px;overflow-y:auto}
+.notif-item{padding:10px 12px;border-bottom:1px solid var(--line);font-size:14px;cursor:pointer;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.notif-item:hover{background:#f8f8f8}
 
-/* small helpers */
-.row{display:flex;gap:10px;align-items:center}
-.center{text-align:center}
-.btn{background:var(--brand);color:#fff;padding:8px 12px;border-radius:8px;font-weight:700}
-.btn-ghost{background:#f3f4f6;padding:6px 10px;border-radius:8px}
-.input,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #d9d9de}
-.small{font-size:13px;color:var(--muted)}
+/* Agenda/rooster */
+schedule-item{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--line)}
+.schedule-item:last-child{border-bottom:none}
+
+/* Inbox */
+.inbox-list{border-top:1px solid var(--line)}
+.inbox-item{display:flex;flex-direction:column;padding:14px;border-bottom:1px solid var(--line);cursor:pointer;transition:.2s}
+.inbox-item:hover{background:#fafafa}
+.inbox-item strong{margin-bottom:4px}
 </style>
 </head>
 <body>
@@ -169,27 +134,29 @@ body{
   <div class="nav-right">
     <div class="nav-item" onclick="showPage('home')"><span>Start</span></div>
 
-    <div class="nav-item has-dropdown" id="gotoItem">
+    <div class="nav-item has-dropdown">
       <span>Ga naar ▾</span>
       <div class="dropdown-menu">
-        <a onclick="showPage('agenda'); keepDropdownOpen('gotoItem')">📅 Agenda</a>
-        <a onclick="showPage('rooster'); keepDropdownOpen('gotoItem')">📘 Lesrooster</a>
+        <a onclick="showPage('agenda')">📅 Agenda</a>
+        <a onclick="showPage('rooster')">📘 Lesrooster</a>
       </div>
     </div>
 
-    <div class="nav-item has-dropdown" id="linksItem">
+    <div class="nav-item has-dropdown">
       <span>Links ▾</span>
       <div class="dropdown-menu">
-        <a href="https://www.google.com" target="_blank">🔗 Google</a>
+        <a href="https://www.youtube.com" target="_blank">▶️ YouTube</a>
         <a href="https://www.smartschool.be" target="_blank">🔗 Smartschool</a>
       </div>
     </div>
 
-    <div class="nav-item" onclick="showPage('messages')"><span>Berichten</span></div>
-
-    <div class="nav-item" id="notifNav" onclick="openNotifications()" style="position:relative">
+    <div class="nav-item has-dropdown">
       <span>Meldingen 🔔</span>
       <div id="notifBadge" class="badge hidden" title="meldingen">0</div>
+      <div class="dropdown-menu" id="notifDropdown">
+        <!-- Meldingen komen hier live -->
+        <div id="noNotif" class="notif-item">Geen meldingen</div>
+      </div>
     </div>
 
     <div class="nav-item"><span id="logoutBtn" class="logout-btn" onclick="logout()">⎋</span></div>
@@ -197,685 +164,100 @@ body{
 </div>
 
 <!-- PAGES -->
-<!-- HOME -->
-<div id="home" class="container">
-  <div class="home-grid">
-    <div>
-      <div class="card">
-        <h2>Welkom, <span id="userDisplay">User</span> 🎉</h2>
-        <div id="todayDate"></div>
-        <div id="todayTime" class="small"></div>
-
-        <div class="kpis" style="margin-top:12px">
-          <div class="kpi">
-            <div class="small">Volgende les</div>
-            <div id="nextLesson" class="small">--</div>
-          </div>
-          <div class="kpi">
-            <div class="small">Ongelezen berichten</div>
-            <div id="unreadMsgs" class="small">0</div>
-          </div>
-          <div class="kpi">
-            <div class="small">Meldingen</div>
-            <div id="notifCountHome" class="small">0</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Vandaag in agenda</h3>
-        <div id="todayAgendaList">Geen items voor vandaag</div>
-      </div>
-
-      <div class="card">
-        <h3>Snelle acties</h3>
-        <div class="row">
-          <button class="btn" onclick="showPage('agenda')">Open Agenda</button>
-          <button class="btn" onclick="showPage('rooster')">Open Rooster</button>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <div class="card">
-        <h3>Recent</h3>
-        <div id="recentList">Geen recente gebeurtenissen</div>
-      </div>
-      <div class="card">
-        <h3>Rooster (kort)</h3>
-        <div id="miniRooster" class="small">Laad...</div>
-      </div>
-    </div>
+<div class="container">
+  <div id="home" class="page">
+    <div class="page-title">Welkom bij Smartschool</div>
+    <div class="card">Dit is je startpagina.</div>
   </div>
-</div>
-
-<!-- AGENDA -->
-<div id="agenda" class="container hidden">
-  <div class="card">
-    <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:10px">
-      <h3>📅 Agenda</h3>
-      <div>
-        <button class="btn-ghost" onclick="prevMonth()">◀</button>
-        <span id="monthYear" style="font-weight:700;margin:0 10px"></span>
-        <button class="btn-ghost" onclick="nextMonth()">▶</button>
-      </div>
-    </div>
-
-    <div id="calendar" class="calendar"></div>
-    <div style="margin-top:12px">
-      <small class="small">Tip: Admin (test.account2) kan dubbelklikken op een dag om lessen toe te voegen of te bewerken.</small>
-    </div>
+  <div id="agenda" class="page hidden">
+    <div class="page-title">Agenda</div>
+    <div class="card schedule-item"><span>Wiskunde</span><span>09:00 - 10:00</span></div>
+    <div class="card schedule-item"><span>Nederlands</span><span>10:15 - 11:15</span></div>
   </div>
-</div>
-
-<!-- ROOSTER -->
-<div id="rooster" class="container hidden">
-  <div class="card">
-    <h3>📘 Lesrooster</h3>
-    <div class="rooster" id="roosterTable"></div>
-    <div class="small" style="margin-top:8px">Dubbelklik op een vak om te bewerken (alleen admin).</div>
+  <div id="rooster" class="page hidden">
+    <div class="page-title">Lesrooster</div>
+    <div class="card">Maandag: Wiskunde, Nederlands</div>
+    <div class="card">Dinsdag: Engels, Geschiedenis</div>
   </div>
-</div>
-
-<!-- MESSAGES -->
-<div id="messages" class="container hidden">
-  <div class="card">
-    <h3>📩 Berichten</h3>
-    <div class="gmail-container" style="margin-top:10px">
-      <div class="gmail-sidebar">
-        <div class="compose-btn" onclick="toggleComposer()">✉ Nieuw bericht</div>
-        <div class="folder active" data-folder="inbox" onclick="switchFolder('inbox')">📥 Inbox</div>
-        <div class="folder" data-folder="sent" onclick="switchFolder('sent')">📤 Verzonden</div>
-      </div>
-
-      <div class="gmail-list">
-        <div class="gmail-list-header">
-          <input id="searchConv" class="input" placeholder="Zoeken..." oninput="renderConversations()">
-        </div>
-        <div class="gmail-messages" id="convList">Geen berichten</div>
-      </div>
-
-      <div class="gmail-viewer" id="viewer">
-        <div class="gmail-viewer-header">Selecteer een bericht</div>
-        <div class="gmail-thread" id="threadArea"></div>
-      </div>
-    </div>
-
-    <!-- composer popup -->
-    <div id="composer" style="position:fixed;right:20px;bottom:20px;width:360px;background:var(--card);box-shadow:0 8px 28px rgba(0,0,0,.18);border-radius:12px;padding:14px;display:none;z-index:800">
-      <input id="toField" class="input" placeholder="Aan (gebruikersnaam)">
-      <input id="subjectField" class="input" placeholder="Onderwerp" style="margin-top:8px">
-      <textarea id="bodyField" class="input" placeholder="Bericht..." style="height:110px;margin-top:8px"></textarea>
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
-        <button class="btn-ghost" onclick="toggleComposer()">Annuleer</button>
-        <button class="btn" onclick="sendMessage()">Verstuur</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MELDINGEN -->
-<div id="notifications" class="container hidden">
-  <div class="card">
-    <h3>🔔 Meldingen</h3>
-    <div id="notificationsList"></div>
+  <div id="notifications" class="page hidden">
+    <div class="page-title">Meldingen</div>
+    <div id="allNotifs"></div>
   </div>
 </div>
 
 <script>
-/* ----------------------------
-   App data and helpers
-   ----------------------------*/
-const ADMIN_USERS = ["test.account2"];
-const user = localStorage.getItem("loggedInUser") || "test.account";
-const isAdmin = ADMIN_USERS.includes(user);
-
-/* init UI identity */
-document.getElementById("userDisplay").textContent = user;
-document.getElementById("profileName").textContent = user;
-document.getElementById("roleText").textContent = isAdmin ? "Beheerder" : "Leerling";
-
-/* localStorage helpers */
-function lsGet(key, fallback){ try{ return JSON.parse(localStorage.getItem(key)) ?? fallback }catch(e){ return fallback } }
-function lsSet(key,val){ localStorage.setItem(key, JSON.stringify(val)) }
-
-/* storage keys */
-const KEY_TIMETABLE = "timetable_v1";
-const KEY_AGENDA = "agenda_v1";
-const KEY_MESSAGES = "messages_v1";
-const KEY_NOTIFS = "notifications_v1";
-
-/* simple utilities */
-function formatDateKey(d){
-  const iso = new Date(d.getFullYear(),d.getMonth(),d.getDate()).toISOString();
-  return iso.split("T")[0];
-}
-
-/* ----------------------------
-   Dropdown behaviour (2s delay; stays open while hovered)
-   ----------------------------*/
+/* --- Dropdown behaviour --- */
 function attachDropdownBehavior(){
   document.querySelectorAll('.nav-item.has-dropdown').forEach(item=>{
     const menu = item.querySelector('.dropdown-menu');
     let timeout = null;
-    // show immediately on enter
     item.addEventListener('mouseenter', ()=> {
       if(timeout) { clearTimeout(timeout); timeout = null; }
       menu.style.display = 'block';
     });
-    // start 2s close timer on leave
     item.addEventListener('mouseleave', ()=> {
-      timeout = setTimeout(()=>{ menu.style.display = 'none'; timeout = null; }, 2000);
+      timeout = setTimeout(()=>{ menu.style.display = 'none'; timeout = null; }, 300);
     });
-    // keep open when cursor enters menu
     menu.addEventListener('mouseenter', ()=> {
       if(timeout) { clearTimeout(timeout); timeout = null; }
       menu.style.display = 'block';
     });
-    // close 2s after leaving menu
     menu.addEventListener('mouseleave', ()=> {
-      timeout = setTimeout(()=>{ menu.style.display = 'none'; timeout = null; }, 2000);
-    });
-    // when a link inside is clicked, keep menu open while user is on destination
-    menu.querySelectorAll('a').forEach(a=>{
-      a.addEventListener('click', (ev)=>{
-        // small delay to ensure click navigation occurs
-        setTimeout(()=>{ menu.style.display = 'block'; }, 10);
-      });
+      timeout = setTimeout(()=>{ menu.style.display = 'none'; timeout = null; }, 300);
     });
   });
 }
 attachDropdownBehavior();
 
-/* helper to keep dropdown open (used when clicking 'Ga naar' links) */
-function keepDropdownOpen(itemId){
-  const item = document.getElementById(itemId);
-  if(!item) return;
-  const menu = item.querySelector('.dropdown-menu');
-  if(menu){ menu.style.display = 'block'; }
+/* --- Page switching --- */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
 }
 
-/* ----------------------------
-   Home (date/time/overview)
-   ----------------------------*/
-function updateDateTime(){
-  const now = new Date();
-  document.getElementById("todayDate").textContent = now.toLocaleDateString("nl-NL", { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-  document.getElementById("todayTime").textContent = now.toLocaleTimeString("nl-NL", { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-}
-setInterval(updateDateTime,1000); updateDateTime();
+/* --- Notifications --- */
+function addNotification(text){
+  const dropdown = document.getElementById('notifDropdown');
+  const allNotifs = document.getElementById('allNotifs');
+  const noNotif = document.getElementById('noNotif');
+  if(noNotif) noNotif.remove();
 
-/* ----------------------------
-   TIMETABLE (Rooster)
-   ----------------------------*/
-const periodTimes = {
-  1:"08:25 - 09:15",
-  2:"09:15 - 10:05",
-  3:"10:15 - 11:05",
-  4:"11:05 - 11:55",
-  "Middag":"11:55 - 12:45",
-  5:"12:45 - 13:35",
-  6:"13:35 - 14:25",
-  7:"14:35 - 15:25",
-  8:"15:25 - 16:15"
-};
-const daysOrder = ["maandag","dinsdag","woensdag","donderdag","vrijdag"];
+  // maak item
+  const item = document.createElement('div');
+  item.className = 'notif-item';
+  item.textContent = text;
+  dropdown.prepend(item);
 
-function ensureTimetable(){
-  const t = lsGet(KEY_TIMETABLE, {});
-  daysOrder.forEach(d=>{
-    if(!t[d]) t[d] = {};
-    Object.keys(periodTimes).forEach(p=>{
-      if(typeof t[d][p] === "undefined") t[d][p] = null;
-    });
-  });
-  lsSet(KEY_TIMETABLE, t);
-}
-ensureTimetable();
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.textContent = text;
+  allNotifs.prepend(card);
 
-function getTimetable(){ return lsGet(KEY_TIMETABLE, {}) }
-function saveTimetable(t){ lsSet(KEY_TIMETABLE, t) }
-
-function renderTimetable(){
-  const t = getTimetable();
-  const container = document.getElementById("roosterTable");
-  const table = document.createElement("table");
-  const thead = document.createElement("thead");
-  const trh = document.createElement("tr");
-  trh.appendChild(document.createElement("th"));
-  daysOrder.forEach(d=>{ const th = document.createElement("th"); th.textContent = d; trh.appendChild(th); });
-  thead.appendChild(trh);
-  const tbody = document.createElement("tbody");
-
-  Object.keys(periodTimes).forEach(p=>{
-    const tr = document.createElement("tr");
-    const label = document.createElement("th");
-    label.innerHTML = p === "Middag" ? `Middag<br><span class="small">${periodTimes[p]}</span>` : `${p}<br><span class="small">${periodTimes[p]}</span>`;
-    tr.appendChild(label);
-
-    if(p === "Middag"){
-      const td = document.createElement("td"); td.colSpan = daysOrder.length;
-      const wrap = document.createElement("div"); wrap.className = "slot-wrap";
-      const slot = document.createElement("div"); slot.className = "slot"; slot.innerHTML = `<div class="slot-title">Middagpauze</div><div class="slot-meta">${periodTimes[p]}</div>`;
-      wrap.appendChild(slot); td.appendChild(wrap); tr.appendChild(td);
-    } else {
-      daysOrder.forEach(d=>{
-        const td = document.createElement("td");
-        const wrap = document.createElement("div"); wrap.className = "slot-wrap";
-        const slot = document.createElement("div"); slot.className = "slot";
-        const val = t[d][p];
-        if(val){
-          slot.style.background = val.color || "#e8eef8";
-          slot.innerHTML = `<div class="slot-title">${val.title}</div><div class="slot-meta">${val.obj} (${val.teacher||'—'})</div>`;
-        } else {
-          slot.innerHTML = `<div class="slot-empty">Leeg</div>`;
-        }
-        if(isAdmin){
-          slot.ondblclick = ()=> editSlot(d,p,val);
-        }
-        wrap.appendChild(slot); td.appendChild(wrap); tr.appendChild(td);
-      });
-    }
-    tbody.appendChild(tr);
-  });
-
-  table.appendChild(thead); table.appendChild(tbody);
-  container.innerHTML = ""; container.appendChild(table);
-
-  // update mini-rooster in home
-  updateMiniRooster();
-}
-renderTimetable();
-
-function editSlot(day,period,current){
-  // admin-only
-  if(!isAdmin){ alert("Alleen admin kan lessen bewerken."); return; }
-  const title = prompt("Titel:", current ? current.title : "");
-  if(title === null) return;
-  const obj = prompt("Doel / onderwerp:", current ? current.obj : "");
-  if(obj === null) return;
-  const teacher = prompt("Leerkracht (naam):", current ? current.teacher : "");
-  if(teacher === null) return;
-  const color = prompt("Kleur (bv. #ffccaa):", current ? current.color : "#e0f7fa");
-  if(color === null) return;
-
-  const t = getTimetable();
-  t[day][period] = { title, obj, teacher, color };
-  saveTimetable(t);
-  renderTimetable();
+  updateNotifications();
 }
 
-/* ----------------------------
-   AGENDA (Calendar)
-   ----------------------------*/
-let currentMonth = new Date().getMonth();
-let currentYear = new Date().getFullYear();
-
-function getAgenda(){ return lsGet(KEY_AGENDA, {}) }
-function saveAgenda(a){ lsSet(KEY_AGENDA, a) }
-
-function renderCalendar(){
-  const cal = document.getElementById("calendar");
-  cal.innerHTML = "";
-  const firstDay = new Date(currentYear, currentMonth, 1);
-  const lastDay = new Date(currentYear, currentMonth+1, 0);
-  document.getElementById("monthYear").textContent = firstDay.toLocaleString("nl-NL", { month:'long', year:'numeric' });
-
-  // headers
-  const days = ["Ma","Di","Wo","Do","Vr","Za","Zo"];
-  days.forEach(d=>{
-    const h = document.createElement("div"); h.className = "header"; h.textContent = d; cal.appendChild(h);
-  });
-
-  // padding
-  const pad = (firstDay.getDay()+6)%7;
-  for(let i=0;i<pad;i++){ const e = document.createElement("div"); cal.appendChild(e); }
-
-  for(let d=1; d<=lastDay.getDate(); d++){
-    const date = new Date(currentYear, currentMonth, d);
-    const key = formatDateKey(date);
-    const cell = document.createElement("div");
-    cell.className = "cell";
-    if(date.toDateString() === (new Date()).toDateString()) cell.classList.add("day-today");
-    // date number
-    const dn = document.createElement("div");
-    dn.className = "date-num";
-    dn.textContent = d;
-    cell.appendChild(dn);
-
-    const lessons = getAgenda()[key] || [];
-    // each lesson is fixed-height (equal frames)
-    lessons.forEach((les, idx)=>{
-      const l = document.createElement("div");
-      l.className = "lesson";
-      l.style.background = les.color || "#e8eef8";
-      l.innerHTML = `<div class="lt">${escapeHtml(les.title)}</div><div class="lo">${escapeHtml(les.obj)} — ${escapeHtml(les.teacher||'—')}</div>`;
-      if(isAdmin){
-        l.ondblclick = (ev)=>{ ev.stopPropagation(); editAgendaLesson(date, idx); };
-      }
-      cell.appendChild(l);
-    });
-
-    // add double-click on empty area (admin only)
-    if(isAdmin){
-      cell.ondblclick = ()=> addAgendaLesson(date);
-    }
-
-    cal.appendChild(cell);
-  }
-
-  updateHomeTodayAgenda();
-}
-renderCalendar();
-
-function prevMonth(){ currentMonth--; if(currentMonth<0){ currentMonth = 11; currentYear--; } renderCalendar(); }
-function nextMonth(){ currentMonth++; if(currentMonth>11){ currentMonth = 0; currentYear++; } renderCalendar(); }
-
-function addAgendaLesson(date){
-  if(!isAdmin){ alert("Alleen admin kan lessen toevoegen."); return; }
-  const title = prompt("Titel les:"); if(!title) return;
-  const obj = prompt("Doel / onderwerp:", "") ; if(obj === null) return;
-  const teacher = prompt("Naam leerkracht:", "") ; if(teacher === null) return;
-  const color = prompt("Kleur (#hex of naam):", "#d1e7ff"); if(color === null) return;
-  const key = formatDateKey(date);
-  const ag = getAgenda();
-  if(!ag[key]) ag[key] = [];
-  ag[key].push({ title, obj, teacher, color });
-  saveAgenda(ag); renderCalendar();
-  addNotificationForUser(`${user} heeft een agenda-item toegevoegd voor ${key}`, null); // optional admin-notif log
-}
-
-function editAgendaLesson(date, index){
-  if(!isAdmin){ alert("Alleen admin kan lessen bewerken."); return; }
-  const key = formatDateKey(date);
-  const ag = getAgenda();
-  if(!ag[key] || !ag[key][index]) return;
-  const cur = ag[key][index];
-  const title = prompt("Titel:", cur.title); if(title === null) return;
-  const obj = prompt("Doel / onderwerp:", cur.obj); if(obj === null) return;
-  const teacher = prompt("Naam leerkracht:", cur.teacher); if(teacher === null) return;
-  const color = prompt("Kleur (#hex of naam):", cur.color || "#d1e7ff"); if(color === null) return;
-  ag[key][index] = { title, obj, teacher, color };
-  saveAgenda(ag); renderCalendar();
-}
-
-/* ----------------------------
-   MESSAGES
-   ----------------------------*/
-function getMessages(){ return lsGet(KEY_MESSAGES, []) }
-function saveMessages(msgs){ lsSet(KEY_MESSAGES, msgs) }
-
-let currentFolder = "inbox"; // inbox or sent
-
-function switchFolder(f){
-  currentFolder = f;
-  document.querySelectorAll('.folder').forEach(el=>el.classList.toggle('active', el.dataset.folder===f));
-  renderConversations();
-}
-function toggleComposer(){
-  const comp = document.getElementById('composer');
-  comp.style.display = comp.style.display === 'none' || comp.style.display === '' ? 'block' : 'none';
-}
-function sendMessage(){
-  const to = document.getElementById('toField').value.trim();
-  const subject = document.getElementById('subjectField').value.trim();
-  const body = document.getElementById('bodyField').value.trim();
-  if(!to || !body){ alert("Vul ontvanger en bericht in."); return; }
-  const msgs = getMessages();
-  const m = { from:user, to, subject, text:body, time: (new Date()).toLocaleString() };
-  msgs.push(m);
-  saveMessages(msgs);
-  // create notification for recipient
-  addNotificationForUser(`Nieuw bericht van ${user}`, to);
-  // clear composer
-  document.getElementById('toField').value = '';
-  document.getElementById('subjectField').value = '';
-  document.getElementById('bodyField').value = '';
-  toggleComposer();
-  renderConversations();
-  updateHomeOverview();
-}
-
-/* conversation list rendering */
-function renderConversations(){
-  const convList = document.getElementById('convList');
-  const q = (document.getElementById('searchConv')?.value || '').toLowerCase();
-  const all = getMessages();
-  let list = [];
-  if(currentFolder === 'inbox') list = all.filter(m => m.to === user);
-  else list = all.filter(m => m.from === user);
-  list = list.filter(m => (m.subject||'').toLowerCase().includes(q) || (m.text||'').toLowerCase().includes(q) || (m.from||'').toLowerCase().includes(q) || (m.to||'').toLowerCase().includes(q));
-  list = list.sort((a,b)=> new Date(b.time) - new Date(a.time));
-  convList.innerHTML = '';
-  if(!list.length){ convList.innerHTML = "Geen berichten"; return; }
-  list.forEach(m=>{
-    const div = document.createElement('div'); div.className = 'gmail-message';
-    div.innerHTML = `<div><strong>${ currentFolder==='inbox' ? m.from : m.to }</strong> — ${escapeHtml(m.subject||'(geen onderwerp)')}<br><span class="small">${escapeHtml(m.text.substring(0,100))}</span></div><div class="small" style="float:right">${m.time}</div>`;
-    div.style.display = 'flex'; div.style.justifyContent = 'space-between'; div.style.alignItems = 'center'; div.style.gap = '10px';
-    div.onclick = ()=> showMessage(m);
-    convList.appendChild(div);
-  });
-}
-
-/* show a single message in viewer */
-function showMessage(m){
-  const viewer = document.getElementById('viewer');
-  const thread = document.getElementById('threadArea');
-  viewer.querySelector('.gmail-viewer-header').textContent = `${m.subject || '(geen onderwerp)'} — ${ m.to === user ? 'van '+m.from : 'aan '+m.to }`;
-  thread.innerHTML = `<div class="gmail-bubble"><strong>${m.from}</strong><div>${escapeHtml(m.text)}</div><div class="small">${m.time}</div></div>`;
-}
-
-/* ----------------------------
-   NOTIFICATIONS
-   ----------------------------*/
-function getNotifications(){ return lsGet(KEY_NOTIFS, []) }
-function saveNotifications(n){ lsSet(KEY_NOTIFS, n) }
-
-function addNotificationForUser(text, toUser /* if null, broadcast */){
-  const n = getNotifications();
-  n.push({ text, to: toUser, time: (new Date()).toLocaleString(), id: Math.random().toString(36).slice(2) });
-  saveNotifications(n);
-  updateNotifBadge();
-  updateHomeOverview();
-}
-
-/* update badge for the logged-in user */
-function updateNotifBadge(){
-  const count = getNotifications().filter(i => !i.to || i.to === user).length;
+function updateNotifications(){
+  const notifItems = document.querySelectorAll('#notifDropdown .notif-item');
   const badge = document.getElementById('notifBadge');
-  const homeCount = document.getElementById('notifCountHome');
-  if(count > 0){
-    badge.textContent = count; badge.classList.remove('hidden');
+  if(notifItems.length > 0){
+    badge.textContent = notifItems.length;
+    badge.classList.remove('hidden');
   } else {
     badge.classList.add('hidden');
   }
-  if(homeCount) homeCount.textContent = count;
 }
 
-/* show notifications list for current user */
-function renderNotifications(){
-  const list = document.getElementById('notificationsList');
-  const nots = getNotifications().filter(i => !i.to || i.to === user).slice().reverse();
-  list.innerHTML = '';
-  if(!nots.length){ list.innerHTML = '<div class="small">Geen meldingen</div>'; return; }
-  nots.forEach(n=>{
-    const div = document.createElement('div'); div.className = 'notif';
-    div.innerHTML = `${escapeHtml(n.text)}<div class="small" style="margin-top:6px">${n.time}</div>`;
-    list.appendChild(div);
-  });
+/* Example: simulate new notifications */
+setTimeout(()=> addNotification('📧 Nieuw bericht van docent'), 2000);
+setTimeout(()=> addNotification('📅 Herinnering: toets morgen'), 5000);
+setTimeout(()=> addNotification('⚠️ Opmerking van de directeur'), 8000);
+
+/* --- Logout --- */
+function logout(){
+  localStorage.clear();
+  alert("Je bent uitgelogd.");
+  location.reload();
 }
-
-/* clear notifications for current user when opening Meldingen */
-function openNotifications(){
-  showPage('notifications');
-  // remove notifications for this user only (keep broadcasts if desired - here we remove those targeted to user or broadcast)
-  const remaining = getNotifications().filter(i => i.to && i.to !== user);
-  saveNotifications(remaining);
-  updateNotifBadge();
-  renderNotifications();
-}
-
-/* ----------------------------
-   Home overview & helpers
-   ----------------------------*/
-function updateHomeOverview(){
-  // unread messages count
-  const msgs = getMessages().filter(m => m.to === user);
-  document.getElementById('unreadMsgs').textContent = msgs.length;
-
-  // next lesson today (from timetable)
-  const tt = getTimetable();
-  const todayName = new Date().toLocaleDateString("nl-NL",{weekday:'long'}).toLowerCase();
-  let nextText = "Geen lessen vandaag";
-  if(tt[todayName]){
-    // find first non-null period (excluding Middag)
-    const p = Object.keys(periodTimes).find(p => p !== "Middag" && tt[todayName][p]);
-    if(p && tt[todayName][p]) nextText = `${tt[todayName][p].title} — ${tt[todayName][p].teacher || '—'} (${p})`;
-  }
-  document.getElementById('nextLesson').textContent = nextText;
-
-  // notifications count
-  updateNotifBadge();
-}
-updateHomeOverview();
-
-/* mini-rooster and today's agenda */
-function updateMiniRooster(){
-  const t = getTimetable();
-  const todayName = new Date().toLocaleDateString("nl-NL",{weekday:'long'}).toLowerCase();
-  const el = document.getElementById('miniRooster');
-  if(!t[todayName]){ el.textContent = 'Geen rooster vandaag'; return; }
-  let text = '';
-  Object.keys(periodTimes).forEach(p=>{
-    if(p === 'Middag') text += `\nMiddag: ${periodTimes[p]}\n`;
-    else{
-      const val = t[todayName][p];
-      if(val) text += `${p}: ${val.title} (${val.teacher || '—'})\n`;
-    }
-  });
-  el.textContent = text || 'Geen lessen vandaag';
-}
-
-function updateHomeTodayAgenda(){
-  const key = formatDateKey(new Date());
-  const ag = getAgenda();
-  const items = ag[key] || [];
-  const container = document.getElementById('todayAgendaList');
-  container.innerHTML = '';
-  if(!items.length){ container.textContent = 'Geen items voor vandaag'; return; }
-  items.forEach(it=>{
-    const d = document.createElement('div'); d.className = 'small'; d.style.marginBottom = '8px';
-    d.innerHTML = `<strong>${escapeHtml(it.title)}</strong><div>${escapeHtml(it.obj)} — ${escapeHtml(it.teacher||'—')}</div>`;
-    container.appendChild(d);
-  });
-}
-
-/* ----------------------------
-   Misc helpers & init rendering
-   ----------------------------*/
-function showPage(id){
-  document.querySelectorAll('.container').forEach(c=>c.classList.add('hidden'));
-  const el = document.getElementById(id);
-  if(!el) return;
-  el.classList.remove('hidden');
-  // special actions
-  if(id === 'messages'){ renderConversations(); renderMessagesList(); updateHomeOverview(); }
-  if(id === 'agenda'){ renderCalendar(); }
-  if(id === 'rooster'){ renderTimetable(); }
-  if(id === 'home'){ updateHomeOverview(); renderCalendar(); renderTimetable(); renderMessagesList(); updateHomeTodayAgenda(); }
-  if(id === 'notifications'){ renderNotifications(); }
-}
-showPage('home');
-
-/* escape html */
-function escapeHtml(s){ if(!s && s!==0) return ''; return String(s).replace(/[&<>"'`]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;', '`':'&#96;' })[c]); }
-
-/* initialize other modules */
-renderCalendar();
-renderTimetable();
-renderConversations();
-renderMessages();
-renderNotifications();
-updateNotifBadge();
-updateHomeOverview();
-
-/* convenience: render messages list (in viewer area maybe) */
-function renderMessagesList(){
-  // ensure messages view (viewer panel) is empty default
-  document.getElementById('viewer').querySelector('.gmail-viewer-header').textContent = 'Selecteer een bericht';
-  document.getElementById('threadArea').innerHTML = '';
-}
-
-/* convenience: renderConversations already defined earlier but ensure folder default & UI */
-switchFolder('inbox');
-
-/* render main messages (for Home and Messages list) */
-function renderMessages(){
-  // update conversation list and viewer if open
-  renderConversations();
-  // update messages shown in home recent
-  const recent = getMessages().slice(-5).reverse();
-  const rl = document.getElementById('recentList'); rl.innerHTML = '';
-  if(!recent.length) rl.textContent = 'Geen recente gebeurtenissen';
-  recent.forEach(m=>{
-    const div = document.createElement('div'); div.className = 'small'; div.style.marginBottom = '8px';
-    div.innerHTML = `<strong>${escapeHtml(m.from)} → ${escapeHtml(m.to)}</strong><div>${escapeHtml(m.text)}</div><div class="small">${m.time}</div>`;
-    rl.appendChild(div);
-  });
-  updateHomeOverview();
-}
-
-/* renderConversations defined earlier (redeclare safe) */
-function renderConversations(){
-  const convList = document.getElementById('convList');
-  if(!convList) return;
-  const q = (document.getElementById('searchConv')?.value || '').toLowerCase();
-  const all = getMessages();
-  let list = [];
-  if(currentFolder === 'inbox') list = all.filter(m => m.to === user);
-  else list = all.filter(m => m.from === user);
-  list = list.filter(m => (m.subject||'').toLowerCase().includes(q) || (m.text||'').toLowerCase().includes(q) || (m.from||'').toLowerCase().includes(q) || (m.to||'').toLowerCase().includes(q));
-  list = list.sort((a,b)=> new Date(b.time) - new Date(a.time));
-  convList.innerHTML = '';
-  if(!list.length){ convList.innerHTML = "Geen berichten"; return; }
-  list.forEach(m=>{
-    const div = document.createElement('div'); div.className = 'gmail-message';
-    div.style.display = 'flex'; div.style.justifyContent = 'space-between'; div.style.alignItems = 'center';
-    div.innerHTML = `<div><strong>${ currentFolder==='inbox' ? escapeHtml(m.from) : escapeHtml(m.to) }</strong> — ${escapeHtml(m.subject||'(geen onderwerp)')}<br><span class="small">${escapeHtml(m.text.substring(0,120))}</span></div><div class="small">${m.time}</div>`;
-    div.onclick = ()=> showMessage(m);
-    convList.appendChild(div);
-  });
-}
-
-/* showMessage uses threadArea */
-function showMessage(m){
-  const viewer = document.getElementById('viewer');
-  viewer.querySelector('.gmail-viewer-header').textContent = `${m.subject||'(geen onderwerp)'} — ${ m.to === user ? 'van '+m.from : 'aan '+m.to }`;
-  const thread = document.getElementById('threadArea');
-  thread.innerHTML = `<div class="gmail-bubble"><strong>${escapeHtml(m.from)}</strong><div>${escapeHtml(m.text)}</div><div class="small">${m.time}</div></div>`;
-}
-
-/* helper to get messages (already used) */
-function getMessages(){ return lsGet(KEY_MESSAGES, []) }
-function saveMessages(msgs){ lsSet(KEY_MESSAGES, msgs) }
-
-/* Sending via bottom composer in messages list (if we add a simple send there) */
-function sendMessageFromSimple(to, text){
-  const msgs = getMessages();
-  msgs.push({ from:user, to, subject:'', text, time:(new Date()).toLocaleString() });
-  saveMessages(msgs);
-  addNotificationForUser(`Nieuw bericht van ${user}`, to);
-  renderMessages();
-}
-
-/* small helper to render conversations/messages area on load */
-renderMessages();
-
-/* finalize updates */
-updateNotifBadge();
-updateHomeOverview();
-renderNotifications();
-
 </script>
 </body>
 </html>
