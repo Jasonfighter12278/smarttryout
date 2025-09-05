@@ -1,242 +1,220 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8" />
-  <title>Smartschool Dashboard</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
-    :root{
-      --brand:#a31d1d;
-      --bg:#8b1b1b;
-      --ink:#ffffff;
-      --muted:#ffd9d9;
-      --border:#9c2a2a;
-    }
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-    .navbar{background:var(--brand);padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
-    .nav-left{display:flex;align-items:center;gap:10px}
-    .nav-right{display:flex;align-items:center;gap:18px}
-    .nav-item{position:relative;cursor:pointer}
-    .nav-item:hover{opacity:.85}
-    .badge{background:#1e90ff;color:#fff;border-radius:999px;font-size:12px;padding:2px 6px;margin-left:4px}
-    .dropdown-menu{display:none;position:absolute;top:100%;left:0;background:#922;border:1px solid var(--border);border-radius:8px;z-index:1000}
-    .dropdown-menu.open{display:block}
-    .dropdown-menu.simple{min-width:180px;padding:6px}
-    .dropdown-menu a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;color:#ddd;text-decoration:none;font-size:14px}
-    .dropdown-menu a:hover{background:rgba(255,255,255,.1)}
-    .dropdown-menu.links{display:none;grid-template-columns:1fr 1fr;gap:8px;min-width:360px;padding:10px}
-    .dropdown-menu.links.open{display:grid}
-    .dropdown-menu.meldingen{width:420px;background:#922;padding:12px;border-radius:8px}
-    .meldingen-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-    .toggle{display:inline-flex;border:1px solid #fff;border-radius:6px;overflow:hidden}
-    .toggle button{padding:4px 12px;background:none;border:none;color:#fff;cursor:pointer}
-    .toggle button.active{background:#fff;color:#922}
-    .melding-body{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;color:#ccc;text-align:center}
-    .shell{display:none;grid-template-columns:280px 1fr 320px;min-height:calc(100vh - 56px)}
-    .shell.active{display:grid}
-    .left-pane,.center-pane,.right-pane{padding:18px;border-color:var(--border)}
-    .left-pane{border-right:1px solid var(--border)}
-    .right-pane{border-left:1px solid var(--border)}
-    .clock{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:52px;font-weight:700}
-    .clock small{margin-top:12px;font-size:20px;color:var(--muted)}
-    .cal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-    .cal-cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:50%;font-size:14px;color:#fff}
-    .cal-head{border:none;font-weight:700}
-    .cal-cell.today{outline:2px solid #fff}
-    .cal-cell.muted{opacity:.4}
-    .agenda-container{padding:20px}
-    .agenda-form{display:flex;gap:10px;margin-bottom:16px}
-    .agenda-form input,.agenda-form button{padding:8px;border-radius:6px;border:1px solid var(--border)}
-    .agenda-list{list-style:none;display:flex;flex-direction:column;gap:8px}
-    .agenda-item{background:#922;padding:8px;border-radius:6px;display:flex;justify-content:space-between;align-items:center}
-    .agenda-item span{font-size:14px}
-    .agenda-item button{background:#a31d1d;border:none;color:#fff;padding:4px 8px;border-radius:4px;cursor:pointer}
-    .mail-container{display:none;height:calc(100vh - 56px)}
-    .mail-container.active{display:flex}
-    .mail-sidebar{width:220px;background:#922;padding:12px;display:flex;flex-direction:column;gap:10px}
-    .mail-sidebar button{background:none;border:none;color:#fff;padding:8px;text-align:left;cursor:pointer;border-radius:6px}
-    .mail-sidebar button:hover{background:rgba(255,255,255,0.1)}
-    .mail-main{flex:1;background:#8b1b1b;padding:16px;display:flex;flex-direction:column}
-    .mail-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
-    .mail-item{background:#922;padding:8px;border-radius:6px;cursor:pointer}
-    .mail-item:hover{opacity:.8}
-    .mail-view{flex:1;overflow-y:auto;display:none;flex-direction:column;gap:8px}
-    .mail-view.active{display:flex}
-    .compose{display:none;flex-direction:column;gap:8px}
-    .compose.active{display:flex}
-    .compose input,.compose textarea{padding:8px;border-radius:6px;border:1px solid var(--border)}
-    .compose button{background:#a31d1d;border:none;color:#fff;padding:8px;border-radius:6px;cursor:pointer}
-  </style>
+<meta charset="utf-8" />
+<title>Smartschool Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root{
+  --brand:#a31d1d;
+  --bg:#8b1b1b;
+  --ink:#ffffff;
+  --muted:#ffd9d9;
+  --border:#9c2a2a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+.navbar{background:var(--brand);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:100}
+.nav-left{display:flex;align-items:center;gap:10px}
+.nav-right{display:flex;align-items:center;gap:18px;position:relative}
+.nav-item{position:relative;cursor:pointer}
+.nav-item:hover{opacity:.85}
+.badge{background:#1e90ff;color:#fff;border-radius:999px;font-size:12px;padding:2px 6px;margin-left:4px}
+.dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#922;border:1px solid var(--border);border-radius:8px;z-index:2000;box-shadow:0 6px 16px rgba(0,0,0,0.4)}
+.dropdown-menu.open{display:block}
+.dropdown-menu.simple{min-width:200px;padding:6px}
+.dropdown-menu.links{display:none;grid-template-columns:1fr 1fr;gap:8px;min-width:360px;padding:10px}
+.dropdown-menu.links.open{display:grid}
+.dropdown-menu a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;color:#ddd;text-decoration:none;font-size:14px}
+.dropdown-menu a:hover{background:rgba(255,255,255,.1)}
+.dropdown-menu.meldingen{width:420px;background:#922;padding:12px;border-radius:8px}
+.meldingen-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.toggle{display:inline-flex;border:1px solid #fff;border-radius:6px;overflow:hidden}
+.toggle button{padding:4px 12px;background:none;border:none;color:#fff;cursor:pointer}
+.toggle button.active{background:#fff;color:#922}
+.melding-body{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;color:#ccc;text-align:center}
+.shell{display:none;grid-template-columns:280px 1fr 320px;min-height:calc(100vh - 56px)}
+.shell.active{display:grid}
+.left-pane,.center-pane,.right-pane{padding:18px;border-color:var(--border)}
+.left-pane{border-right:1px solid var(--border)}
+.right-pane{border-left:1px solid var(--border)}
+.clock{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:52px;font-weight:700}
+.clock small{margin-top:12px;font-size:20px;color:var(--muted)}
+.cal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:50%;font-size:14px;color:#fff}
+.cal-head{border:none;font-weight:700}
+.cal-cell.today{outline:2px solid #fff}
+.cal-cell.muted{opacity:.4}
+.agenda-container{padding:20px}
+.agenda-form{display:flex;gap:10px;margin-bottom:16px}
+.agenda-form input,.agenda-form button{padding:8px;border-radius:6px;border:1px solid var(--border)}
+.agenda-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.agenda-item{background:#922;padding:8px;border-radius:6px;display:flex;justify-content:space-between;align-items:center}
+.agenda-item span{font-size:14px}
+.agenda-item button{background:#a31d1d;border:none;color:#fff;padding:4px 8px;border-radius:4px;cursor:pointer}
+.mail-container{display:none;height:calc(100vh - 56px)}
+.mail-container.active{display:flex}
+.mail-sidebar{width:220px;background:#922;padding:12px;display:flex;flex-direction:column;gap:10px}
+.mail-sidebar button{background:none;border:none;color:#fff;padding:8px;text-align:left;cursor:pointer;border-radius:6px}
+.mail-sidebar button:hover{background:rgba(255,255,255,0.1)}
+.mail-main{flex:1;background:#8b1b1b;padding:16px;display:flex;flex-direction:column}
+.mail-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.mail-item{background:#922;padding:8px;border-radius:6px;cursor:pointer}
+.mail-item:hover{opacity:.8}
+.mail-view{flex:1;overflow-y:auto;display:none;flex-direction:column;gap:8px}
+.mail-view.active{display:flex}
+.compose{display:none;flex-direction:column;gap:8px}
+.compose.active{display:flex}
+.compose input,.compose textarea{padding:8px;border-radius:6px;border:1px solid var(--border)}
+.compose button{background:#a31d1d;border:none;color:#fff;padding:8px;border-radius:6px;cursor:pointer}
+</style>
 </head>
 <body>
 <div class="navbar">
-  <div class="nav-left">
-    <img src="https://via.placeholder.com/36" style="border-radius:50%">
-    <span><b>&lt;username&gt;</b></span>
-  </div>
-  <div class="nav-right">
-    <div class="nav-item" onclick="showPage('home')">Start</div>
-    <div class="nav-item has-dropdown" id="gotoItem">Ga naar ▾
-      <div class="dropdown-menu simple" id="gotoMenu">
-        <a href="#" onclick="showPage('agenda')">📅 Agenda</a>
-        <a href="#">📘 Lesrooster</a>
-        <a href="#" onclick="showPage('berichten')">✉️ Berichten</a>
-      </div>
-    </div>
-    <div class="nav-item has-dropdown" id="linksItem">Links ▾
-      <div class="dropdown-menu links" id="linksMenu">
-        <a href="https://leerling.appwel.be/login" target="_blank">Appwel</a>
-        <a href="https://www.diddit.be/login" target="_blank">diddit</a>
-        <a href="https://redwood.e-ducate.me/login" target="_blank">e-ducate.me</a>
-        <a href="https://platform.ftrprf.be" target="_blank">FTRPRF</a>
-        <a href="https://myway.i-learn.be/login" target="_blank">i-Learn</a>
-        <a href="https://platform.ididdit.be/login" target="_blank">iDiddit</a>
-        <a href="#">Lernova</a>
-        <a href="https://www.pelckmansportaal.be" target="_blank">Pelckmans Portaal</a>
-        <a href="https://www.scholierenkoepel.be" target="_blank">Scholierenkoepel</a>
-        <a href="https://apps.plantyn.com" target="_blank">Scoodle</a>
-        <a href="https://onderwijs.hetarchief.be" target="_blank">Uitgeklaard</a>
-        <a href="https://onderwijs.vrt.be/edubox-bib" target="_blank">VRT Leer mee</a>
-      </div>
-    </div>
-    <div class="nav-item has-dropdown" id="meldingenItem">Meldingen ▾
-      <div class="dropdown-menu meldingen" id="meldingenMenu">
-        <div class="meldingen-top">
-          <div class="toggle">
-            <button id="aanBtn" class="active">Aan</button>
-            <button id="uitBtn">Uit</button>
-          </div>
-          <div>
-            <button>Instellingen</button>
-            <button>Alles wissen</button>
-          </div>
-        </div>
-        <div class="melding-body">
-          <div style="font-size:48px">💬</div>
-          <p>Er zijn geen meldingen. Je bent volledig up-to-date!</p>
-        </div>
-      </div>
-    </div>
-    <div class="nav-item" onclick="showPage('berichten')">Berichten<span class="badge" id="mailCount">0</span></div>
-    <div class="nav-item" title="Afmelden">⎋</div>
-  </div>
+<div class="nav-left">
+<img src="https://via.placeholder.com/36" style="border-radius:50%">
+<span><b>&lt;username&gt;</b></span>
+</div>
+<div class="nav-right">
+<div class="nav-item" onclick="showPage('home')">Start</div>
+<div class="nav-item has-dropdown" id="gotoItem">Ga naar ▾
+<div class="dropdown-menu simple" id="gotoMenu">
+<a href="#" onclick="showPage('agenda')">📅 Agenda</a>
+<a href="#">📘 Lesrooster</a>
+<a href="#" onclick="showPage('berichten')">✉️ Berichten</a>
+</div>
+</div>
+<div class="nav-item has-dropdown" id="linksItem">Links ▾
+<div class="dropdown-menu links" id="linksMenu">
+<a href="https://leerling.appwel.be/login" target="_blank">Appwel</a>
+<a href="https://www.diddit.be/login" target="_blank">diddit</a>
+<a href="https://redwood.e-ducate.me/login" target="_blank">e-ducate.me</a>
+<a href="https://platform.ftrprf.be" target="_blank">FTRPRF</a>
+<a href="https://myway.i-learn.be/login" target="_blank">i-Learn</a>
+<a href="https://platform.ididdit.be/login" target="_blank">iDiddit</a>
+<a href="#">Lernova</a>
+<a href="https://www.pelckmansportaal.be" target="_blank">Pelckmans Portaal</a>
+<a href="https://www.scholierenkoepel.be" target="_blank">Scholierenkoepel</a>
+<a href="https://apps.plantyn.com" target="_blank">Scoodle</a>
+<a href="https://onderwijs.hetarchief.be" target="_blank">Uitgeklaard</a>
+<a href="https://onderwijs.vrt.be/edubox-bib" target="_blank">VRT Leer mee</a>
+</div>
+</div>
+<div class="nav-item has-dropdown" id="meldingenItem">Meldingen ▾
+<div class="dropdown-menu meldingen" id="meldingenMenu">
+<div class="meldingen-top">
+<div class="toggle">
+<button id="aanBtn" class="active">Aan</button>
+<button id="uitBtn">Uit</button>
+</div>
+<div>
+<button>Instellingen</button>
+<button>Alles wissen</button>
+</div>
+</div>
+<div class="melding-body">
+<div style="font-size:48px">💬</div>
+<p>Er zijn geen meldingen. Je bent volledig up-to-date!</p>
+</div>
+</div>
+</div>
+<div class="nav-item" onclick="showPage('berichten')">Berichten<span class="badge" id="mailCount">0</span></div>
+<div class="nav-item" title="Afmelden">⎋</div>
+</div>
 </div>
 
 <div id="home" class="shell active">
-  <aside class="left-pane">
-    <h3>Schoolkalender</h3>
-    <p><a href="#" style="color:#00f">Link naar de SCHOOLKALENDER</a></p>
-    <hr style="margin:12px 0;border:0;border-top:1px solid var(--border)">
-    <h3>Contactinformatie</h3>
-    <p>Sint Maria Geel<br>Pas 110<br>2440 Geel</p>
-    <p>Tel.: 014 58 86 72<br>Fax: 014 58 69 25<br> E-mail: <a href="mailto:smg@kogeka.be" style="color:#ffd9d9">smg@kogeka.be</a><br> Web: <a href="http://www.kogeka.be/sint..." style="color:#ffd9d9">http://www.kogeka.be/sint…</a> </p>
-  </aside>
-  <main class="center-pane">
-    <div class="clock">
-      <div id="clockTime">00:00:00</div>
-      <small id="clockDate">-</small>
-    </div>
-  </main>
-  <aside class="right-pane">
-    <div class="calendar">
-      <div class="cal-top">
-        <button onclick="shiftMonth(-1)">◀</button>
-        <h3 id="calTitle"></h3>
-        <button onclick="shiftMonth(1)">▶</button>
-      </div>
-      <div id="calGrid" class="cal-grid"></div>
-    </div>
-  </aside>
+<aside class="left-pane">
+<h3>Schoolkalender</h3>
+<p><a href="#" style="color:#00f">Link naar de SCHOOLKALENDER</a></p>
+<hr style="margin:12px 0;border:0;border-top:1px solid var(--border)">
+<h3>Contactinformatie</h3>
+<p>Sint Maria Geel<br>Pas 110<br>2440 Geel</p>
+<p>Tel.: 014 58 86 72<br>Fax: 014 58 69 25<br> E-mail: <a href="mailto:smg@kogeka.be" style="color:#ffd9d9">smg@kogeka.be</a><br> Web: <a href="http://www.kogeka.be/sint..." style="color:#ffd9d9">http://www.kogeka.be/sint…</a> </p>
+</aside>
+<main class="center-pane">
+<div class="clock">
+<div id="clockTime">00:00:00</div>
+<small id="clockDate">-</small>
+</div>
+</main>
+<aside class="right-pane">
+<div class="calendar">
+<div class="cal-top">
+<button onclick="shiftMonth(-1)">◀</button>
+<h3 id="calTitle"></h3>
+<button onclick="shiftMonth(1)">▶</button>
+</div>
+<div id="calGrid" class="cal-grid"></div>
+</div>
+</aside>
 </div>
 
 <div id="agenda" class="shell">
-  <main class="center-pane agenda-container">
-    <h2>Agenda</h2>
-    <form class="agenda-form" onsubmit="addEvent(event)">
-      <input type="text" id="eventTitle" placeholder="Titel" required>
-      <input type="date" id="eventDate" required>
-      <button type="submit">Toevoegen</button>
-    </form>
-    <ul id="agendaList" class="agenda-list"></ul>
-  </main>
+<main class="center-pane agenda-container">
+<h2>Agenda</h2>
+<form class="agenda-form" onsubmit="addEvent(event)">
+<input type="text" id="eventTitle" placeholder="Titel" required>
+<input type="date" id="eventDate" required>
+<button type="submit">Toevoegen</button>
+</form>
+<ul id="agendaList" class="agenda-list"></ul>
+</main>
 </div>
 
 <div id="berichten" class="mail-container">
-  <div class="mail-sidebar">
-    <button onclick="switchMailbox('inbox')">📥 Inbox</button>
-    <button onclick="switchMailbox('sent')">📤 Verzonden</button>
-    <button onclick="switchMailbox('drafts')">📝 Concepten</button>
-    <button onclick="composeMail()">✉️ Nieuw bericht</button>
-  </div>
-  <div class="mail-main">
-    <div id="mailList" class="mail-list"></div>
-    <div id="mailView" class="mail-view"></div>
-    <div id="compose" class="compose">
-      <input type="text" id="composeTo" placeholder="Aan">
-      <input type="text" id="composeSubject" placeholder="Onderwerp">
-      <textarea id="composeBody" rows="6" placeholder="Bericht..."></textarea>
-      <button onclick="sendMail()">Versturen</button>
-    </div>
-  </div>
+<div class="mail-sidebar">
+<button onclick="switchMailbox('inbox')">📥 Inbox</button>
+<button onclick="switchMailbox('sent')">📤 Verzonden</button>
+<button onclick="switchMailbox('drafts')">📝 Concepten</button>
+<button onclick="composeMail()">✉️ Nieuw bericht</button>
+</div>
+<div class="mail-main">
+<div id="mailList" class="mail-list"></div>
+<div id="mailView" class="mail-view"></div>
+<div id="compose" class="compose">
+<input type="text" id="composeTo" placeholder="Aan">
+<input type="text" id="composeSubject" placeholder="Onderwerp">
+<textarea id="composeBody" rows="6" placeholder="Bericht..."></textarea>
+<button onclick="sendMail()">Versturen</button>
+</div>
+</div>
 </div>
 
 <script>
 document.querySelectorAll('.has-dropdown').forEach(item=>{
-  item.addEventListener('click',e=>{
-    e.stopPropagation();
-    const menu=item.querySelector('.dropdown-menu');
-    document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'));
-    menu.classList.toggle('open');
-  });
+item.addEventListener('click',e=>{
+e.stopPropagation();
+const menu=item.querySelector('.dropdown-menu');
+document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'));
+menu.classList.toggle('open');
+});
 });
 document.addEventListener('click',()=>{document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'))});
 document.getElementById('aanBtn').addEventListener('click',()=>{document.getElementById('aanBtn').classList.add('active');document.getElementById('uitBtn').classList.remove('active')});
 document.getElementById('uitBtn').addEventListener('click',()=>{document.getElementById('uitBtn').classList.add('active');document.getElementById('aanBtn').classList.remove('active')});
 
-function showPage(id){
-  document.querySelectorAll('.shell,.mail-container').forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-function updateClock(){
-  const now=new Date();
-  document.getElementById('clockTime').textContent=now.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  document.getElementById('clockDate').textContent=now.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-}
+function showPage(id){document.querySelectorAll('.shell,.mail-container').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function updateClock(){const now=new Date();document.getElementById('clockTime').textContent=now.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit',second:'2-digit'});document.getElementById('clockDate').textContent=now.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});}
 setInterval(updateClock,1000);updateClock();
 let calPointer=new Date();
-function renderCalendar(){
-  const title=document.getElementById('calTitle');const grid=document.getElementById('calGrid');
-  title.textContent=new Intl.DateTimeFormat('nl-NL',{month:'long',year:'numeric'}).format(calPointer);grid.innerHTML='';
-  const weekDays=['ma','di','wo','do','vr','za','zo'];weekDays.forEach(d=>{let h=document.createElement('div');h.className='cal-cell cal-head';h.textContent=d;grid.appendChild(h)});
-  const first=new Date(calPointer.getFullYear(),calPointer.getMonth(),1);const startIndex=(first.getDay()+6)%7;
-  const daysInMonth=new Date(calPointer.getFullYear(),calPointer.getMonth()+1,0).getDate();
-  const prevDays=new Date(calPointer.getFullYear(),calPointer.getMonth(),0).getDate();
-  for(let i=startIndex-1;i>=0;i--){let c=document.createElement('div');c.className='cal-cell muted';c.textContent=prevDays-i;grid.appendChild(c)}
-  const today=new Date();const isThisMonth=today.getFullYear()===calPointer.getFullYear()&&today.getMonth()===calPointer.getMonth();
-  for(let d=1;d<=daysInMonth;d++){let c=document.createElement('div');c.className='cal-cell';c.textContent=d;if(isThisMonth&&d===today.getDate())c.classList.add('today');grid.appendChild(c)}
-}
+function renderCalendar(){const title=document.getElementById('calTitle');const grid=document.getElementById('calGrid');title.textContent=new Intl.DateTimeFormat('nl-NL',{month:'long',year:'numeric'}).format(calPointer);grid.innerHTML='';const weekDays=['ma','di','wo','do','vr','za','zo'];weekDays.forEach(d=>{let h=document.createElement('div');h.className='cal-cell cal-head';h.textContent=d;grid.appendChild(h)});const first=new Date(calPointer.getFullYear(),calPointer.getMonth(),1);const startIndex=(first.getDay()+6)%7;const daysInMonth=new Date(calPointer.getFullYear(),calPointer.getMonth()+1,0).getDate();const prevDays=new Date(calPointer.getFullYear(),calPointer.getMonth(),0).getDate();for(let i=startIndex-1;i>=0;i--){let c=document.createElement('div');c.className='cal-cell muted';c.textContent=prevDays-i;grid.appendChild(c)}const today=new Date();const isThisMonth=today.getFullYear()===calPointer.getFullYear()&&today.getMonth()===calPointer.getMonth();for(let d=1;d<=daysInMonth;d++){let c=document.createElement('div');c.className='cal-cell';c.textContent=d;if(isThisMonth&&d===today.getDate())c.classList.add('today');grid.appendChild(c)}}
 function shiftMonth(delta){calPointer.setMonth(calPointer.getMonth()+delta);renderCalendar()}
 renderCalendar();
 
 let events=[];
-function addEvent(e){e.preventDefault();const title=document.getElementById('eventTitle').value;const date=document.getElementById('eventDate').value;
-events.push({title,date});document.getElementById('eventTitle').value='';document.getElementById('eventDate').value='';renderEvents();}
-function renderEvents(){const list=document.getElementById('agendaList');list.innerHTML='';events.forEach((ev,i)=>{let li=document.createElement('li');li.className='agenda-item';
-li.innerHTML=`<span>${ev.date} - ${ev.title}</span><button onclick="removeEvent(${i})">x</button>`;list.appendChild(li)});}
+function addEvent(e){e.preventDefault();const title=document.getElementById('eventTitle').value;const date=document.getElementById('eventDate').value;events.push({title,date});document.getElementById('eventTitle').value='';document.getElementById('eventDate').value='';renderEvents();}
+function renderEvents(){const list=document.getElementById('agendaList');list.innerHTML='';events.forEach((ev,i)=>{let li=document.createElement('li');li.className='agenda-item';li.innerHTML=`<span>${ev.date} - ${ev.title}</span><button onclick="removeEvent(${i})">x</button>`;list.appendChild(li)});}
 function removeEvent(i){events.splice(i,1);renderEvents();}
 
 let mails={inbox:[{from:"Directie",subject:"Welkom",body:"Welkom bij Smartschool!",date:"vandaag"}],sent:[],drafts:[]};
 let currentBox='inbox';
 function switchMailbox(box){currentBox=box;document.getElementById('compose').classList.remove('active');document.getElementById('mailView').classList.remove('active');renderMailbox();}
-function renderMailbox(){const list=document.getElementById('mailList');list.innerHTML='';mails[currentBox].forEach((m,i)=>{let div=document.createElement('div');div.className='mail-item';
-div.textContent=`${m.from||"Ik"} - ${m.subject}`;div.onclick=()=>openMail(i);list.appendChild(div)});document.getElementById('mailCount').textContent=mails.inbox.length;}
+function renderMailbox(){const list=document.getElementById('mailList');list.innerHTML='';mails[currentBox].forEach((m,i)=>{let div=document.createElement('div');div.className='mail-item';div.textContent=`${m.from||"Ik"} - ${m.subject}`;div.onclick=()=>openMail(i);list.appendChild(div)});document.getElementById('mailCount').textContent=mails.inbox.length;}
 function openMail(i){const mail=mails[currentBox][i];const view=document.getElementById('mailView');view.classList.add('active');view.innerHTML=`<h3>${mail.subject}</h3><p><b>Van:</b> ${mail.from||"Ik"}</p><p>${mail.body}</p>`;}
 function composeMail(){document.getElementById('compose').classList.add('active');document.getElementById('mailView').classList.remove('active');}
-function sendMail(){let to=document.getElementById('composeTo').value;let subject=document.getElementById('composeSubject').value;let body=document.getElementById('composeBody').value;
-if(subject&&body){mails.sent.push({to,subject,body,date:new Date().toLocaleDateString('nl-NL')});document.getElementById('composeTo').value='';document.getElementById('composeSubject').value='';document.getElementById('composeBody').value='';
-alert("Bericht verzonden!");switchMailbox('sent');}}
+function sendMail(){let to=document.getElementById('composeTo').value;let subject=document.getElementById('composeSubject').value;let body=document.getElementById('composeBody').value;if(subject&&body){mails.sent.push({to,subject,body,date:new Date().toLocaleDateString('nl-NL')});document.getElementById('composeTo').value='';document.getElementById('composeSubject').value='';document.getElementById('composeBody').value='';alert("Bericht verzonden!");switchMailbox('sent');}}
 switchMailbox('inbox');
 </script>
 </body>
