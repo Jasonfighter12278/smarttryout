@@ -195,7 +195,7 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
   </div>
 </div>
 <script>
-const ACCOUNTS={"admin":{name:"Beheerder",img:"https://cdn-icons-png.flaticon.com/512/147/147144.png",admin:true}};
+const ACCOUNTS={"admin":{name:"Beheerder",img:"https://static.wikia.nocookie.net/h__/images/0/09/Vorhees.jpg/revision/latest?cb=20120826172608&path-prefix=halloween",admin:true}};
 let user=localStorage.getItem('loggedInUser')||'admin';
 const currentUserObj=ACCOUNTS[user]||{name:user,img:'',admin:false};
 document.getElementById('userDisplay').textContent=currentUserObj.name;
