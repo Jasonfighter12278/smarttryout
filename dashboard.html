@@ -5,215 +5,317 @@
 <title>Smartschool Dashboard — Homepage</title>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <style>
-:root{--brand:#a61b1b;--bg:#ffe5e5;--card:#fff;--radius:12px;--muted:#666;--line:#e6e6ea;--accent:#e74c3c}
+/* ===== THEME (dark red, flat) ===== */
+:root{
+  --brand:#8f1818;        /* top bar + accents */
+  --bg:#7f1818;           /* page background */
+  --bg-deeper:#6f1414;    /* panels */
+  --ink:#ffffff;          /* primary text (white) */
+  --muted:#ffd9d9;        /* muted text */
+  --ring:#b33;            /* focus ring */
+  --border:#9c2a2a;       /* subtle separators */
+  --radius:10px;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);color:#222;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-.navbar{background:var(--brand);color:#fff;padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:400;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+body{
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* ===== TOP NAV ===== */
+.navbar{
+  background:var(--brand);
+  color:var(--ink);
+  padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  position:sticky;top:0;z-index:100;
+}
 .nav-left{display:flex;align-items:center;gap:12px}
-.profile-img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.12)}
+.profile-img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.15)}
 .profile-name{font-weight:600}
-.nav-right{display:flex;align-items:center;gap:10px}
-.nav-item{position:relative;cursor:pointer;padding:6px 8px;border-radius:6px;user-select:none}
-.nav-item > span{font-weight:600}
-.nav-item:hover{background:rgba(255,255,255,.06)}
-.dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;min-width:220px;background:var(--card);color:#222;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.18);overflow:hidden;z-index:500}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-item{position:relative;cursor:pointer;padding:6px 10px;border-radius:6px;user-select:none}
+.nav-item:hover{background:rgba(255,255,255,.08)}
+.dropdown-menu{
+  display:none;position:absolute;top:calc(100% + 8px);left:0;min-width:220px;
+  background:var(--bg-deeper);color:var(--ink);border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;z-index:200
+}
 .dropdown-menu.open{display:block}
-.dropdown-menu a,.dropdown-menu button{display:block;width:100%;text-align:left;padding:10px 12px;color:#222;text-decoration:none;background:none;border:none;cursor:pointer}
-.dropdown-menu a:hover,.dropdown-menu button:hover{background:#f4f4f6}
-.logout-btn{font-size:18px;cursor:pointer;padding:6px 8px;border-radius:6px}
-.badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--accent);color:white;font-size:12px;position:absolute;top:-6px;right:-6px}
-.container{max-width:1200px;margin:20px auto;padding:20px}
+.dropdown-menu a,.dropdown-menu button{
+  display:block;width:100%;text-align:left;padding:10px 12px;color:var(--ink);
+  text-decoration:none;background:none;border:none;cursor:pointer
+}
+.dropdown-menu a:hover,.dropdown-menu button:hover{background:rgba(255,255,255,.06)}
+.badge{
+  display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;
+  padding:0 6px;border-radius:999px;background:#e24c4c;color:#fff;font-size:12px;position:absolute;top:-6px;right:-6px
+}
 .hidden{display:none!important}
-.card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:0 3px 10px rgba(0,0,0,.06);margin-bottom:18px}
-.home-layout{display:grid;grid-template-columns:1fr 260px;gap:18px;align-items:start}
-.center-time{text-align:center;margin:20px 0;font-size:22px;font-weight:700}
-.kpis{display:flex;gap:12px;margin-top:10px}
-.kpi{background:#fafbff;border:1px solid var(--line);border-radius:10px;padding:10px;flex:1}
-#todayDate{font-weight:700}
-#todayTime{font-size:18px;margin-top:6px}
-.agenda-list{display:grid;grid-template-columns:1fr;gap:10px}
-.agenda-item{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px;min-height:84px}
-.agenda-title{font-weight:700}
-.small{font-size:13px;color:var(--muted)}
+
+/* ===== PAGE LAYOUT (like screenshot) ===== */
+.shell{display:grid;grid-template-columns:280px 1fr 320px;gap:0;min-height:calc(100vh - 56px)}
+.left-pane,.center-pane,.right-pane{padding:18px 16px}
+.left-pane{border-right:1px solid var(--border)}
+.right-pane{border-left:1px solid var(--border)}
+
+/* Left column: logo + search */
+.logo-wrap{display:flex;align-items:center;gap:10px;margin:8px 0 18px}
+.logo{
+  width:130px;height:110px;background:transparent;border:2px solid rgba(255,255,255,.1);
+  border-radius:10px;display:grid;place-items:center;color:#ffdada;font-weight:900;font-size:28px;
+}
+.search{display:flex;gap:8px}
+.search input{
+  flex:1;background:rgba(0,0,0,.15);border:1px solid var(--border);color:var(--ink);
+  padding:10px;border-radius:8px;outline:none;
+}
+.search input::placeholder{color:#ffdede}
+.search button{
+  background:rgba(255,255,255,.12);border:1px solid var(--border);color:var(--ink);
+  padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:700
+}
+.search button:hover{background:rgba(255,255,255,.2)}
+
+/* Center column: blank stage (but we still keep Home widgets offscreen if needed) */
+.center-stage{
+  height:100%;
+  background:transparent;
+  border-radius:var(--radius);
+}
+
+/* Right column: month calendar */
+.calendar{
+  width:100%;
+  background:transparent;
+  border-radius:12px;
+}
+.cal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-top h3{font-weight:700}
+.cal-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+}
+.cal-cell{
+  aspect-ratio:1/1;
+  border:1px solid var(--border);
+  border-radius:50%;
+  display:grid;place-items:center;
+  color:#ffe9e9;
+  user-select:none;
+}
+.cal-head{border:none;border-radius:0;font-weight:700;color:#fff;opacity:.8;aspect-ratio:auto;padding:6px 0}
+.cal-cell.today{outline:2px solid #fff}
+.cal-cell.muted{opacity:.4}
+
+/* Secondary pages keep working but get a flat style */
+.container{max-width:1200px;margin:0 auto;padding:18px 16px}
+.card{
+  background:rgba(0,0,0,.12);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px; margin-bottom:16px;
+}
 .row{display:flex;gap:10px;align-items:center}
-.btn{background:var(--brand);color:#fff;padding:8px 12px;border-radius:8px;font-weight:700;border:none;cursor:pointer}
-.btn-ghost{background:#f3f4f6;padding:6px 10px;border-radius:8px;border:none;cursor:pointer}
+.btn{background:#b12525;color:#fff;padding:8px 12px;border-radius:8px;font-weight:700;border:1px solid #c13a3a;cursor:pointer}
+.btn-ghost{background:rgba(0,0,0,.22);padding:8px 10px;border-radius:8px;border:1px solid var(--border);color:#fff;cursor:pointer}
+.small{font-size:13px;color:#ffd9d9}
+
+/* Timetable (kept intact) */
 .timetable-wrap{overflow:auto}
-.timetable{display:grid;grid-template-columns:120px repeat(5,1fr);border:1px solid var(--line);border-radius:10px;overflow:visible}
-.timetable .col-header{padding:12px;text-align:center;background:#f4f4f6;font-weight:700;border-right:1px solid var(--line)}
-.timetable .time-cell{padding:12px;border-right:1px solid var(--line);background:#fff;font-weight:700}
-.timetable .slot-cell{min-height:88px;padding:10px;border-right:1px solid var(--line);background:#fff;cursor:pointer}
-.slot-inner{height:100%;border-radius:8px;padding:8px;border-left:8px solid transparent;display:flex;flex-direction:column;justify-content:center}
-.modal{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:999}
-.modal .box{background:#fff;padding:16px;border-radius:10px;width:360px;box-shadow:0 12px 40px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:8px}
-.modal input,.modal textarea,.modal select{padding:8px;border-radius:8px;border:1px solid #ddd}
+.timetable{display:grid;grid-template-columns:120px repeat(5,1fr);border:1px solid var(--border);border-radius:10px;overflow:visible}
+.timetable .col-header{padding:12px;text-align:center;background:rgba(0,0,0,.18);font-weight:700;border-right:1px solid var(--border)}
+.timetable .time-cell{padding:12px;border-right:1px solid var(--border);background:rgba(0,0,0,.08);font-weight:700}
+.timetable .slot-cell{min-height:88px;padding:10px;border-right:1px solid var(--border);background:rgba(0,0,0,.08);cursor:pointer}
+.slot-inner{height:100%;border-radius:8px;padding:8px;border-left:8px solid transparent;display:flex;flex-direction:column;justify-content:center;background:rgba(255,255,255,.04)}
+
+/* Agenda items */
+.agenda-list{display:grid;grid-template-columns:1fr;gap:10px}
+.agenda-item{display:flex;flex-direction:column;gap:6px;border:1px solid var(--border);border-radius:12px;background:rgba(0,0,0,.12);padding:10px;min-height:84px}
+.agenda-title{font-weight:700}
+
+/* Modals */
+.modal{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:999}
+.modal .box{background:#5e0f0f;color:#fff;border:1px solid var(--border);padding:16px;border-radius:10px;width:360px;box-shadow:0 12px 40px rgba(0,0,0,.45);display:flex;flex-direction:column;gap:8px}
+.modal input,.modal textarea,.modal select{padding:10px;border-radius:8px;border:1px solid var(--border);background:rgba(0,0,0,.2);color:#fff}
 .modal textarea{resize:vertical;min-height:80px}
 .modal .actions{display:flex;gap:8px;justify-content:flex-end}
-.week-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+
+/* Accessibility */
+:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
 </style>
 </head>
 <body>
-<div class="navbar">
-  <div class="nav-left">
-    <img id="profilePic" class="profile-img" src="" alt="profiel">
-    <div>
-      <div class="profile-name" id="profileName"></div>
-      <div class="small" id="roleText"></div>
-    </div>
-  </div>
-  <div class="nav-right">
-    <div class="nav-item" onclick="showPage('home')"><span>Start</span></div>
-    <div class="nav-item has-dropdown" id="gotoItem">
-      <span>Ga naar ▾</span>
-      <div class="dropdown-menu" id="gotoMenu">
-        <a onclick="showPage('agenda'); keepDropdownOpen('gotoItem')">📅 Agenda</a>
-        <a onclick="showPage('lessenrooster'); keepDropdownOpen('gotoItem')">📘 Lesrooster</a>
-        <a onclick="showPage('messages'); keepDropdownOpen('gotoItem')">✉️ Berichten</a>
+  <!-- ===== TOP BAR ===== -->
+  <div class="navbar">
+    <div class="nav-left">
+      <img id="profilePic" class="profile-img" src="" alt="profiel">
+      <div>
+        <div class="profile-name" id="profileName"></div>
+        <div class="small" id="roleText"></div>
       </div>
     </div>
-    <div class="nav-item has-dropdown" id="linksItem">
-      <span>Links ▾</span>
-      <div class="dropdown-menu" id="linksMenu">
-        <a href="https://leerling.appwel.be/login" target="_blank">🔗 Appwel</a>
-        <a href="https://https://www.diddit.be/login?smartschoolPlatform=smg" target="_blank">🔗 diddit</a>
-        <a href="https://https://redwood.e-ducate.me/login" target="_blank">🔗 e-ducate.me</a>
-        <a href="https://platform.ftrprf.be/?subdomain=smg" target="_blank">🔗 FTRPRF</a>
-        <a href="https://myway.i-learn.be/login?smartschoolPlatform=smg" target="_blank">🔗 i-Learn</a>
-        <a href="https://platform.ididdit.be/login?smartschoolPlatform=smg" target="_blank">🔗 iDiddit</a>
-        <a href="about:blank" target="_blank">🔗 Lernova</a>
-        <a href="https://www.pelckmansportaal.be/aanmelden?returnUrl=%2Fdashboard" target="_blank">🔗 Pelckmans Portaal</a>
-        <a href="https://smg.smartschool.be/OAuth/index/authorize?client_id=c4122c9da71f&redirect_uri=https://api.polpo.be/auth/smartschool/callback&scope=diekeureinfo%20sendnotif&response_type=code" target="_blank">🔗 POLPO</a>
-        <a href="https://www.scholierenkoepel.be" target="_blank">🔗 Scholierenkoepel</a>
-        <a href="https://apps.plantyn.com/my/nl-be/bookshelf?redirectPath=%2F&redirectPlatform=sep" target="_blank">🔗 Scoodle</a>
-        <a href="https://onderwijs.hetarchief.be/projecten/uitgeklaard?utm_source=Smartschool&utm_medium=menu&utm_campaign=Uitgeklaard&rol=leerling" target="_blank">🔗 Uitgeklaard</a>
-        <a href="https://onderwijs.vrt.be/edubox-bib/#/educatie" target="_blank">🔗 VRT Leer mee</a>
-        <a href="https://jasonfighter12278.github.io/smarttryout/dashboard.html" target="blank">🔗 dashboard</a>
-      </div>
-    </div>
-    <div class="nav-item" id="notifNav" onclick="showPage('notifications')" style="position:relative">
-      <span>Meldingen 🔔</span>
-      <div id="notifBadge" class="badge hidden" title="meldingen">0</div>
-    </div>
-    <div class="nav-item has-dropdown" id="userSwitch">
-      <span>Account ▾</span>
-      <div class="dropdown-menu" id="userMenu"></div>
-    </div>
-    <div class="nav-item"><span id="logoutBtn" class="logout-btn" onclick="logout()">⎋</span></div>
-  </div>
-</div>
-<div id="home" class="container">
-  <div class="center-time">
-    <div id="todayDate"></div>
-    <div id="todayTime"></div>
-  </div>
-  <div class="home-layout">
-    <div>
-      <div class="card">
-        <h2>Welkom, <span id="userDisplay">User</span> 🎉</h2>
-        <div class="kpis">
-          <div class="kpi">
-            <div class="small">Volgende les</div>
-            <div id="nextLesson" class="small">--</div>
-          </div>
-          <div class="kpi">
-            <div class="small">Ongelezen berichten</div>
-            <div id="unreadMsgs" class="small">0</div>
-          </div>
-          <div class="kpi">
-            <div class="small">Meldingen</div>
-            <div id="notifCountHome" class="small">0</div>
-          </div>
+    <div class="nav-right">
+      <div class="nav-item" onclick="showPage('home')"><span>Start</span></div>
+
+      <div class="nav-item has-dropdown" id="gotoItem">
+        <span>Ga naar ▾</span>
+        <div class="dropdown-menu" id="gotoMenu">
+          <a onclick="showPage('agenda'); keepDropdownOpen('gotoItem')">📅 Agenda</a>
+          <a onclick="showPage('lessenrooster'); keepDropdownOpen('gotoItem')">📘 Lesrooster</a>
+          <a onclick="showPage('messages'); keepDropdownOpen('gotoItem')">✉️ Berichten</a>
         </div>
       </div>
-      <div class="card">
-        <h3>Recent</h3>
-        <div id="recentList">Geen recente gebeurtenissen</div>
+
+      <div class="nav-item has-dropdown" id="linksItem">
+        <span>Links ▾</span>
+        <div class="dropdown-menu" id="linksMenu">
+          <a href="https://leerling.appwel.be/login" target="_blank">🔗 Appwel</a>
+          <a href="https://https://www.diddit.be/login?smartschoolPlatform=smg" target="_blank">🔗 diddit</a>
+          <a href="https://https://redwood.e-ducate.me/login" target="_blank">🔗 e-ducate.me</a>
+          <a href="https://platform.ftrprf.be/?subdomain=smg" target="_blank">🔗 FTRPRF</a>
+          <a href="https://myway.i-learn.be/login?smartschoolPlatform=smg" target="_blank">🔗 i-Learn</a>
+          <a href="https://platform.ididdit.be/login?smartschoolPlatform=smg" target="_blank">🔗 iDiddit</a>
+          <a href="about:blank" target="_blank">🔗 Lernova</a>
+          <a href="https://www.pelckmansportaal.be/aanmelden?returnUrl=%2Fdashboard" target="_blank">🔗 Pelckmans Portaal</a>
+          <a href="https://smg.smartschool.be/OAuth/index/authorize?client_id=c4122c9da71f&redirect_uri=https://api.polpo.be/auth/smartschool/callback&scope=diekeureinfo%20sendnotif&response_type=code" target="_blank">🔗 POLPO</a>
+          <a href="https://www.scholierenkoepel.be" target="_blank">🔗 Scholierenkoepel</a>
+          <a href="https://apps.plantyn.com/my/nl-be/bookshelf?redirectPath=%2F&redirectPlatform=sep" target="_blank">🔗 Scoodle</a>
+          <a href="https://onderwijs.hetarchief.be/projecten/uitgeklaard?utm_source=Smartschool&utm_medium=menu&utm_campaign=Uitgeklaard&rol=leerling" target="_blank">🔗 Uitgeklaard</a>
+          <a href="https://onderwijs.vrt.be/edubox-bib/#/educatie" target="_blank">🔗 VRT Leer mee</a>
+          <a href="https://jasonfighter12278.github.io/smarttryout/dashboard.html" target="blank">🔗 dashboard</a>
+        </div>
       </div>
-      <div class="card">
-        <h3>Snelle acties</h3>
+
+      <div class="nav-item" id="notifNav" onclick="showPage('notifications')" style="position:relative">
+        <span>Meldingen 🔔</span>
+        <div id="notifBadge" class="badge hidden" title="meldingen">0</div>
+      </div>
+
+      <div class="nav-item has-dropdown" id="userSwitch">
+        <span>Account ▾</span>
+        <div class="dropdown-menu" id="userMenu"></div>
+      </div>
+
+      <div class="nav-item" title="Afmelden"><span id="logoutBtn" onclick="logout()">⎋</span></div>
+    </div>
+  </div>
+
+  <!-- ===== HOME (screenshot layout) ===== -->
+  <div id="home" class="shell">
+    <!-- Left: logo + search -->
+    <aside class="left-pane">
+      <div class="logo-wrap">
+        <div class="logo">de<br>Bib</div>
+      </div>
+      <div class="search" role="search">
+        <input id="leftSearch" type="text" placeholder="Zoeken">
+        <button onclick="alert('Zoeken…')">Zoeken</button>
+      </div>
+    </aside>
+
+    <!-- Middle: blank stage (keeps space like screenshot) -->
+    <main class="center-pane">
+      <div class="center-stage" aria-label="Hoofdvenster"></div>
+    </main>
+
+    <!-- Right: calendar -->
+    <aside class="right-pane">
+      <div class="calendar">
+        <div class="cal-top">
+          <button class="btn-ghost" onclick="shiftMonth(-1)">◀</button>
+          <h3 id="calTitle">september 2025</h3>
+          <button class="btn-ghost" onclick="shiftMonth(1)">▶</button>
+        </div>
+        <div id="calGrid" class="cal-grid"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ===== OTHER PAGES (all original functions intact) ===== -->
+  <div id="agenda" class="container hidden">
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <h2>Agenda</h2>
+        <button class="btn" onclick="openAgendaModal()">+ Item</button>
+      </div>
+      <div id="agendaItems" class="agenda-list">Geen items</div>
+    </div>
+  </div>
+
+  <div id="lessenrooster" class="container hidden">
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div class="small" id="weekLabel">Week 0</div>
         <div class="row">
-          <button class="btn" onclick="showPage('agenda')">Open Agenda</button>
-          <button class="btn" onclick="showPage('lessenrooster')">Open Rooster</button>
-          <button class="btn" onclick="showPage('messages')">Open Berichten</button>
+          <button class="btn-ghost" onclick="prevWeek()">◀</button>
+          <button class="btn-ghost" onclick="nextWeek()">▶</button>
         </div>
       </div>
-    </div>
-    <div>
-      <div class="card">
-        <h3>Mini Agenda</h3>
-        <div id="todayAgendaList">Geen items voor vandaag</div>
+      <div class="timetable-wrap">
+        <div id="timetable" class="timetable"></div>
       </div>
     </div>
   </div>
-</div>
-<div id="agenda" class="container hidden">
-  <div class="card">
-    <div class="row" style="justify-content:space-between">
-      <h2>Agenda</h2>
-      <button class="btn" onclick="openAgendaModal()">+ Item</button>
-    </div>
-    <div id="agendaItems" class="agenda-list">Geen items</div>
-  </div>
-</div>
-<div id="lessenrooster" class="container hidden">
-  <div class="card">
-    <div class="week-nav">
-      <button class="btn-ghost" onclick="prevWeek()">◀</button>
-      <div id="weekLabel" class="small">Week</div>
-      <button class="btn-ghost" onclick="nextWeek()">▶</button>
-    </div>
-    <div class="timetable-wrap">
-      <div id="timetable" class="timetable"></div>
+
+  <div id="messages" class="container hidden">
+    <div class="card">
+      <h2>Berichten</h2>
+      <div id="messageList">Geen berichten</div>
+      <button class="btn" onclick="openCompose()">Nieuw bericht</button>
     </div>
   </div>
-</div>
-<div id="messages" class="container hidden">
-  <div class="card">
-    <h2>Berichten</h2>
-    <div id="messageList">Geen berichten</div>
-    <button class="btn" onclick="openCompose()">Nieuw bericht</button>
-  </div>
-</div>
-<div id="notifications" class="container hidden">
-  <div class="card">
-    <h2>Meldingen</h2>
-    <div id="notifList">Geen meldingen</div>
-    <button class="btn-ghost" onclick="markAllNotifsRead()">Alles als gelezen</button>
-  </div>
-</div>
-<div id="lessonModal" class="modal">
-  <div class="box">
-    <input id="modalSubject" type="text" placeholder="Vak">
-    <input id="modalTeacher" type="text" placeholder="Docent">
-    <input id="modalRoom" type="text" placeholder="Lokaal">
-    <input id="modalColor" type="color" value="#ffd166">
-    <div class="actions">
-      <button class="btn" id="saveLessonBtn">Opslaan</button>
-      <button class="btn-ghost" onclick="closeLessonModal()">Annuleer</button>
+
+  <div id="notifications" class="container hidden">
+    <div class="card">
+      <h2>Meldingen</h2>
+      <div id="notifList">Geen meldingen</div>
+      <button class="btn-ghost" onclick="markAllNotifsRead()">Alles als gelezen</button>
     </div>
   </div>
-</div>
-<div id="agendaModal" class="modal">
-  <div class="box">
-    <input id="agendaTitle" type="text" placeholder="Titel">
-    <input id="agendaDate" type="date">
-    <input id="agendaTime" type="time">
-    <textarea id="agendaDesc" placeholder="Beschrijving"></textarea>
-    <div class="actions">
-      <button class="btn" onclick="saveAgendaItem()">Opslaan</button>
-      <button class="btn-ghost" onclick="closeAgendaModal()">Annuleer</button>
+
+  <!-- ===== MODALS (unchanged functionality) ===== -->
+  <div id="lessonModal" class="modal" aria-hidden="true">
+    <div class="box">
+      <input id="modalSubject" type="text" placeholder="Vak">
+      <input id="modalTeacher" type="text" placeholder="Docent">
+      <input id="modalRoom" type="text" placeholder="Lokaal">
+      <input id="modalColor" type="color" value="#ffd166">
+      <div class="actions">
+        <button class="btn" id="saveLessonBtn">Opslaan</button>
+        <button class="btn-ghost" onclick="closeLessonModal()">Annuleer</button>
+      </div>
     </div>
   </div>
-</div>
+
+  <div id="agendaModal" class="modal" aria-hidden="true">
+    <div class="box">
+      <input id="agendaTitle" type="text" placeholder="Titel">
+      <input id="agendaDate" type="date">
+      <input id="agendaTime" type="time">
+      <textarea id="agendaDesc" placeholder="Beschrijving"></textarea>
+      <div class="actions">
+        <button class="btn" onclick="saveAgendaItem()">Opslaan</button>
+        <button class="btn-ghost" onclick="closeAgendaModal()">Annuleer</button>
+      </div>
+    </div>
+  </div>
+
 <script>
-const ACCOUNTS={"admin":{name:"Beheerder",img:"https://static.wikia.nocookie.net/h__/images/0/09/Vorhees.jpg/revision/latest?cb=20120826172608&path-prefix=halloween",admin:true}};
+/* ===== ACCOUNT & BOOT ===== */
+const ACCOUNTS={
+  "admin":{name:"Beheerder",img:"https://static.wikia.nocookie.net/h__/images/0/09/Vorhees.jpg/revision/latest?cb=20120826172608&path-prefix=halloween",admin:true}
+};
 let user=localStorage.getItem('loggedInUser')||'admin';
 const currentUserObj=ACCOUNTS[user]||{name:user,img:'',admin:false};
-document.getElementById('userDisplay').textContent=currentUserObj.name;
 document.getElementById('profileName').textContent=currentUserObj.name;
 document.getElementById('roleText').textContent=currentUserObj.admin?'Beheerder':'Leerling';
-document.getElementById('profilePic').src=currentUserObj.img;
+document.getElementById('profilePic').src=currentUserObj.img||'';
 const STORAGE={schedule:'school.schedule',messages:'school.messages',notifications:'school.notifications',agenda:'school.agenda'};
 function save(key,val){localStorage.setItem(key,JSON.stringify(val))}
 function load(key,def){try{return JSON.parse(localStorage.getItem(key))||def}catch(e){return def}}
@@ -221,41 +323,230 @@ if(!localStorage.getItem(STORAGE.schedule))save(STORAGE.schedule,{});
 if(!localStorage.getItem(STORAGE.messages))save(STORAGE.messages,[]);
 if(!localStorage.getItem(STORAGE.notifications))save(STORAGE.notifications,[]);
 if(!localStorage.getItem(STORAGE.agenda))save(STORAGE.agenda,[]);
-function pad(n){return n<10?'0'+n:n;}
-function fmtDate(d){return d.toLocaleDateString('nl-NL',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}
-function fmtTime(d){return pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());}
-function tick(){const n=new Date();document.getElementById('todayDate').textContent=fmtDate(n);document.getElementById('todayTime').textContent=fmtTime(n);setTimeout(tick,1000);}
-tick();
-function showPage(id){document.querySelectorAll('.container').forEach(c=>c.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+
+/* ===== NAV / DROPDOWNS ===== */
+function showPage(id){
+  // Show classic containers or the new shell for home
+  document.querySelectorAll('.container,.shell').forEach(c=>c.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
 function logout(){localStorage.removeItem('loggedInUser');location.reload();}
-document.querySelectorAll('.has-dropdown').forEach(dd=>{const menu=dd.querySelector('.dropdown-menu');dd.addEventListener('click',e=>{e.stopPropagation();menu.classList.toggle('open');document.addEventListener('click',function h(ev){if(!dd.contains(ev.target)){menu.classList.remove('open');document.removeEventListener('click',h)}})})})
-const userMenu=document.getElementById('userMenu');userMenu.innerHTML=Object.keys(ACCOUNTS).map(k=>`<button onclick="switchAccount('${k}')">${ACCOUNTS[k].name}</button>`).join('');
+document.querySelectorAll('.has-dropdown').forEach(dd=>{
+  const menu=dd.querySelector('.dropdown-menu');
+  dd.addEventListener('click',e=>{
+    e.stopPropagation();
+    menu.classList.toggle('open');
+    document.addEventListener('click',function h(ev){
+      if(!dd.contains(ev.target)){menu.classList.remove('open');document.removeEventListener('click',h)}
+    })
+  })
+});
+function keepDropdownOpen(id){
+  const dd=document.getElementById(id);
+  const menu=dd.querySelector('.dropdown-menu');
+  menu.classList.add('open');
+}
+const userMenu=document.getElementById('userMenu');
+userMenu.innerHTML=Object.keys(ACCOUNTS).map(k=>`<button onclick="switchAccount('${k}')">${ACCOUNTS[k].name}</button>`).join('');
 function switchAccount(id){user=id;localStorage.setItem('loggedInUser',id);location.reload();}
-function renderAgenda(){const data=load(STORAGE.agenda,[]);const el=document.getElementById('agendaItems');el.innerHTML='';if(data.length===0){el.textContent='Geen items'}else{data.sort((a,b)=>new Date(a.date+" "+a.time)-new Date(b.date+" "+b.time));data.forEach(it=>{const div=document.createElement('div');div.className='agenda-item';div.innerHTML=`<div class="agenda-title">${it.title}</div><div class="small">${it.date} ${it.time}</div><div>${it.desc||''}</div>`;el.appendChild(div)})}}
-function renderMiniAgenda(){const data=load(STORAGE.agenda,[]);const el=document.getElementById('todayAgendaList');el.innerHTML='';let today=new Date().toISOString().split('T')[0];let any=false;data.forEach(it=>{if(it.date===today){const div=document.createElement('div');div.className='agenda-item';div.innerHTML=`<div class="agenda-title">${it.title}</div><div class="small">${it.time}</div>`;el.appendChild(div);any=true}});if(!any)el.textContent='Geen items voor vandaag';}
+
+/* ===== CALENDAR (right column) ===== */
+let calPointer=new Date(); // current visible month
+function renderCalendar(){
+  const title=document.getElementById('calTitle');
+  const grid=document.getElementById('calGrid');
+  const monthFmt=new Intl.DateTimeFormat('nl-NL',{month:'long',year:'numeric'});
+  title.textContent=monthFmt.format(calPointer);
+
+  // headers ma..zo (nl starts Monday)
+  const weekDays=['ma','di','wo','do','vr','za','zo'];
+  grid.innerHTML='';
+  weekDays.forEach(d=>{
+    const h=document.createElement('div');
+    h.className='cal-cell cal-head';
+    h.textContent=d;
+    grid.appendChild(h);
+  });
+
+  const first=new Date(calPointer.getFullYear(),calPointer.getMonth(),1);
+  const startIndex=(first.getDay()+6)%7; // Monday=0
+  const daysInMonth=new Date(calPointer.getFullYear(),calPointer.getMonth()+1,0).getDate();
+
+  // previous month trailing
+  const prevDays=new Date(calPointer.getFullYear(),calPointer.getMonth(),0).getDate();
+  for(let i=startIndex-1;i>=0;i--){
+    const c=document.createElement('div');c.className='cal-cell muted';c.textContent=(prevDays-i);
+    grid.appendChild(c);
+  }
+
+  // current month
+  const today=new Date(); const isThisMonth = (today.getFullYear()===calPointer.getFullYear() && today.getMonth()===calPointer.getMonth());
+  for(let d=1; d<=daysInMonth; d++){
+    const c=document.createElement('div');c.className='cal-cell';c.textContent=d;
+    if(isThisMonth && d===today.getDate()) c.classList.add('today');
+    grid.appendChild(c);
+  }
+
+  // next month leading to fill grid (not strictly necessary, but keeps look tight)
+  const cellsNeeded = 7*6; // 6 rows
+  const currentCells = grid.children.length;
+  for(let i=1; i<=cellsNeeded-currentCells; i++){
+    const c=document.createElement('div');c.className='cal-cell muted';c.textContent=i;grid.appendChild(c);
+  }
+}
+function shiftMonth(delta){
+  calPointer=new Date(calPointer.getFullYear(),calPointer.getMonth()+delta,1);
+  renderCalendar();
+}
+renderCalendar();
+
+/* ===== AGENDA ===== */
+function renderAgenda(){
+  const data=load(STORAGE.agenda,[]);
+  const el=document.getElementById('agendaItems');
+  if(!el) return;
+  el.innerHTML='';
+  if(data.length===0){el.textContent='Geen items'}
+  else{
+    data.sort((a,b)=>new Date(a.date+" "+a.time)-new Date(b.date+" "+b.time));
+    data.forEach(it=>{
+      const div=document.createElement('div');
+      div.className='agenda-item';
+      div.innerHTML=`<div class="agenda-title">${it.title}</div>
+                     <div class="small">${it.date} ${it.time||''}</div>
+                     <div>${it.desc||''}</div>`;
+      el.appendChild(div);
+    })
+  }
+}
 function openAgendaModal(){document.getElementById('agendaModal').style.display='flex'}
 function closeAgendaModal(){document.getElementById('agendaModal').style.display='none'}
-function saveAgendaItem(){const title=document.getElementById('agendaTitle').value;const date=document.getElementById('agendaDate').value;const time=document.getElementById('agendaTime').value;const desc=document.getElementById('agendaDesc').value;if(!title||!date)return;const data=load(STORAGE.agenda,[]);data.push({title,date,time,desc});save(STORAGE.agenda,data);closeAgendaModal();renderAgenda();renderMiniAgenda();}
-renderAgenda();renderMiniAgenda();
-function renderMessages(){const msgs=load(STORAGE.messages,[]);const el=document.getElementById('messageList');el.innerHTML='';if(msgs.length===0){el.textContent='Geen berichten'}else{msgs.forEach(m=>{const div=document.createElement('div');div.className='agenda-item';div.innerHTML=`<div class="agenda-title">${m.title}</div><div class="small">${m.time}</div>`;el.appendChild(div)})}}
-function openCompose(){const title=prompt('Titel bericht?');if(!title)return;const time=fmtTime(new Date());const msgs=load(STORAGE.messages,[]);msgs.push({title,time});save(STORAGE.messages,msgs);renderMessages();updateKPI();}
+function saveAgendaItem(){
+  const title=document.getElementById('agendaTitle').value;
+  const date=document.getElementById('agendaDate').value;
+  const time=document.getElementById('agendaTime').value;
+  const desc=document.getElementById('agendaDesc').value;
+  if(!title||!date) return;
+  const data=load(STORAGE.agenda,[]);
+  data.push({title,date,time,desc});
+  save(STORAGE.agenda,data);
+  closeAgendaModal();
+  renderAgenda();
+}
+renderAgenda();
+
+/* ===== MESSAGES ===== */
+function renderMessages(){
+  const msgs=load(STORAGE.messages,[]);
+  const el=document.getElementById('messageList');
+  if(!el) return;
+  el.innerHTML='';
+  if(msgs.length===0){el.textContent='Geen berichten'}
+  else{
+    msgs.forEach(m=>{
+      const div=document.createElement('div');
+      div.className='agenda-item';
+      div.innerHTML=`<div class="agenda-title">${m.title}</div><div class="small">${m.time}</div>`;
+      el.appendChild(div);
+    })
+  }
+}
+function openCompose(){
+  const title=prompt('Titel bericht?');
+  if(!title) return;
+  const time=new Date().toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+  const msgs=load(STORAGE.messages,[]);
+  msgs.push({title,time});
+  save(STORAGE.messages,msgs);
+  renderMessages();
+  updateKPI();
+}
 renderMessages();
-function renderNotifications(){const notifs=load(STORAGE.notifications,[]);const el=document.getElementById('notifList');el.innerHTML='';if(notifs.length===0){el.textContent='Geen meldingen'}else{notifs.forEach(n=>{const div=document.createElement('div');div.className='agenda-item';div.textContent=n})}document.getElementById('notifCountHome').textContent=notifs.length;document.getElementById('notifBadge').textContent=notifs.length;document.getElementById('notifBadge').classList.toggle('hidden',notifs.length===0);}
+
+/* ===== NOTIFICATIONS ===== */
+function renderNotifications(){
+  const notifs=load(STORAGE.notifications,[]);
+  const el=document.getElementById('notifList');
+  if(el){
+    el.innerHTML='';
+    if(notifs.length===0){el.textContent='Geen meldingen'}
+    else{notifs.forEach(n=>{const d=document.createElement('div');d.className='agenda-item';d.textContent=n;el.appendChild(d)})}
+  }
+  const count=notifs.length;
+  document.getElementById('notifBadge').textContent=count;
+  document.getElementById('notifBadge').classList.toggle('hidden',count===0);
+}
 function markAllNotifsRead(){save(STORAGE.notifications,[]);renderNotifications();}
 renderNotifications();
-function updateKPI(){const msgs=load(STORAGE.messages,[]);document.getElementById('unreadMsgs').textContent=msgs.length;}
+
+/* ===== KPIs (message count) – still used in messages page logic ===== */
+function updateKPI(){
+  const msgs=load(STORAGE.messages,[]);
+  // Could be shown somewhere else if needed later
+}
 updateKPI();
+
+/* ===== TIMETABLE ===== */
 let currentWeek=0;
 const days=['Ma','Di','Wo','Do','Vr'];
 const hours=['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00'];
-function renderTimetable(){const data=load(STORAGE.schedule,{});const el=document.getElementById('timetable');el.innerHTML='';el.appendChild(document.createElement('div'));const headerRow=document.createElement('div');headerRow.className='timetable';headerRow.innerHTML='<div class="col-header">Uur</div>'+days.map(d=>`<div class="col-header">${d}</div>`).join('');el.appendChild(headerRow);hours.forEach(h=>{const row=document.createElement('div');row.className='timetable';row.innerHTML=`<div class="time-cell">${h}</div>`+days.map(d=>{const key=`${d}-${h}`;const slot=data[key];if(slot){return `<div class="slot-cell" onclick="editSlot('${d}','${h}')"><div class="slot-inner" style="border-left-color:${slot.color}"><b>${slot.subj}</b><span class="small">${slot.teacher||''} ${slot.room||''}</span></div></div>`}else{return `<div class="slot-cell" onclick="editSlot('${d}','${h}')"><div class="slot-inner"></div></div>`}}).join('');el.appendChild(row)})}
-function editSlot(day,hour){editingDay=day;editingHour=hour;document.getElementById('lessonModal').style.display='flex'}
-function closeLessonModal(){document.getElementById('lessonModal').style.display='none'}
+function renderTimetable(){
+  const data=load(STORAGE.schedule,{});
+  const el=document.getElementById('timetable');
+  if(!el) return;
+  el.innerHTML='';
+  // top-left spacer
+  el.appendChild(document.createElement('div'));
+  // headers
+  const headerRow=document.createElement('div');
+  headerRow.className='timetable';
+  headerRow.innerHTML='<div class="col-header">Uur</div>'+days.map(d=>`<div class="col-header">${d}</div>`).join('');
+  el.appendChild(headerRow);
+  // rows
+  hours.forEach(h=>{
+    const row=document.createElement('div');
+    row.className='timetable';
+    row.innerHTML=`<div class="time-cell">${h}</div>` + days.map(d=>{
+      const key=`${d}-${h}`;
+      const slot=data[key];
+      if(slot){
+        return `<div class="slot-cell" onclick="editSlot('${d}','${h}')">
+                  <div class="slot-inner" style="border-left-color:${slot.color}">
+                    <b>${slot.subj}</b>
+                    <span class="small">${slot.teacher||''} ${slot.room||''}</span>
+                  </div>
+                </div>`
+      }else{
+        return `<div class="slot-cell" onclick="editSlot('${d}','${h}')"><div class="slot-inner"></div></div>`
+      }
+    }).join('');
+    el.appendChild(row);
+  })
+}
 let editingDay=null,editingHour=null;
-document.getElementById('saveLessonBtn').onclick=function(){const subj=document.getElementById('modalSubject').value;if(!subj){closeLessonModal();return}const teacher=document.getElementById('modalTeacher').value;const room=document.getElementById('modalRoom').value;const color=document.getElementById('modalColor').value;const data=load(STORAGE.schedule,{});data[`${editingDay}-${editingHour}`]={subj,teacher,room,color};save(STORAGE.schedule,data);closeLessonModal();renderTimetable();}
+function editSlot(day,hour){
+  editingDay=day;editingHour=hour;
+  document.getElementById('lessonModal').style.display='flex';
+}
+function closeLessonModal(){document.getElementById('lessonModal').style.display='none'}
+document.getElementById('saveLessonBtn').onclick=function(){
+  const subj=document.getElementById('modalSubject').value;
+  if(!subj){closeLessonModal();return}
+  const teacher=document.getElementById('modalTeacher').value;
+  const room=document.getElementById('modalRoom').value;
+  const color=document.getElementById('modalColor').value;
+  const data=load(STORAGE.schedule,{});
+  data[`${editingDay}-${editingHour}`]={subj,teacher,room,color};
+  save(STORAGE.schedule,data);
+  closeLessonModal();
+  renderTimetable();
+}
 function prevWeek(){currentWeek--;document.getElementById('weekLabel').textContent='Week '+currentWeek;renderTimetable();}
 function nextWeek(){currentWeek++;document.getElementById('weekLabel').textContent='Week '+currentWeek;renderTimetable();}
 renderTimetable();
+
+/* ===== INITIAL PAGE ===== */
+showPage('home');
 </script>
 </body>
 </html>
