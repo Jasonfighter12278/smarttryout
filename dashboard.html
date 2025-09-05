@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8" />
-<title>Smartschool Dashboard — Homepage</title>
+<title>Smartschool Dashboard</title>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <style>
 :root {
@@ -13,7 +13,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);color:#fff;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);color:#fff}
 
 /* NAVBAR */
 .navbar {
@@ -38,10 +38,10 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
 .logout-btn{font-size:18px;cursor:pointer}
 
 /* DROPDOWNS */
-.dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;background:var(--card);color:#fff;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.4);padding:12px}
+.dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;background:var(--card);color:#fff;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.4);padding:12px;z-index:500}
 .dropdown-menu.open{display:grid}
 
-/* LINKS dropdown redesign */
+/* LINKS dropdown */
 #linksMenu {
   width: 460px;
   background: #7a1f1f;
@@ -78,6 +78,7 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
 }
 .center-pane {
   padding:20px;
+  overflow:auto;
 }
 .right-pane {
   padding:20px;
@@ -104,6 +105,13 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
   cursor:pointer;
 }
 
+/* CLOCK */
+#clock {
+  font-size: 2em;
+  text-align:center;
+  margin-bottom:20px;
+}
+
 /* CALENDAR */
 .calendar {
   text-align:center;
@@ -122,6 +130,15 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
   background:rgba(255,255,255,0.1);
   border-radius:50%;
 }
+
+/* IFRAME */
+#linkFrame {
+  width:100%;
+  height:70vh;
+  border:none;
+  margin-top:20px;
+  display:none;
+}
 </style>
 </head>
 <body>
@@ -129,10 +146,10 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
 <!-- NAVBAR -->
 <div class="navbar">
   <div class="nav-left">
-    <img id="profilePic" class="profile-img" src="" alt="profiel">
+    <img id="profilePic" class="profile-img" src="https://dummyimage.com/100x100/333/fff&text=Me" alt="profiel">
     <div>
-      <div class="profile-name" id="profileName"></div>
-      <div class="small" id="roleText"></div>
+      <div class="profile-name" id="profileName">Gebruiker</div>
+      <div class="small" id="roleText">Leerling</div>
     </div>
   </div>
   <div class="nav-right">
@@ -140,21 +157,21 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
     <div class="nav-item"><span>Ga naar</span></div>
     <div class="nav-item"><span>Vakken</span></div>
     <div class="nav-item has-dropdown" id="linksItem">
-      <span>Links ▾</span>
+      <span class="links-toggle">Links ▾</span>
       <div class="dropdown-menu" id="linksMenu">
-        <a href="#">🅰 Appwel</a>
-        <a href="#">📖 diddit</a>
-        <a href="#">🌐 e-ducate.me</a>
-        <a href="#">🔵 FTRPRF</a>
-        <a href="#">📘 i-Learn</a>
-        <a href="#">🅸 iDiddit</a>
-        <a href="#">Ln Lernova</a>
-        <a href="#">🅿 Pelckmans Portaal</a>
-        <a href="#">🅿 POLPO</a>
-        <a href="#">🏫 Scholierenkoepel</a>
-        <a href="#">💠 Scoodle</a>
-        <a href="#">▶ Uitgeklaard</a>
-        <a href="#">VRT Leer mee</a>
+        <a href="https://leerling.appwel.be/login" target="linkFrame">🅰 Appwel</a>
+        <a href="https://www.diddit.be/login?smartschoolPlatform=smg" target="linkFrame">📖 diddit</a>
+        <a href="https://redwood.e-ducate.me/login" target="linkFrame">🌐 e-ducate.me</a>
+        <a href="https://platform.ftrprf.be/?subdomain=smg" target="linkFrame">🔵 FTRPRF</a>
+        <a href="https://myway.i-learn.be/login?smartschoolPlatform=smg" target="linkFrame">📘 i-Learn</a>
+        <a href="https://platform.ididdit.be/login?smartschoolPlatform=smg" target="linkFrame">🅸 iDiddit</a>
+        <a href="about:blank" target="linkFrame">Ln Lernova</a>
+        <a href="https://www.pelckmansportaal.be/aanmelden?returnUrl=%2Fdashboard" target="linkFrame">🅿 Pelckmans Portaal</a>
+        <a href="https://api.polpo.be/auth/smartschool/callback" target="linkFrame">🅿 POLPO</a>
+        <a href="https://www.scholierenkoepel.be" target="linkFrame">🏫 Scholierenkoepel</a>
+        <a href="https://apps.plantyn.com/my/nl-be/bookshelf?redirectPath=%2F&redirectPlatform=sep" target="linkFrame">💠 Scoodle</a>
+        <a href="https://onderwijs.hetarchief.be/projecten/uitgeklaard" target="linkFrame">▶ Uitgeklaard</a>
+        <a href="https://onderwijs.vrt.be/edubox-bib/#/educatie" target="linkFrame">VRT Leer mee</a>
       </div>
     </div>
     <div class="nav-item"><span>Berichten</span></div>
@@ -176,13 +193,16 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
 
   <!-- CENTER PANE -->
   <div class="center-pane" id="mainContent">
-    <!-- Dynamic content (agenda, rooster, berichten, etc.) will appear here -->
+    <div id="clock"></div>
+    <h2>Welkom bij Smartschool</h2>
+    <p>Selecteer een link om te laden in het frame hieronder.</p>
+    <iframe id="linkFrame" name="linkFrame"></iframe>
   </div>
 
   <!-- RIGHT PANE -->
   <div class="right-pane">
     <div class="calendar">
-      <h3>september 2025</h3>
+      <h3>September 2025</h3>
       <table>
         <tr><td>ma</td><td>di</td><td>wo</td><td>do</td><td>vr</td><td>za</td><td>zo</td></tr>
         <tr><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td style="border:1px solid #fff;border-radius:50%">5</td><td>6</td></tr>
@@ -192,20 +212,38 @@ body{font-family:"Segoe UI", Roboto, Arial, sans-serif;background:var(--bg);colo
 </div>
 
 <script>
-// Keep your existing JavaScript logic (agenda, messages, etc.) here.
-// Dropdown handling
-document.querySelectorAll('.has-dropdown').forEach(dd=>{
-  const menu=dd.querySelector('.dropdown-menu');
-  dd.addEventListener('click',e=>{
-    e.stopPropagation();
-    menu.classList.toggle('open');
-    document.addEventListener('click',function h(ev){
-      if(!dd.contains(ev.target)){
-        menu.classList.remove('open');
-        document.removeEventListener('click',h)
-      }
-    })
-  })
+// CLOCK
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleDateString('nl-NL', {weekday:'long', day:'numeric', month:'long', year:'numeric'}) +
+    " • " +
+    now.toLocaleTimeString('nl-NL', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// DROPDOWN - Links only opens on click
+const linksItem = document.getElementById('linksItem');
+const linksMenu = document.getElementById('linksMenu');
+const toggle = linksItem.querySelector('.links-toggle');
+
+toggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  linksMenu.classList.toggle('open');
+  document.addEventListener('click', function closeMenu(ev) {
+    if (!linksItem.contains(ev.target)) {
+      linksMenu.classList.remove('open');
+      document.removeEventListener('click', closeMenu);
+    }
+  });
+});
+
+// IFRAME auto show on link click
+linksMenu.querySelectorAll('a').forEach(link=>{
+  link.addEventListener('click',()=>{
+    document.getElementById('linkFrame').style.display='block';
+  });
 });
 </script>
 </body>
