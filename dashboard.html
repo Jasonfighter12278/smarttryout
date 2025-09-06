@@ -113,3 +113,72 @@
 <script>
   // Sidebar navigation
   const buttons=document.querySelectorAll('.nav button');
+  const views=document.querySelectorAll('.view');
+  buttons.forEach(btn=>btn.addEventListener('click',()=>{
+    buttons.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const id=btn.dataset.view;
+    views.forEach(v=>v.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }));
+
+  // Load user data from login
+  const user=localStorage.getItem('loggedInUser');
+  const role=localStorage.getItem('userRole');
+  const pfp=localStorage.getItem('userPfp');
+  if(!user){ window.location.href='login.html'; }
+  document.getElementById('profileName').textContent=user;
+  document.getElementById('profileRole').textContent=role;
+  document.getElementById('profileImg').src=pfp || "https://i.pravatar.cc/100";
+  document.getElementById('welcomeMsg').textContent=`Fijn dat je er bent, ${user}!`;
+
+  // Greeting
+  const hour=new Date().getHours();
+  let greet="Goede dag";
+  if(hour<12) greet="Goedemorgen"; else if(hour<18) greet="Goedemiddag"; else greet="Goedenavond";
+  document.getElementById('greeting').textContent=greet;
+
+  // Clock
+  function updateClock(){
+    const now=new Date();
+    document.getElementById('clock').textContent=now.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+  }
+  setInterval(updateClock,1000);updateClock();
+
+  // Real lessons from screenshot
+  const lessonsToday=[
+    "08:25 – ZW-Praktijk • A207 Keuken groot – Klara Pauwels",
+    "08:25 – Godsdienst • A204 – Anouk Goor",
+    "08:25 – ZW-Maaltijdzorg • A109/H110 Deel keuken, A204 – Klara Pauwels",
+    "09:15 – Artistieke vorming • B101 Vaklokaal AVMV – Bieke Virns",
+    "09:15 – ZW-Pedagogisch handelen • A204 – Charlien Mertens",
+    "09:15 – Frans • A204 – Tinne Helsen",
+    "10:15 – ZW-Praktijk • A109/H110 Deel keuken – Sterre Vanlommel",
+    "10:15 – ZW-Indir. Zorg • A109/H110 Deel wasklas – Sterre Vanlommel",
+    "10:15 – Wiskunde • A204 – Sarah Driesen",
+    "10:15 – Maatschappelijke vorming • A204 – Marleen Holvoet",
+    "11:05 – ZW-Klasuur • A204 – Sterre Vanlommel",
+    "11:05 – Nederlands • A204 – Marleen Holvoet",
+    "11:05 – ZW-Gezondheid en welzijn • A204 – An Vervangen",
+    "12:45 – ZW-Pedagogisch handelen • A204 – Charlien Mertens",
+    "12:45 – Frans • A204 – Tinne Helsen",
+    "12:45 – ZW-Gezondheid en welzijn • A204 – An Vervangen",
+    "13:35 – Nederlands • A204 – Marleen Holvoet",
+    "13:35 – Wiskunde • A204 – Sarah Driesen",
+    "13:35 – Informatica • A204 – Wendy Thijs, Wendy Wouters",
+    "13:35 – Lichamelijke opvoeding • Sportlokalen – Katrien Erpels",
+    "14:35 – ZW-Gezondheid en welzijn • A204 – An Vervangen"
+  ];
+  document.getElementById('agendaList').innerHTML=lessonsToday.slice(0,4).map(a=>`<div class='agenda-item'>${a}</div>`).join('');
+  document.getElementById('agendaFull').innerHTML=lessonsToday.map(a=>`<div class='agenda-item'>${a}</div>`).join('');
+
+  // Canteen mock
+  const menus=["Pasta bolognese €4,50","Kip curry €4,20","Lasagne €4,00","Soep & brood €3,00"];
+  const day=new Date().getDay();
+  document.getElementById('canteenMenu').innerHTML=menus[day%menus.length]+ " <button>Bestel</button>";
+
+  // Logout
+  function logout(){localStorage.removeItem('loggedInUser');localStorage.removeItem('userRole');localStorage.removeItem('userPfp');window.location.href='login.html';}
+</script>
+</body>
+</html>
