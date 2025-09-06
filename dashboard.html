@@ -1,87 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="nl">
   <head>
-    <title>Dashboard</title>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-
-    <!-- Icons -->
-    <link rel="icon" href="https://static3.smart-school.net/smsc/svg/favicon/favicon.svg">
-    <link rel="mask-icon" href="https://static5.smart-school.net/smsc/svg/favicon/mask-icon.svg" color="#ff520e">
-    <link rel="apple-touch-icon" href="https://static5.smart-school.net/smsc/img/favicon/apple-touch-icon.png">
-
-    <!-- jQuery & jQueryUI -->
-    <script type="text/javascript" src="https://static1.smart-school.net/smsc/resources/jquery/3.7.1/jquery.min.rev-d2299f9fcf.js"></script>
-    <script type="text/javascript" src="https://static3.smart-school.net/smsc/resources/jqueryui/1.14.1/jquery-ui.min.rev-f9db301ab5.js"></script>
-    <link href="https://static1.smart-school.net/smsc/resources/jqueryui/1.14.1/jquery-ui.min.rev-d2f703837f.css" rel="stylesheet" />
-
-    <!-- Smartschool core styles -->
-    <link href="https://static3.smart-school.net/production/Topnav/main.rev-e1d0969e21.css" rel="stylesheet" />
-    <link href="https://static1.smart-school.net/modules/Agenda/dist/main-built.rev-18f879fcf4.css" rel="stylesheet" />
-    <link href="https://static5.smart-school.net/modules/Agenda/desktop/main/dist/main-built.rev-de3aa78583.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Smartschool-like Dashboard — Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>[x-cloak]{display:none!important;}</style>
   </head>
+  <body class="bg-red-900 text-white min-h-screen" x-data="dashboard()">
 
-  <body>
-    <a href="#mainContent" class="skip-link js-skip-link">Spring naar hoofdcontent</a>
-
-    <header id="smscTopContainer" class="smsc-topnav">
-      <nav class="topnav">
-        <div data-profile class="topnav__btn-wrapper">
-          <button class="js-btn-profile topnav__btn topnav__btn--profile">
-            <img src="https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/1061_1b9bd6e8-b313-4e85-ba95-3c26ad96d5cb/plain/1/res/48" alt="Profiel"/>
-            <div class="hlp-vert-box">
-              <span>Demo User</span>
-              <span class="topnav__btn__light"></span>
-            </div>
-            <div class="topnav__menu-arrow" aria-hidden="true"></div>
-          </button>
-        </div>
-
-        <a href="#" class="js-btn-home topnav__btn topnav__btn--push-right">Start</a>
-
-        <div data-shortcuts class="topnav__btn-wrapper">
-          <button class="js-btn-shortcuts topnav__btn">Modules<div class="topnav__menu-arrow" aria-hidden="true"></div></button>
-          <div class="topnav__menu topnav__menu--shortcuts js-shortcuts-container js-autosize">
-            <a href="#messages" class="topnav__menuitem" role="menuitem">Berichten</a>
-            <a href="#forms" class="topnav__menuitem" role="menuitem">Formulieren</a>
-            <a href="#helpdesk" class="topnav__menuitem" role="menuitem">Helpdesk</a>
-            <a href="#agenda" class="topnav__menuitem" role="menuitem">Schoolagenda</a>
-            <a href="#results" class="topnav__menuitem" role="menuitem">Resultaten</a>
-          </div>
-        </div>
-
-        <div data-courses class="topnav__btn-wrapper">
-          <button class="js-btn-courses topnav__btn">Vakken</button>
-        </div>
-
-        <div data-links class="topnav__btn-wrapper">
-          <button class="js-btn-links topnav__btn">Links</button>
-        </div>
-
-        <a href="#messages" class="js-btn-messages topnav__btn">Berichten</a>
-        <div data-notifs class="topnav__btn-wrapper"><button class="js-btn-notifs topnav__btn">Meldingen</button></div>
-        <div data-search class="topnav__btn-wrapper"><button class="js-btn-search topnav__btn topnav__btn--icon topnav__btn--icon--search"></button></div>
-      </nav>
+    <!-- NAVBAR -->
+    <header class="bg-red-800 sticky top-0 shadow">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <h1 class="font-bold">Dashboard</h1>
+        <nav class="flex gap-4">
+          <a @click.prevent="showSection('home')" href="#">Home</a>
+          <a @click.prevent="showSection('agenda')" href="#">Agenda</a>
+        </nav>
+      </div>
     </header>
 
-    <main id="mainContent" class="smscMain">
-      <h1>Dashboard</h1>
-      <p>Welkom bij je dashboard! Gebruik de navigatie hierboven om naar verschillende onderdelen te gaan.</p>
+    <main class="max-w-7xl mx-auto p-4">
 
-      <section id="agenda">
-        <h2>Agenda</h2>
-        <p>De agenda kan hier weergegeven worden.</p>
+      <!-- HOME -->
+      <section x-show="section==='home'" x-cloak>
+        <h2 class="text-2xl font-bold mb-4">Welkom op je dashboard</h2>
+        <p class="text-sm text-red-200">Kies een sectie in de navigatie.</p>
       </section>
 
-      <section id="messages">
-        <h2>Berichten</h2>
-        <p>Hier komen je berichten.</p>
+      <!-- AGENDA (WEEKROOSTER STYLE) -->
+      <section x-show="section==='agenda'" x-cloak>
+        <h2 class="text-2xl font-bold mb-6">Weekrooster</h2>
+        <div class="overflow-x-auto">
+          <table class="table-fixed border-collapse w-full text-sm">
+            <thead>
+              <tr class="bg-red-800">
+                <th class="border px-2 py-2 w-24">Uur</th>
+                <template x-for="day in days" :key="day">
+                  <th class="border px-2 py-2" x-text="day"></th>
+                </template>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="slot in times" :key="slot.time">
+                <tr>
+                  <td class="border px-2 py-2 bg-red-800 font-semibold" x-text="slot.time"></td>
+                  <template x-for="day in days" :key="day">
+                    <td class="border px-2 py-4 align-top">
+                      <template x-if="lessons[day] && lessons[day][slot.time]">
+                        <div class="bg-red-700 rounded p-2 shadow">
+                          <div class="font-bold" x-text="lessons[day][slot.time].subject"></div>
+                          <div class="text-xs text-red-200" x-text="lessons[day][slot.time].teacher"></div>
+                          <div class="text-xs" x-text="lessons[day][slot.time].room"></div>
+                        </div>
+                      </template>
+                    </td>
+                  </template>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
       </section>
 
-      <section id="results">
-        <h2>Resultaten</h2>
-        <p>Hier komen de resultaten.</p>
-      </section>
     </main>
+
+    <script>
+      function dashboard(){
+        return {
+          section:'home',
+          days:['Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag'],
+          times:[
+            {time:'08:25 - 09:15'},
+            {time:'09:15 - 10:05'},
+            {time:'10:15 - 11:05'},
+            {time:'11:05 - 11:55'},
+            {time:'11:55 - 12:45 (Middag)'},
+            {time:'12:45 - 13:35'},
+            {time:'13:35 - 14:25'},
+            {time:'14:25 - 15:15'}
+          ],
+          lessons:{
+            'Maandag':{
+              '08:25 - 09:15':{subject:'Wiskunde', teacher:'Mevr. Janssens', room:'B204'},
+              '09:15 - 10:05':{subject:'Nederlands', teacher:'Dhr. Peeters', room:'A101'}
+            },
+            'Dinsdag':{
+              '10:15 - 11:05':{subject:'Geschiedenis', teacher:'Mevr. Smets', room:'C303'}
+            },
+            'Woensdag':{},
+            'Donderdag':{
+              '08:25 - 09:15':{subject:'Engels', teacher:'Dhr. Willems', room:'B102'}
+            },
+            'Vrijdag':{
+              '12:45 - 13:35':{subject:'Biologie', teacher:'Mevr. Vermeulen', room:'Lab1'}
+            }
+          },
+          showSection(name){ this.section = name }
+        }
+      }
+    </script>
+
   </body>
 </html>
