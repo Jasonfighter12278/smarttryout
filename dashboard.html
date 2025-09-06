@@ -1,106 +1,244 @@
 <!DOCTYPE html>
 <html lang="nl">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Smartschool-like Dashboard — Demo</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>[x-cloak]{display:none!important;}</style>
-  </head>
-  <body class="bg-red-900 text-white min-h-screen" x-data="dashboard()">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
 
-    <!-- NAVBAR -->
-    <header class="bg-red-800 sticky top-0 shadow">
-      <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        <h1 class="font-bold">Dashboard</h1>
-        <nav class="flex gap-4">
-          <a @click.prevent="showSection('home')" href="#">Home</a>
-          <a @click.prevent="showSection('agenda')" href="#">Agenda</a>
-        </nav>
+    /* Navbar */
+    header {
+      background: #9b1c1c;
+      color: white;
+      padding: 8px 20px;
+    }
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .topnav button, .topnav a {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .topnav__btn--profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: none;
+      border: none;
+      color: white;
+    }
+    .topnav img {
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+    }
+
+    /* Dropdown */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #9b1c1c;
+      min-width: 200px;
+      border-radius: 5px;
+      overflow: hidden;
+      z-index: 100;
+    }
+    .dropdown-content a {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      text-decoration: none;
+      color: white;
+    }
+    .dropdown-content a:hover {
+      background: #b22222;
+    }
+    .dropdown.show .dropdown-content {
+      display: block;
+    }
+
+    /* Main sections */
+    main section {
+      display: none;
+      padding: 20px;
+    }
+    main section.active {
+      display: block;
+    }
+
+    /* Agenda grid */
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: 150px repeat(5, 1fr);
+      border: 1px solid #ccc;
+    }
+    .agenda-grid div {
+      border: 1px solid #ccc;
+      padding: 10px;
+      min-height: 60px;
+    }
+    .agenda-grid .time {
+      background: #f0f0f0;
+      font-weight: bold;
+    }
+
+    /* Dashboard home */
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 20px;
+    }
+    .card {
+      background: #9b1c1c;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .calendar {
+      text-align: center;
+    }
+    .calendar table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      color: white;
+    }
+    .calendar td, .calendar th {
+      border: 1px solid #fff;
+      padding: 5px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="topnav">
+      <button class="topnav__btn--profile">
+        <img src="https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/1061_1b9bd6e8-b313-4e85-ba95-3c26ad96d5cb/plain/1/res/48" alt="Profiel">
+        <span>Tristan V</span>
+      </button>
+      <a onclick="showSection('home')">Start</a>
+      <div class="dropdown">
+        <button onclick="toggleDropdown(this)">Ga naar ▼</button>
+        <div class="dropdown-content">
+          <a onclick="showSection('agenda')">Agenda</a>
+          <a onclick="showSection('results')">Resultaten</a>
+          <a href="#">Berichten</a>
+          <a href="#">Formulieren</a>
+          <a href="#">Helpdesk</a>
+        </div>
       </div>
-    </header>
+      <a onclick="showSection('agenda')">Vakken</a>
+      <a href="#">Links</a>
+      <a href="#">Berichten</a>
+      <a href="#">Meldingen</a>
+    </nav>
+  </header>
 
-    <main class="max-w-7xl mx-auto p-4">
-
-      <!-- HOME -->
-      <section x-show="section==='home'" x-cloak>
-        <h2 class="text-2xl font-bold mb-4">Welkom op je dashboard</h2>
-        <p class="text-sm text-red-200">Kies een sectie in de navigatie.</p>
-      </section>
-
-      <!-- AGENDA (WEEKROOSTER STYLE) -->
-      <section x-show="section==='agenda'" x-cloak>
-        <h2 class="text-2xl font-bold mb-6">Weekrooster</h2>
-        <div class="overflow-x-auto">
-          <table class="table-fixed border-collapse w-full text-sm">
-            <thead>
-              <tr class="bg-red-800">
-                <th class="border px-2 py-2 w-24">Uur</th>
-                <template x-for="day in days" :key="day">
-                  <th class="border px-2 py-2" x-text="day"></th>
-                </template>
-              </tr>
-            </thead>
-            <tbody>
-              <template x-for="slot in times" :key="slot.time">
-                <tr>
-                  <td class="border px-2 py-2 bg-red-800 font-semibold" x-text="slot.time"></td>
-                  <template x-for="day in days" :key="day">
-                    <td class="border px-2 py-4 align-top">
-                      <template x-if="lessons[day] && lessons[day][slot.time]">
-                        <div class="bg-red-700 rounded p-2 shadow">
-                          <div class="font-bold" x-text="lessons[day][slot.time].subject"></div>
-                          <div class="text-xs text-red-200" x-text="lessons[day][slot.time].teacher"></div>
-                          <div class="text-xs" x-text="lessons[day][slot.time].room"></div>
-                        </div>
-                      </template>
-                    </td>
-                  </template>
-                </tr>
-              </template>
-            </tbody>
+  <main>
+    <!-- Home dashboard -->
+    <section id="home" class="active">
+      <h1>Dashboard</h1>
+      <div class="dashboard">
+        <div class="card">
+          <h3>Afwezigheid wettigen</h3>
+          <p>Open hier de instructiefilm</p>
+        </div>
+        <div class="card">
+          <h3>Lezing Anky De Frangh</h3>
+          <p>Woensdag 1 oktober</p>
+          <img src="https://dummyimage.com/300x400/ffffff/000000&text=Poster" width="100%">
+        </div>
+        <div class="card calendar">
+          <h3>September 2025</h3>
+          <table>
+            <tr><th>ma</th><th>di</th><th>wo</th><th>do</th><th>vr</th><th>za</th><th>zo</th></tr>
+            <tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+            <tr><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td></tr>
+            <tr><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td></tr>
+            <tr><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td></tr>
+            <tr><td>29</td><td>30</td><td></td><td></td><td></td><td></td><td></td></tr>
           </table>
         </div>
-      </section>
+      </div>
+    </section>
 
-    </main>
+    <!-- Agenda -->
+    <section id="agenda">
+      <h1>Agenda</h1>
+      <div class="agenda-grid">
+        <div class="time">Uren</div>
+        <div>Maandag</div>
+        <div>Dinsdag</div>
+        <div>Woensdag</div>
+        <div>Donderdag</div>
+        <div>Vrijdag</div>
 
-    <script>
-      function dashboard(){
-        return {
-          section:'home',
-          days:['Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag'],
-          times:[
-            {time:'08:25 - 09:15'},
-            {time:'09:15 - 10:05'},
-            {time:'10:15 - 11:05'},
-            {time:'11:05 - 11:55'},
-            {time:'11:55 - 12:45 (Middag)'},
-            {time:'12:45 - 13:35'},
-            {time:'13:35 - 14:25'},
-            {time:'14:25 - 15:15'}
-          ],
-          lessons:{
-            'Maandag':{
-              '08:25 - 09:15':{subject:'Wiskunde', teacher:'Mevr. Janssens', room:'B204'},
-              '09:15 - 10:05':{subject:'Nederlands', teacher:'Dhr. Peeters', room:'A101'}
-            },
-            'Dinsdag':{
-              '10:15 - 11:05':{subject:'Geschiedenis', teacher:'Mevr. Smets', room:'C303'}
-            },
-            'Woensdag':{},
-            'Donderdag':{
-              '08:25 - 09:15':{subject:'Engels', teacher:'Dhr. Willems', room:'B102'}
-            },
-            'Vrijdag':{
-              '12:45 - 13:35':{subject:'Biologie', teacher:'Mevr. Vermeulen', room:'Lab1'}
-            }
-          },
-          showSection(name){ this.section = name }
-        }
+        <div class="time">08:25 - 09:15</div>
+        <div>Wiskunde</div>
+        <div>Frans</div>
+        <div>Geschiedenis</div>
+        <div>Biologie</div>
+        <div>Nederlands</div>
+
+        <div class="time">09:15 - 10:05</div>
+        <div>Engels</div>
+        <div>Wiskunde</div>
+        <div>LO</div>
+        <div>Chemie</div>
+        <div>Fysica</div>
+
+        <div class="time">10:15 - 11:05</div>
+        <div>Biologie</div>
+        <div>Informatica</div>
+        <div>Nederlands</div>
+        <div>Frans</div>
+        <div>Geschiedenis</div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section id="results">
+      <h1>Resultaten</h1>
+      <p>Hier komen je resultaten.</p>
+    </section>
+  </main>
+
+  <script>
+    function toggleDropdown(btn) {
+      btn.parentElement.classList.toggle("show");
+    }
+
+    function showSection(id) {
+      document.querySelectorAll("main section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+
+      // close dropdown after selection
+      document.querySelectorAll(".dropdown").forEach(d => d.classList.remove("show"));
+    }
+
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropdown button')) {
+        document.querySelectorAll(".dropdown").forEach(d => d.classList.remove("show"));
       }
-    </script>
-
-  </body>
+    }
+  </script>
+</body>
 </html>
