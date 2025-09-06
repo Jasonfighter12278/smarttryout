@@ -1,122 +1,64 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8" />
-  <title>Smartschool NextGen — School Edition</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8"/>
+  <title>Smartschool NextGen — Full</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     :root{
       --bg:#f4f6f9;
-      --card:#ffffff;
+      --card:#fff;
       --muted:#5b6168;
-      --accent:#c75a00;         /* dark orange sidebar */
+      --accent:#c75a00;
       --accent-2:#ff8a3d;
-      --blue-card:#bff0ff;     /* light cyan cards in timetable */
-      --timetable-bg:#7a1717;  /* dark red background like screenshot */
+      --blue-card:#bff0ff;
+      --timetable-bg:#7a1717;
       --radius:10px;
       --shadow: 0 6px 18px rgba(15,23,42,0.06);
     }
     *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-      background: linear-gradient(180deg,#fff 0%, var(--bg) 40%);
-      color:#0f172a;
-      min-height:100vh;
-      display:flex;
-    }
-
-    /* SIDEBAR */
-    .sidebar{
-      width:260px;
-      background: linear-gradient(180deg,var(--accent) 0%, var(--accent-2) 100%);
-      color:#fff;
-      height:100vh;
-      position:fixed;
-      left:0; top:0;
-      padding:20px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      box-shadow: 4px 0 24px rgba(0,0,0,0.12);
-    }
-    .logo{display:flex;align-items:center;gap:10px}
-    .logo .brand{font-weight:800;font-size:1.05rem}
+    body{margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,#fff 0%,var(--bg)40%);color:#0f172a;display:flex;min-height:100vh}
+    .sidebar{width:260px;background:linear-gradient(180deg,var(--accent)0%,var(--accent-2)100%);color:#fff;height:100vh;position:fixed;left:0;top:0;padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:4px 0 24px rgba(0,0,0,0.12)}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:800}
     .profile{display:flex;gap:12px;align-items:center;padding:8px;border-radius:10px;background:rgba(255,255,255,0.06)}
     .profile img{width:56px;height:56px;border-radius:10px;object-fit:cover;border:2px solid rgba(255,255,255,0.12)}
     nav a{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;padding:10px;border-radius:8px;font-weight:700}
-    nav a:hover{background:rgba(255,255,255,0.06);transform:translateX(6px)}
+    nav a:hover{background:rgba(255,255,255,0.06);transform:translateX(4px)}
     .logout{margin-top:auto;padding:10px;border-radius:8px;cursor:pointer;font-weight:700}
-    .logout:hover{background:rgba(255,255,255,0.06)}
-
-    /* MAIN */
     .main{margin-left:260px;flex:1;padding:20px}
-    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:12px}
+    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
     .search{display:flex;align-items:center;gap:10px;background:var(--card);padding:10px;border-radius:12px;box-shadow:var(--shadow);width:100%;max-width:760px}
-    .search input{border:0;outline:0;background:transparent;font-size:1rem;width:100%}
-    .clock{font-weight:800;color:var(--accent)}
-    .muted{color:var(--muted)}
-
-    /* Cards & grid */
+    .search input{border:0;background:transparent;outline:none;width:100%}
+    .clock{font-weight:700;color:var(--accent)}
     .card{background:var(--card);border-radius:12px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px}
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
     .col-8{grid-column:span 8}
     .col-4{grid-column:span 4}
     .col-12{grid-column:span 12}
-
-    input, select, textarea, button{padding:10px;border-radius:8px;border:1px solid #e6eef9;font-size:0.95rem}
-    button{background:var(--accent);color:#fff;border:none;cursor:pointer;font-weight:700}
-    button[disabled]{opacity:0.5;cursor:not-allowed}
-
+    input,select,textarea,button{padding:10px;border-radius:8px;border:1px solid #e6eef9;font-size:0.95rem}
+    button{background:var(--accent);color:#fff;border:0;cursor:pointer;font-weight:700}
+    button[disabled]{opacity:.5;cursor:not-allowed}
     ul{list-style:none;padding:0;margin:0}
     li{margin-bottom:8px}
-
-    /* Timetable (agenda) style — large red background with light blue cards */
     .timetable-wrap{background:var(--timetable-bg);padding:18px;border-radius:12px;color:#fff}
-    .timetable{
-      display:grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap:14px;
-      align-items:start;
-    }
-    .day-col{min-height:180px;padding:8px;border-radius:8px;background:linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.03)); position:relative}
-    .day-col h4{margin:0 0 8px 0;font-size:0.95rem}
-    .tt-card{
-      background:var(--blue-card); color:#06304a; border-radius:8px;
-      padding:10px;margin-bottom:10px; box-shadow: 0 4px 10px rgba(0,0,0,0.07);
-      font-size:0.85rem; position:relative;
-    }
+    .timetable{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;align-items:start}
+    .day-col{min-height:180px;padding:8px;border-radius:8px;background:linear-gradient(180deg,rgba(0,0,0,0.06),rgba(0,0,0,0.03))}
+    .tt-card{background:var(--blue-card);color:#06304a;border-radius:8px;padding:10px;margin-bottom:10px;box-shadow:0 4px 10px rgba(0,0,0,0.07);font-size:0.85rem}
     .tt-time{font-size:0.78rem;color:#094a5d;margin-bottom:6px;font-weight:700}
     .tt-sub{font-weight:800;margin-bottom:6px}
-    .tt-meta{font-size:0.75rem;color:#083748}
-
-    /* small helpers */
-    .row{display:flex;gap:10px;align-items:center}
-    .avatar-xs{width:36px;height:36px;border-radius:8px;object-fit:cover}
     .muted-small{color:#6b7280;font-size:0.85rem}
-    .right{margin-left:auto}
-
-    /* responsive */
-    @media (max-width:900px){
-      .timetable{grid-template-columns: repeat(2,1fr)}
-      .col-8,.col-4{grid-column:span 12}
-      .sidebar{display:none}
-      .main{margin-left:0}
-    }
+    .avatar-xs{width:36px;height:36px;border-radius:8px;object-fit:cover}
+    @media(max-width:900px){.timetable{grid-template-columns:repeat(2,1fr)}.sidebar{display:none}.main{margin-left:0}}
   </style>
 </head>
 <body>
   <aside class="sidebar" aria-label="Hoofdmenu">
-    <div class="logo"><i class="fa fa-school"></i><div class="brand">Smartschool NextGen</div></div>
-
+    <div class="logo"><i class="fa fa-school"></i><div style="margin-left:6px">Smartschool NextGen</div></div>
     <div class="profile">
-      <img id="userPfp" src="" alt="Profielfoto">
-      <div>
-        <strong id="userName">Naam</strong><br><small id="userRole">Rol</small>
-      </div>
+      <img id="userPfp" src="" alt="pfp">
+      <div><strong id="userName">Naam</strong><br><small id="userRole">Rol</small></div>
     </div>
-
     <nav>
       <a href="#" onclick="switchView('dashboard')"><i class="fa fa-home"></i> Dashboard</a>
       <a href="#" onclick="switchView('timetable')"><i class="fa fa-calendar"></i> Agenda</a>
@@ -129,47 +71,30 @@
       <a href="#" onclick="switchView('transport')"><i class="fa fa-bus"></i> Vervoer</a>
       <a href="#" onclick="switchView('settings')"><i class="fa fa-cog"></i> Instellingen</a>
     </nav>
-
     <div class="logout" onclick="logout()"><i class="fa fa-sign-out-alt"></i> Uitloggen</div>
   </aside>
 
   <main class="main">
     <header>
-      <div class="search">
-        <i class="fa fa-search" style="opacity:.6"></i>
-        <input id="globalSearch" placeholder="Zoek leerlingen, vakken, bestanden...">
-      </div>
-      <div style="display:flex;align-items:center;gap:12px">
-        <div class="muted" id="dateLabel"></div>
-        <div id="clock" class="clock">12:00</div>
-      </div>
+      <div class="search"><i class="fa fa-search" style="opacity:.6"></i><input id="globalSearch" placeholder="Zoek leerlingen, vakken, bestanden..."></div>
+      <div style="display:flex;align-items:center;gap:12px"><div id="dateLabel" class="muted-small"></div><div id="clock" class="clock">12:00</div></div>
     </header>
 
-    <!-- DASHBOARD -->
     <section id="dashboard" class="card">
-      <h3>Welkom terug, <span id="welcomeName">Gebruiker</span>!</h3>
-      <p class="muted">Gebruik de navigatie links om naar onderdelen te gaan. Let op: alleen leraren kunnen gebruikers, afwezigheden, resultaten en bestanden beheren.</p>
+      <h3>Welkom, <span id="welcomeName">Gebruiker</span>!</h3>
+      <p class="muted-small">Berichten & cafetaria zijn beschikbaar voor alle gebruikers. Leraren beheren gebruikers, afwezigheden, resultaten en bestanden.</p>
+      <div style="margin-top:12px" id="activityArea"></div>
     </section>
 
-    <!-- TIMETABLE / AGENDA (styled like provided screenshot) -->
+    <!-- TIMETABLE / AGENDA -->
     <section id="timetable" class="card" style="display:none">
-      <h3>Agenda (weekoverzicht)</h3>
-      <p class="muted">De weergave is vergelijkbaar met een rooster: vak, lokaal, tijd en docent.</p>
-
+      <h3>Agenda (week)</h3>
       <div class="timetable-wrap" style="margin-top:12px">
-        <div style="display:flex;justify-content:space-between;color:#fff;margin-bottom:8px">
-          <div>Maandag</div><div>Dinsdag</div><div>Woensdag</div><div>Donderdag</div><div>Vrijdag</div>
-        </div>
+        <div style="display:flex;justify-content:space-between;color:#fff;margin-bottom:8px"><div>Maandag</div><div>Dinsdag</div><div>Woensdag</div><div>Donderdag</div><div>Vrijdag</div></div>
+        <div class="timetable" id="timetableGrid"></div>
 
-        <div class="timetable" id="timetableGrid">
-          <!-- day columns will be injected here -->
-        </div>
-
-        <!-- Quick add (teacher only) -->
         <form id="ttAddForm" onsubmit="addTimetableItem(event)" style="margin-top:12px;display:flex;gap:8px;align-items:center">
-          <select id="ttDay">
-            <option value="1">Maandag</option><option value="2">Dinsdag</option><option value="3">Woensdag</option><option value="4">Donderdag</option><option value="5">Vrijdag</option>
-          </select>
+          <select id="ttDay"><option value="1">Maandag</option><option value="2">Dinsdag</option><option value="3">Woensdag</option><option value="4">Donderdag</option><option value="5">Vrijdag</option></select>
           <input id="ttTime" placeholder="08:25-10:05" required>
           <input id="ttTitle" placeholder="Vak (bijv. ZW-Praktijk)" required>
           <input id="ttRoom" placeholder="A207" style="width:90px">
@@ -179,7 +104,7 @@
       </div>
     </section>
 
-    <!-- MESSAGES -->
+    <!-- MESSAGES (everyone) -->
     <section id="messages" class="card" style="display:none">
       <h3>Berichten</h3>
       <form id="msgForm" onsubmit="sendMessage(event)" style="display:flex;gap:8px;align-items:center;margin-top:12px">
@@ -193,20 +118,24 @@
     <!-- RESULTS -->
     <section id="results" class="card" style="display:none">
       <h3>Resultaten</h3>
-      <p class="muted">Alleen leraren kunnen cijfers toevoegen of verwijderen. Leerlingen zien hun eigen resultaten.</p>
+      <p class="muted-small">Leraren voegen cijfers toe als percentage (Lesson → Subject → %). Studenten zien alleen hun eigen resultaten.</p>
+
       <form id="gradeForm" onsubmit="addGrade(event)" style="display:flex;gap:8px;align-items:center;margin-top:12px">
         <select id="gradeStudent"></select>
-        <input id="course" placeholder="Vak" required>
-        <input id="grade" type="number" placeholder="Punt" required>
+        <select id="lessonSelect"></select>
+        <select id="subjectSelect"></select>
+        <input id="gradePercent" type="number" min="0" max="100" placeholder="%" required style="width:90px">
         <button type="submit">Opslaan</button>
       </form>
+
       <ul id="gradeList" style="margin-top:12px"></ul>
     </section>
 
     <!-- ATTENDANCE -->
     <section id="attendance" class="card" style="display:none">
       <h3>Afwezigheden</h3>
-      <p class="muted">Alleen leraren kunnen afwezigheden/aanwezigheden registreren.</p>
+      <p class="muted-small">Leraren registreren voor alle leerlingen. Studenten zien alleen hun eigen status & geschiedenis.</p>
+
       <form id="attForm" onsubmit="setAttendance(event)" style="display:flex;gap:8px;align-items:center;margin-top:12px">
         <select id="attUser"></select>
         <select id="attStatus"><option>Aanwezig</option><option>Te laat</option><option>Afwezig</option></select>
@@ -215,24 +144,18 @@
       </form>
 
       <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap">
-        <div style="flex:1;min-width:300px">
-          <h4>Huidige status per leerling</h4>
-          <ul id="attList"></ul>
-        </div>
-        <div style="flex:1;min-width:300px">
-          <h4>Geschiedenis</h4>
-          <div style="max-height:260px;overflow:auto"><ul id="attHistory"></ul></div>
-        </div>
+        <div style="flex:1;min-width:300px"><h4>Huidige status</h4><ul id="attList"></ul></div>
+        <div style="flex:1;min-width:300px"><h4>Geschiedenis</h4><div style="max-height:260px;overflow:auto"><ul id="attHistory"></ul></div></div>
       </div>
     </section>
 
-    <!-- FILES -->
+    <!-- FILES (teacher upload only) -->
     <section id="files" class="card" style="display:none">
       <h3>Bestanden</h3>
-      <p class="muted">Alleen leraren kunnen bestanden uploaden of verwijderen.</p>
+      <p class="muted-small">Alleen leraren kunnen uploaden of verwijderen.</p>
       <div id="fileUploadBox" style="display:flex;gap:8px;align-items:center;margin-top:12px">
         <input id="fileInput" type="file"><input id="fileDesc" placeholder="Korte omschrijving">
-        <button onclick="uploadFile()" id="uploadBtn">Upload</button>
+        <button id="uploadBtn" onclick="uploadFile()">Upload</button>
       </div>
       <ul id="fileList" style="margin-top:12px"></ul>
     </section>
@@ -246,7 +169,7 @@
       <ul id="formList" style="margin-top:12px"></ul>
     </section>
 
-    <!-- CANTEEN -->
+    <!-- CANTEEN (everyone) -->
     <section id="canteen" class="card" style="display:none">
       <h3>Cafetaria</h3>
       <form onsubmit="orderFood(event)" style="display:flex;gap:8px;align-items:center;margin-top:12px">
@@ -258,39 +181,32 @@
         <button type="submit">Bestel</button>
       </form>
       <ul id="orderList" style="margin-top:12px"></ul>
-      <p class="muted">Totaal: € <strong id="totalPrice">0.00</strong></p>
+      <p class="muted-small">Totaal: € <strong id="totalPrice">0.00</strong></p>
     </section>
 
     <!-- TRANSPORT -->
     <section id="transport" class="card" style="display:none">
       <h3>Vervoer</h3>
-      <ul>
-        <li><strong>Bus 12</strong> — Halte: Centrum — 07:45</li>
-        <li><strong>Bus 7</strong> — Halte: Noord — 07:55</li>
-      </ul>
+      <ul><li><strong>Bus 12</strong> — Halte: Centrum — 07:45</li><li><strong>Bus 7</strong> — Halte: Noord — 07:55</li></ul>
     </section>
 
     <!-- SETTINGS -->
     <section id="settings" class="card" style="display:none">
       <h3>Instellingen</h3>
-      <p class="muted">Alleen leraren kunnen gebruikers toevoegen of bewerken. Leerlingen kunnen dit niet.</p>
-
+      <p class="muted-small">Leraren kunnen gebruikers toevoegen of bewerken.</p>
       <div style="display:flex;gap:8px;align-items:center;margin-top:12px">
         <input id="newUserName" placeholder="Nieuwe gebruiker (volledige naam)">
         <select id="newUserRole"><option>Leerling</option><option>Leraar</option></select>
         <button id="addUserBtn" onclick="addAppUser()">Voeg gebruiker toe</button>
       </div>
-
       <div style="margin-top:12px"><h4>Gebruikers</h4><ul id="appUsersList"></ul></div>
     </section>
   </main>
 
   <script>
-    /* -------------------------
-       Initial persistent data
-       ------------------------- */
+    // --- Initial demo data & defaults ---
     if(!localStorage.getItem("user_images")){
-      const imgs = {
+      localStorage.setItem("user_images", JSON.stringify({
         "Sophie":"https://via.placeholder.com/150/c1ffd7/0b5a2b?text=Sophie",
         "John":"https://via.placeholder.com/150/9fc5ff/003366?text=John",
         "Emma":"https://via.placeholder.com/150/ffd1dc/6b0f28?text=Emma",
@@ -298,51 +214,42 @@
         "Alice":"https://via.placeholder.com/150/d1e8ff/0a3b66?text=Alice",
         "Bob":"https://via.placeholder.com/150/e6ffd9/0b5a2b?text=Bob",
         "Charlie":"https://via.placeholder.com/150/ffe5b4/5a3b00?text=Charlie"
-      };
-      localStorage.setItem("user_images", JSON.stringify(imgs));
+      }));
     }
     if(!localStorage.getItem("user_roles")){
-      const roles = {"Sophie":"Leraar","John":"Leerling","Emma":"Leerling","Lucas":"Leerling","Alice":"Leerling","Bob":"Leerling","Charlie":"Leerling"};
-      localStorage.setItem("user_roles", JSON.stringify(roles));
+      localStorage.setItem("user_roles", JSON.stringify({
+        "Sophie":"Leraar","John":"Leerling","Emma":"Leerling","Lucas":"Leerling","Alice":"Leerling","Bob":"Leerling","Charlie":"Leerling"
+      }));
     }
     if(!localStorage.getItem("app_users")){
       localStorage.setItem("app_users", JSON.stringify(["Sophie","John","Emma","Lucas","Alice","Bob","Charlie"]));
     }
-    // sample timetable entries (like screenshot) stored as array of objects
     if(!localStorage.getItem("timetable_items")){
-      const sample = [
+      // sample items
+      localStorage.setItem("timetable_items", JSON.stringify([
         {day:1,time:"08:25-10:05",title:"ZW-Praktijk",room:"A207",teacher:"Klara Pauwels"},
-        {day:1,time:"10:15-11:15",title:"ZW-Praktijk",room:"A109/H110",teacher:"Sterre Vanlommel"},
-        {day:1,time:"11:05-11:55",title:"ZW-Klasuur",room:"A204",teacher:"Charlien Mertens"},
-
-        {day:2,time:"08:25-09:15",title:"Godsdienst",room:"A204",teacher:"Anouk Goor"},
+        {day:1,time:"10:15-11:55",title:"ZW-Praktijk",room:"A109/H110",teacher:"Sterre Vanlommel"},
         {day:2,time:"09:15-10:05",title:"Artistieke vorming",room:"B101",teacher:"Bieke Vrins"},
-        {day:2,time:"10:25-11:15",title:"ZW-Indirecte Zorg",room:"A109/H110",teacher:"Sterre Vanlommel"},
-
         {day:3,time:"08:25-10:05",title:"ZW-Maaltijdzorg",room:"A109/H110",teacher:"Klara Pauwels"},
-        {day:3,time:"10:15-11:15",title:"Wiskunde",room:"A204",teacher:"Sarah Driesen"},
-        {day:3,time:"11:05-11:55",title:"ZW-Gezondheid en welzijn",room:"A204",teacher:"An Vervrangen"},
-
-        {day:4,time:"08:25-09:15",title:"Godsdienst",room:"A204",teacher:"Anouk Goor"},
         {day:4,time:"09:15-10:05",title:"ZW-Pedagogisch handelen",room:"A204",teacher:"Charlien Mertens"},
-        {day:4,time:"10:15-11:15",title:"Informatica",room:"A204",teacher:"Wendy Thijs"},
-
-        {day:5,time:"09:15-10:05",title:"Frans",room:"A204",teacher:"Tinne Helsen"},
-        {day:5,time:"10:15-11:15",title:"Maatschappelijke vorming",room:"A204",teacher:"Marleen Holvoet"},
         {day:5,time:"13:35-15:15",title:"Lichamelijke opvoeding",room:"Sportlokalen",teacher:"Katrien Erpels"}
-      ];
-      localStorage.setItem("timetable_items", JSON.stringify(sample));
+      ]));
     }
-
-    // default logged in user for demo if missing
+    // default login for demo
     if(!localStorage.getItem("loggedInUser")){
       localStorage.setItem("loggedInUser","John");
       localStorage.setItem("userRole","Leerling");
     }
 
-    /* -------------------------
-       Init variables
-       ------------------------- */
+    // Lesson→Subjects map for grade flow
+    const lessonSubjects = {
+      "Wiskunde":["Algebra","Meetkunde","Statistiek"],
+      "Nederlands":["Lezen","Schrijven","Grammatica"],
+      "Frans":["Luisteren","Spreken","Schrijven"],
+      "ZW-Praktijk":["Keuken","Praktijk","Klasuur"]
+    };
+
+    // --- Current context ---
     const currentUser = localStorage.getItem("loggedInUser");
     const currentRole = localStorage.getItem("userRole") || "Leerling";
     const userImages = JSON.parse(localStorage.getItem("user_images")||"{}");
@@ -353,93 +260,68 @@
     document.getElementById("userRole").textContent = currentRole;
     document.getElementById("userPfp").src = userImages[currentUser] || Object.values(userImages)[0];
 
-    /* -------------------------
-       Utility & UI functions
-       ------------------------- */
-    function updateClock(){
-      document.getElementById("clock").textContent = new Date().toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"});
-      document.getElementById("dateLabel").textContent = new Date().toLocaleDateString("nl-NL");
-    }
+    // --- clock & date ---
+    function updateClock(){document.getElementById("clock").textContent = new Date().toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"});document.getElementById("dateLabel").textContent = new Date().toLocaleDateString("nl-NL");}
     setInterval(updateClock,1000); updateClock();
 
+    // --- utility: switch view ---
     function switchView(id){
       document.querySelectorAll("main section").forEach(s=>s.style.display='none');
       document.getElementById(id).style.display='block';
-      if(id==="timetable") renderTimetable();
-      if(id==="messages") renderMessages();
-      if(id==="results") renderGrades();
-      if(id==="attendance") renderAttendance();
-      if(id==="files") renderFiles();
-      if(id==="forms") renderForms();
-      if(id==="canteen") renderOrders();
-      if(id==="settings") renderUsersList();
+      if(id==='timetable') renderTimetable();
+      if(id==='messages') renderMessages();
+      if(id==='results') renderGrades();
+      if(id==='attendance') renderAttendance();
+      if(id==='files') renderFiles();
+      if(id==='forms') renderForms();
+      if(id==='canteen') renderOrders();
+      if(id==='settings') renderUsers();
     }
 
-    function logout(){
-      localStorage.removeItem("loggedInUser");
-      localStorage.removeItem("userRole");
-      location.href = "index.html";
-    }
+    function logout(){ localStorage.removeItem("loggedInUser"); localStorage.removeItem("userRole"); location.href="index.html"; }
 
-    /* -------------------------
-       Populate user control dropdowns & lists
-       ------------------------- */
+    // --- populate common controls ---
     function populateUserControls(){
       const users = JSON.parse(localStorage.getItem("app_users")||"[]");
       document.getElementById("msgTo").innerHTML = users.filter(u=>u!==currentUser).map(u=>`<option>${u}</option>`).join("");
       document.getElementById("attUser").innerHTML = users.map(u=>`<option>${u}</option>`).join("");
       document.getElementById("gradeStudent").innerHTML = users.map(u=>`<option>${u}</option>`).join("");
+      // lessons dropdown
+      const lessonSelect = document.getElementById("lessonSelect");
+      lessonSelect.innerHTML = Object.keys(lessonSubjects).map(l=>`<option>${l}</option>`).join("");
+      populateSubjectDropdown(lessonSelect.value);
+      lessonSelect.onchange = ()=> populateSubjectDropdown(lessonSelect.value);
     }
 
-    function renderUsersList(){
-      const users = JSON.parse(localStorage.getItem("app_users")||"[]");
-      const imgs = JSON.parse(localStorage.getItem("user_images")||"{}");
-      const roles = JSON.parse(localStorage.getItem("user_roles")||"{}");
-      document.getElementById("appUsersList").innerHTML = users.map(u=>{
-        const r = roles[u] || "Leerling";
-        return `<li style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;background:#fff;margin-bottom:8px">
-          <img src="${imgs[u]||Object.values(imgs)[0]}" class="avatar-xs">
-          <div><strong>${u}</strong><div class="muted-small">${r}</div></div>
-          ${currentRole === "Leraar" ? `<div style="margin-left:auto"><button onclick="promptEditUser('${u}')">Bewerk</button></div>` : ""}
-        </li>`;
-      }).join("") || "<li class='muted-small'>Geen gebruikers</li>";
+    function populateSubjectDropdown(lesson){
+      const subj = lessonSubjects[lesson] || [];
+      const sel = document.getElementById("subjectSelect");
+      sel.innerHTML = subj.map(s=>`<option>${s}</option>`).join("");
     }
 
-    /* -------------------------
-       Timetable (agenda) rendering
-       ------------------------- */
+    // --- timetable rendering & add ---
     function renderTimetable(){
       const container = document.getElementById("timetableGrid");
       container.innerHTML = "";
       const days = ["Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag"];
       const items = JSON.parse(localStorage.getItem("timetable_items")||"[]");
-
       for(let d=1; d<=5; d++){
-        const col = document.createElement("div");
-        col.className = "day-col";
-        col.innerHTML = `<h4>${days[d-1]}</h4>`;
-        const filtered = items.filter(it => it.day === d);
-        // sort by time if possible (string)
-        filtered.sort((a,b)=> a.time.localeCompare(b.time));
+        const col = document.createElement("div"); col.className='day-col';
+        col.innerHTML = `<h4 style="margin:0 0 8px 0">${days[d-1]}</h4>`;
+        const filtered = items.filter(it=>it.day===d).sort((a,b)=>a.time.localeCompare(b.time));
         filtered.forEach(it=>{
-          const card = document.createElement("div");
-          card.className = "tt-card";
-          card.innerHTML = `<div class="tt-time">${it.time}</div>
-                            <div class="tt-sub">${it.title} • ${it.room || ""}</div>
-                            <div class="tt-meta">${it.teacher || ""}</div>`;
+          const card=document.createElement("div"); card.className='tt-card';
+          card.innerHTML = `<div class="tt-time">${it.time}</div><div class="tt-sub">${it.title} • ${it.room||""}</div><div class="muted-small">${it.teacher||""}</div>`;
           col.appendChild(card);
         });
         container.appendChild(col);
       }
-
-      // control visibility: only teachers can add
-      const isTeacher = currentRole === "Leraar";
-      document.getElementById("ttAddForm").style.display = isTeacher ? "flex" : "none";
+      // only teachers can see quick add
+      document.getElementById("ttAddForm").style.display = (currentRole==="Leraar") ? "flex" : "none";
     }
-
     function addTimetableItem(e){
       e.preventDefault();
-      if(currentRole !== "Leraar") return alert("Alleen leraren mogen het rooster bewerken.");
+      if(currentRole !== "Leraar") return alert("Alleen leraren mogen rooster aanpassen.");
       const day = parseInt(document.getElementById("ttDay").value,10);
       const time = document.getElementById("ttTime").value.trim();
       const title = document.getElementById("ttTitle").value.trim();
@@ -454,255 +336,165 @@
       e.target.reset();
     }
 
-    /* -------------------------
-       Messages
-       ------------------------- */
+    // --- messages (everyone) ---
     function sendMessage(e){
       e.preventDefault();
       const to = document.getElementById("msgTo").value;
       const text = document.getElementById("msgText").value.trim();
       if(!text) return;
-      const key = "messages_all";
-      const arr = JSON.parse(localStorage.getItem(key)||"[]");
+      const key="messages_all"; const arr = JSON.parse(localStorage.getItem(key)||"[]");
       arr.push({from:currentUser,to,text,date:new Date().toLocaleString()});
-      localStorage.setItem(key, JSON.stringify(arr));
-      renderMessages();
-      addActivity(`Bericht gestuurd aan ${to}`);
-      e.target.reset();
+      localStorage.setItem(key,JSON.stringify(arr)); renderMessages(); addActivity(`Bericht gestuurd aan ${to}`); e.target.reset();
     }
     function renderMessages(){
       const messages = JSON.parse(localStorage.getItem("messages_all")||"[]");
       const visible = messages.filter(m=>m.from===currentUser || m.to===currentUser);
-      document.getElementById("msgList").innerHTML = visible.length ? visible.reverse().map(m=>`<div style="background:#fff;border-radius:8px;padding:8px;margin-bottom:8px"><strong>${m.from} ➝ ${m.to}</strong><div class="muted-small">${m.date}</div><div>${m.text}</div></div>`).join("") : "<div class='muted-small'>Geen berichten</div>";
-      // update quick info counts (optional)
+      document.getElementById("msgList").innerHTML = visible.length ? visible.reverse().map(m=>`<div style="background:#fff;padding:8px;border-radius:8px;margin-bottom:8px"><strong>${m.from} ➝ ${m.to}</strong><div class="muted-small">${m.date}</div><div>${m.text}</div></div>`).join("") : "<div class='muted-small'>Geen berichten</div>";
     }
 
-    /* -------------------------
-       Grades (results)
-       ------------------------- */
+    // --- grades (teacher adds; student sees own) ---
     function addGrade(e){
       e.preventDefault();
       if(currentRole !== "Leraar") return alert("Alleen leraren kunnen cijfers toevoegen.");
       const student = document.getElementById("gradeStudent").value;
-      const course = document.getElementById("course").value.trim();
-      const gradeVal = document.getElementById("grade").value;
-      if(!student||!course||!gradeVal) return;
-      const key = "grades_all";
-      const arr = JSON.parse(localStorage.getItem(key)||"[]");
-      arr.push({student,course,grade:gradeVal,date:new Date().toLocaleDateString()});
-      localStorage.setItem(key, JSON.stringify(arr));
-      renderGrades();
-      addActivity(`Cijfer toegevoegd: ${student} — ${course} ${gradeVal}`);
-      document.getElementById("gradeForm").reset();
+      const lesson = document.getElementById("lessonSelect").value;
+      const subject = document.getElementById("subjectSelect").value;
+      const pct = parseInt(document.getElementById("gradePercent").value,10);
+      if(isNaN(pct)) return;
+      const key="grades_all"; const arr = JSON.parse(localStorage.getItem(key)||"[]");
+      arr.push({student,lesson,subject,grade:pct,date:new Date().toLocaleDateString()});
+      localStorage.setItem(key,JSON.stringify(arr));
+      renderGrades(); addActivity(`Cijfer toegevoegd: ${student} — ${lesson}/${subject} ${pct}%`);
+      document.getElementById("gradeForm").reset(); populateUserControls();
     }
-
     function renderGrades(){
       const arr = JSON.parse(localStorage.getItem("grades_all")||"[]");
-      const visible = currentRole === "Leraar" ? arr : arr.filter(g=>g.student === currentUser);
-      document.getElementById("gradeList").innerHTML = visible.length ? visible.map(g=>`<li style="background:#fff;padding:8px;border-radius:8px"><strong>${g.student}</strong> — ${g.course}: ${g.grade} <div class="muted-small">${g.date}</div></li>`).join("") : "<li class='muted-small'>Geen resultaten</li>";
+      const visible = (currentRole==="Leraar") ? arr : arr.filter(g=>g.student===currentUser);
+      document.getElementById("gradeList").innerHTML = visible.length ? visible.map(g=>`<li style="background:#fff;padding:8px;border-radius:8px"><strong>${g.student}</strong> — ${g.lesson} / ${g.subject}: ${g.grade}% <div class="muted-small">${g.date}</div></li>`).join("") : "<li class='muted-small'>Geen resultaten</li>";
+      // hide grade form for students
+      document.getElementById("gradeForm").style.display = (currentRole==="Leraar") ? "flex" : "none";
     }
 
-    /* -------------------------
-       Attendance
-       ------------------------- */
+    // --- attendance ---
     function setAttendance(e){
       e.preventDefault();
       if(currentRole !== "Leraar") return alert("Alleen leraren mogen afwezigheden registreren.");
       const name = document.getElementById("attUser").value;
       const status = document.getElementById("attStatus").value;
       const note = document.getElementById("attNote").value.trim();
-      const key = "attendance_all";
-      const arr = JSON.parse(localStorage.getItem(key)||"[]");
+      const key="attendance_all"; const arr = JSON.parse(localStorage.getItem(key)||"[]");
       arr.unshift({name,status,note,time:new Date().toLocaleString()});
-      localStorage.setItem(key, JSON.stringify(arr.slice(0,500)));
-      renderAttendance();
-      addActivity(`Aanwezigheid: ${name} — ${status}`);
-      document.getElementById("attForm").reset();
+      localStorage.setItem(key,JSON.stringify(arr.slice(0,500)));
+      renderAttendance(); addActivity(`Aanwezigheid: ${name} — ${status}`); document.getElementById("attForm").reset();
     }
-
     function renderAttendance(){
       const arr = JSON.parse(localStorage.getItem("attendance_all")||"[]");
-      const latest = {};
-      arr.forEach(a=>{ if(!latest[a.name]) latest[a.name] = a; });
+      const latest = {}; arr.forEach(a=>{ if(!latest[a.name]) latest[a.name]=a; });
       const users = JSON.parse(localStorage.getItem("app_users")||"[]");
-      document.getElementById("attList").innerHTML = users.map(u=>{
+      const listHtml = users.map(u=>{
         const s = latest[u];
         if(s) return `<li style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:8px"><img src="${userImages[u]||Object.values(userImages)[0]}" class="avatar-xs"><div style="flex:1"><strong>${u}</strong><div class="muted-small">${s.status} • ${s.time}${s.note?` • ${s.note}`:""}</div></div></li>`;
         return `<li style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:8px"><img src="${userImages[u]||Object.values(userImages)[0]}" class="avatar-xs"><div style="flex:1"><strong>${u}</strong><div class="muted-small">Geen registratie</div></div></li>`;
       }).join("");
-      document.getElementById("attHistory").innerHTML = arr.length ? arr.map(a=>`<li style="background:#fff;padding:8px;border-radius:8px"><strong>${a.name}</strong> — ${a.status}<div class="muted-small">${a.time}${a.note?` • ${a.note}`:""}</div></li>`).join("") : "<li class='muted-small'>Geen geschiedenis</li>";
+      if(currentRole==="Leraar"){
+        document.getElementById("attList").innerHTML = listHtml;
+        document.getElementById("attHistory").innerHTML = arr.length ? arr.map(a=>`<li style="background:#fff;padding:8px;border-radius:8px"><strong>${a.name}</strong> — ${a.status}<div class="muted-small">${a.time}${a.note?` • ${a.note}`:""}</div></li>`).join("") : "<li class='muted-small'>Geen geschiedenis</li>";
+        document.getElementById("attForm").style.display = "flex";
+      } else {
+        // student sees their own record & history only
+        const latestSelf = latest[currentUser];
+        document.getElementById("attList").innerHTML = latestSelf ? `<li style="background:#fff;padding:8px;border-radius:8px"><img src="${userImages[currentUser]||Object.values(userImages)[0]}" class="avatar-xs"><div style="flex:1"><strong>${currentUser}</strong><div class="muted-small">${latestSelf.status} • ${latestSelf.time}${latestSelf.note?` • ${latestSelf.note}`:""}</div></div></li>` : `<li class="muted-small">Geen registratie</li>`;
+        const history = arr.filter(a=>a.name===currentUser);
+        document.getElementById("attHistory").innerHTML = history.length ? history.map(a=>`<li style="background:#fff;padding:8px;border-radius:8px"><strong>${a.name}</strong> — ${a.status}<div class="muted-small">${a.time}${a.note?` • ${a.note}`:""}</div></li>`).join("") : "<li class='muted-small'>Geen geschiedenis</li>";
+        document.getElementById("attForm").style.display = "none";
+      }
+      // disable attendance menu form elements for students
+      const disabled = currentRole !== "Leraar";
+      document.querySelectorAll("#attForm select, #attForm input, #attForm button").forEach(el=>{
+        el.disabled = disabled;
+      });
     }
 
-    /* -------------------------
-       Files
-       ------------------------- */
+    // --- files (teacher only upload/delete) ---
     function uploadFile(){
       if(currentRole !== "Leraar") return alert("Alleen leraren kunnen bestanden uploaden.");
-      const input = document.getElementById("fileInput");
-      const f = input.files[0];
-      if(!f) return;
-      const url = URL.createObjectURL(f);
-      const desc = document.getElementById("fileDesc").value.trim();
-      const key = "files_all";
-      const arr = JSON.parse(localStorage.getItem(key)||"[]");
+      const input = document.getElementById("fileInput"); const f = input.files[0]; if(!f) return;
+      const url = URL.createObjectURL(f); const desc = document.getElementById("fileDesc").value.trim();
+      const key="files_all"; const arr = JSON.parse(localStorage.getItem(key)||"[]");
       arr.unshift({name:f.name,url,desc,by:currentUser,date:new Date().toLocaleString()});
-      localStorage.setItem(key, JSON.stringify(arr));
-      renderFiles();
-      addActivity(`Bestand geüpload: ${f.name}`);
-      input.value = ""; document.getElementById("fileDesc").value = "";
+      localStorage.setItem(key,JSON.stringify(arr)); renderFiles(); addActivity(`Bestand geüpload: ${f.name}`); input.value=""; document.getElementById("fileDesc").value="";
     }
-
     function renderFiles(){
       const arr = JSON.parse(localStorage.getItem("files_all")||"[]");
-      document.getElementById("fileList").innerHTML = arr.length ? arr.map((f,i)=>`<li style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:8px"><div style="flex:1"><a href="${f.url}" class="muted-small" download="${f.name}">${f.name}</a><div class="muted-small">${f.desc} • ${f.by} • ${f.date}</div></div>${currentRole==="Leraar"?`<button onclick="removeFile(${i})">Verwijder</button>`:""}</li>`).join("") : "<li class='muted-small'>Geen bestanden</li>";
+      document.getElementById("fileList").innerHTML = arr.length ? arr.map((f,i)=>`<li style="background:#fff;padding:8px;border-radius:8px;display:flex;align-items:center;gap:8px"><div style="flex:1"><a href="${f.url}" download="${f.name}">${f.name}</a><div class="muted-small">${f.desc} • ${f.by} • ${f.date}</div></div>${currentRole==="Leraar"?`<button onclick="removeFile(${i})">Verwijder</button>`:""}</li>`).join("") : "<li class='muted-small'>Geen bestanden</li>";
+      document.getElementById("fileUploadBox").style.display = (currentRole==="Leraar") ? "flex" : "none";
     }
     function removeFile(i){
       if(currentRole !== "Leraar") return;
-      const arr = JSON.parse(localStorage.getItem("files_all")||"[]");
-      arr.splice(i,1);
-      localStorage.setItem("files_all",JSON.stringify(arr));
-      renderFiles();
+      const arr = JSON.parse(localStorage.getItem("files_all")||"[]"); arr.splice(i,1); localStorage.setItem("files_all",JSON.stringify(arr)); renderFiles();
     }
 
-    /* -------------------------
-       Forms
-       ------------------------- */
+    // --- forms (everyone) ---
     function addForm(e){
-      e.preventDefault();
-      const t = document.getElementById("formText").value.trim();
-      if(!t) return;
-      const key = "forms_"+currentUser;
-      const arr = JSON.parse(localStorage.getItem(key)||"[]");
-      arr.unshift({text:t,date:new Date().toLocaleString()});
-      localStorage.setItem(key, JSON.stringify(arr));
-      renderForms();
-      addActivity("Formulier ingediend");
-      e.target.reset();
+      e.preventDefault(); const t = document.getElementById("formText").value.trim(); if(!t) return;
+      const key = "forms_"+currentUser; const arr = JSON.parse(localStorage.getItem(key)||"[]"); arr.unshift({text:t,date:new Date().toLocaleString()}); localStorage.setItem(key,JSON.stringify(arr)); renderForms(); addActivity("Formulier ingediend"); e.target.reset();
     }
-    function renderForms(){
-      const key = "forms_"+currentUser;
-      const arr = JSON.parse(localStorage.getItem(key)||"[]");
-      document.getElementById("formList").innerHTML = arr.length ? arr.map(f=>`<li style="background:#fff;padding:8px;border-radius:8px"><strong>${f.text}</strong><div class="muted-small">${f.date}</div></li>`).join("") : "<li class='muted-small'>Geen inzendingen</li>";
-    }
+    function renderForms(){ const arr = JSON.parse(localStorage.getItem("forms_"+currentUser)||"[]"); document.getElementById("formList").innerHTML = arr.length ? arr.map(f=>`<li style="background:#fff;padding:8px;border-radius:8px"><strong>${f.text}</strong><div class="muted-small">${f.date}</div></li>`).join("") : "<li class='muted-small'>Geen inzendingen</li>"; }
 
-    /* -------------------------
-       Canteen orders
-       ------------------------- */
+    // --- canteen (everyone) ---
     function orderFood(e){
-      e.preventDefault();
-      const val = document.getElementById("foodItem").value;
-      const [item,price] = val.split("|");
-      const key = "canteen_"+currentUser;
-      const arr = JSON.parse(localStorage.getItem(key)||"[]");
-      arr.push({item,price:parseFloat(price),date:new Date().toLocaleString()});
-      localStorage.setItem(key,JSON.stringify(arr));
-      renderOrders();
-      addActivity(`Bestelling geplaatst: ${item}`);
+      e.preventDefault(); const val = document.getElementById("foodItem").value; const [item,price] = val.split("|");
+      const key="canteen_"+currentUser; const arr = JSON.parse(localStorage.getItem(key)||"[]"); arr.push({item,price:parseFloat(price),date:new Date().toLocaleString()}); localStorage.setItem(key,JSON.stringify(arr)); renderOrders(); addActivity(`Bestelling: ${item}`);
     }
-    function renderOrders(){
-      const key = "canteen_"+currentUser;
-      const arr = JSON.parse(localStorage.getItem(key)||"[]");
-      document.getElementById("orderList").innerHTML = arr.length ? arr.map(o=>`<li style="background:#fff;padding:8px;border-radius:8px">${o.item} — €${o.price.toFixed(2)}<div class="muted-small">${o.date}</div></li>`).join("") : "<li class='muted-small'>Geen bestellingen</li>";
-      const total = arr.reduce((s,o)=>s+o.price,0);
-      document.getElementById("totalPrice").textContent = total.toFixed(2);
-    }
+    function renderOrders(){ const arr = JSON.parse(localStorage.getItem("canteen_"+currentUser)||"[]"); document.getElementById("orderList").innerHTML = arr.length ? arr.map(o=>`<li style="background:#fff;padding:8px;border-radius:8px">${o.item} — €${o.price.toFixed(2)}<div class="muted-small">${o.date}</div></li>`).join("") : "<li class='muted-small'>Geen bestellingen</li>"; const total = arr.reduce((s,o)=>s+o.price,0); document.getElementById("totalPrice").textContent = total.toFixed(2); }
 
-    /* -------------------------
-       Users management (teacher only)
-       ------------------------- */
+    // --- users management (teachers only) ---
     function addAppUser(){
       if(currentRole !== "Leraar") return alert("Alleen leraren kunnen gebruikers toevoegen.");
-      const name = document.getElementById("newUserName").value.trim();
-      const roleSel = document.getElementById("newUserRole").value;
+      const name = document.getElementById("newUserName").value.trim(); const roleSel = document.getElementById("newUserRole").value;
       if(!name) return alert("Voer een naam in.");
-      const users = JSON.parse(localStorage.getItem("app_users")||"[]");
-      if(users.includes(name)) return alert("Gebruiker bestaat al.");
-      users.push(name);
-      localStorage.setItem("app_users", JSON.stringify(users));
-      const roles = JSON.parse(localStorage.getItem("user_roles")||"{}");
-      roles[name] = roleSel;
-      localStorage.setItem("user_roles", JSON.stringify(roles));
-      const imgs = JSON.parse(localStorage.getItem("user_images")||"{}");
-      imgs[name] = `https://via.placeholder.com/150/cccccc/333333?text=${encodeURIComponent(name)}`;
-      localStorage.setItem("user_images", JSON.stringify(imgs));
-      populateUserControls();
-      renderUsersList();
-      addActivity(`Gebruiker toegevoegd: ${name}`);
-      document.getElementById("newUserName").value = "";
+      const users = JSON.parse(localStorage.getItem("app_users")||"[]"); if(users.includes(name)) return alert("Gebruiker bestaat al.");
+      users.push(name); localStorage.setItem("app_users",JSON.stringify(users));
+      const roles = JSON.parse(localStorage.getItem("user_roles")||"{}"); roles[name]=roleSel; localStorage.setItem("user_roles",JSON.stringify(roles));
+      const imgs = JSON.parse(localStorage.getItem("user_images")||"{}"); imgs[name]=`https://via.placeholder.com/150/cccccc/333333?text=${encodeURIComponent(name)}`; localStorage.setItem("user_images",JSON.stringify(imgs));
+      populateUserControls(); renderUsers(); addActivity(`Gebruiker toegevoegd: ${name}`); document.getElementById("newUserName").value="";
     }
-
     function promptEditUser(name){
       if(currentRole !== "Leraar") return;
-      const newName = prompt("Nieuwe naam voor " + name, name);
-      if(!newName || newName.trim()===name) return;
-      const users = JSON.parse(localStorage.getItem("app_users")||"[]");
-      const idx = users.indexOf(name);
-      if(idx === -1) return;
-      users[idx] = newName;
-      localStorage.setItem("app_users", JSON.stringify(users));
-      const roles = JSON.parse(localStorage.getItem("user_roles")||"{}");
-      roles[newName] = roles[name] || "Leerling";
-      delete roles[name];
-      localStorage.setItem("user_roles", JSON.stringify(roles));
-      const imgs = JSON.parse(localStorage.getItem("user_images")||"{}");
-      imgs[newName] = imgs[name] || `https://via.placeholder.com/150/cccccc/333333?text=${encodeURIComponent(newName)}`;
-      delete imgs[name];
-      localStorage.setItem("user_images", JSON.stringify(imgs));
-      populateUserControls();
-      renderUsersList();
-      addActivity(`Gebruiker hernoemd: ${name} → ${newName}`);
+      const newName = prompt("Nieuwe naam voor " + name, name); if(!newName || newName.trim()===name) return;
+      const users = JSON.parse(localStorage.getItem("app_users")||"[]"); const idx = users.indexOf(name); if(idx===-1) return;
+      users[idx] = newName; localStorage.setItem("app_users",JSON.stringify(users));
+      const roles = JSON.parse(localStorage.getItem("user_roles")||"{}"); roles[newName]=roles[name]||"Leerling"; delete roles[name]; localStorage.setItem("user_roles",JSON.stringify(roles));
+      const imgs = JSON.parse(localStorage.getItem("user_images")||"{}"); imgs[newName]=imgs[name]||`https://via.placeholder.com/150/cccccc/333333?text=${encodeURIComponent(newName)}`; delete imgs[name]; localStorage.setItem("user_images",JSON.stringify(imgs));
+      populateUserControls(); renderUsers(); addActivity(`Gebruiker hernoemd: ${name} → ${newName}`);
+    }
+    function renderUsers(){
+      const users = JSON.parse(localStorage.getItem("app_users")||"[]"); const imgs = JSON.parse(localStorage.getItem("user_images")||"{}"); const roles = JSON.parse(localStorage.getItem("user_roles")||"{}");
+      document.getElementById("appUsersList").innerHTML = users.map(u=>`<li style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;background:#fff;margin-bottom:8px"><img src="${imgs[u]||Object.values(imgs)[0]}" class="avatar-xs"><div><strong>${u}</strong><div class="muted-small">${roles[u]||'Leerling'}</div></div>${currentRole==="Leraar"?`<div style="margin-left:auto"><button onclick="promptEditUser('${u}')">Bewerk</button></div>`:""}</li>`).join("") || "<li class='muted-small'>Geen gebruikers</li>";
     }
 
-    /* -------------------------
-       Tiny activity feed (for dashboard)
-       ------------------------- */
+    // --- small activity feed (dashboard) ---
     function addActivity(text){
-      const key = "activities";
-      const arr = JSON.parse(localStorage.getItem(key)||"[]");
-      arr.unshift({text,date:new Date().toLocaleString()});
-      localStorage.setItem(key, JSON.stringify(arr.slice(0,50)));
-      renderActivities();
+      const key="activities"; const arr = JSON.parse(localStorage.getItem(key)||"[]"); arr.unshift({text,date:new Date().toLocaleString()}); localStorage.setItem(key,JSON.stringify(arr.slice(0,50))); renderActivities();
     }
-    function renderActivities(){
-      const arr = JSON.parse(localStorage.getItem("activities")||"[]");
-      const el = document.getElementById("activityList");
-      if(!el) return;
-      el.innerHTML = arr.length ? arr.map(a=>`<li style="background:#fff;padding:8px;border-radius:8px;margin-bottom:8px"><strong>${a.text}</strong><div class="muted-small">${a.date}</div></li>`).join("") : "<li class='muted-small'>Geen activiteiten</li>";
-    }
+    function renderActivities(){ const arr = JSON.parse(localStorage.getItem("activities")||"[]"); const el=document.getElementById("activityArea"); el.innerHTML = arr.length ? arr.map(a=>`<div style="background:#fff;padding:8px;border-radius:8px;margin-bottom:8px"><strong>${a.text}</strong><div class="muted-small">${a.date}</div></div>`).join("") : "<div class='muted-small'>Geen activiteiten</div>"; }
 
-    /* -------------------------
-       Renderers and initialization
-       ------------------------- */
+    // --- renderers and init ---
     function renderAll(){
-      populateUserControls();
-      renderUsersList();
-      renderTimetable();
-      renderMessages();
-      renderGrades();
-      renderAttendance();
-      renderFiles();
-      renderForms();
-      renderOrders();
-      renderActivities();
-      // administrative UI locks
-      const isTeacher = currentRole === "Leraar";
-      document.getElementById("addUserBtn").style.display = isTeacher ? "inline-block" : "none";
-      document.getElementById("uploadBtn").disabled = !isTeacher;
-      document.getElementById("ttAddBtn").disabled = !isTeacher;
-      document.getElementById("attForm").querySelectorAll("select,input,button").forEach(el=>{
-        if(el.tagName !== "BUTTON") el.disabled = !isTeacher;
-      });
-      document.getElementById("gradeForm").querySelectorAll("select,input,button").forEach(el=>{
-        if(el.tagName !== "BUTTON"){ el.disabled = !isTeacher; }
-      });
+      populateUserControls(); renderTimetable(); renderMessages(); renderGrades(); renderAttendance(); renderFiles(); renderForms(); renderOrders(); renderUsers(); renderActivities();
+      // UI locks
+      document.getElementById("addUserBtn").style.display = (currentRole==="Leraar") ? "inline-block" : "none";
+      document.getElementById("uploadBtn").disabled = (currentRole!=="Leraar");
+      document.getElementById("ttAddBtn").disabled = (currentRole!=="Leraar");
     }
 
-    // initial population
-    populateUserControls();
-    renderAll();
+    function renderForms(){ const arr = JSON.parse(localStorage.getItem("forms_"+currentUser)||"[]"); document.getElementById("formList").innerHTML = arr.length ? arr.map(f=>`<li style="background:#fff;padding:8px;border-radius:8px"><strong>${f.text}</strong><div class="muted-small">${f.date}</div></li>`).join("") : "<li class='muted-small'>Geen inzendingen</li>"; }
 
-    // default view
-    switchView("dashboard");
+    // initial populate
+    populateUserControls(); renderAll();
+
+    // default view is dashboard
+    switchView('dashboard');
   </script>
 </body>
 </html>
