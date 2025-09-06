@@ -1,165 +1,87 @@
-<!doctype html>
-<html lang="nl">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Smartschool Dashboard — Demo</title>
-<style>
-:root{
-  --brand:#ff6a00;
-  --brand-dark:#cc5200;
-  --bg:#ffffff;
-  --panel:#ffffff;
-  --muted:#7b8aa3;
-  --accent:#00a0ff;
-  --danger:#a31d1d;
-  --border:#e1e8f0;
-  --text:#0b2540;
-  --muted-bg:#f5f8fc;
-  --success:#2aa14f;
-  --navbar-text:#ffffff;
-  --main-text:#0b2540;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{
-  font-family:"Segoe UI",Roboto,Arial,sans-serif;
-  background:linear-gradient(180deg,var(--bg),#ecf3fb);
-  color:var(--main-text);
-  line-height:1.3;
-  padding-bottom:24px;
-}
-.navbar{
-  background:linear-gradient(180deg,var(--brand),var(--brand-dark));
-  color:var(--navbar-text);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:12px 18px;
-  gap:12px;
-  position:sticky;
-  top:0;
-  z-index:1200;
-  box-shadow:0 2px 8px rgba(8,23,40,0.12);
-  border-bottom:1px solid rgba(255,255,255,0.06);
-}
-.nav-left{display:flex;align-items:center;gap:10px}
-.brand{display:flex;align-items:center;gap:10px}
-.brand img{width:36px;height:36px;border-radius:6px;object-fit:cover;background:#fff}
-.brand .school-name{font-weight:700;font-size:16px;color:var(--navbar-text)}
-.user-badge{display:flex;align-items:center;gap:10px}
-.user-badge img{width:36px;height:36px;border-radius:999px;object-fit:cover;border:2px solid rgba(255,255,255,0.15)}
-.user-info{color:var(--navbar-text);line-height:1}
-.user-info .name{font-weight:700}
-.user-info .role{font-size:12px;opacity:0.9}
-.nav-right{display:flex;align-items:center;gap:12px}
-.nav-item{
-  color:var(--navbar-text);
-  background:transparent;
-  padding:6px 10px;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:14px;
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  border:1px solid transparent;
-}
-.nav-item:hover{background:rgba(255,255,255,0.06)}
-.badge{background:var(--accent);color:#fff;font-size:12px;padding:2px 6px;border-radius:999px}
-.has-dropdown{position:relative}
-.dropdown-menu{
-  position:absolute;top:calc(100% + 10px);left:0;min-width:220px;
-  background:var(--panel);color:var(--text);border-radius:10px;
-  box-shadow:0 14px 30px rgba(8,23,40,0.12);border:1px solid var(--border);
-  padding:8px;display:none;z-index:2000
-}
-.dropdown-menu.open{display:block}
-.dropdown-menu a{display:flex;align-items:center;gap:8px;padding:8px;text-decoration:none;color:var(--text);border-radius:8px;font-size:14px}
-.dropdown-menu a:hover{background:var(--muted-bg)}
-.container{max-width:1200px;margin:18px auto;padding:0 12px}
-.shell{display:grid;grid-template-columns:260px 1fr 320px;gap:18px}
-@media(max-width:980px){.shell{grid-template-columns:1fr}}
-.left-pane,.center-pane,.right-pane{background:var(--panel);border-radius:12px;padding:18px;border:1px solid var(--border);box-shadow:0 6px 18px rgba(8,23,40,0.04)}
-.clock{display:flex;flex-direction:column;align-items:center;justify-content:center}
-.clock .time{font-size:56px;font-weight:700;color:var(--brand-dark)}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
-.cal-cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:14px;padding:6px;background:var(--muted-bg);color:var(--text)}
-.cal-cell.today{outline:2px solid var(--accent);font-weight:700}
-.agenda-timetable{display:grid;grid-template-columns:80px repeat(5,1fr);gap:8px}
-.timetable-cell{min-height:56px;border-radius:6px;border:1px solid var(--border);padding:8px;background:#fff}
-.timetable-cell.time{background:transparent;border:none;font-weight:700;color:var(--muted)}
-.timetable-day{background:var(--muted-bg);text-align:center;font-weight:700;padding:8px;border-radius:6px}
-.lesson{font-size:13px}
-.lesson .subject{font-weight:700}
-.settings-page{display:none}
-.settings-page.active{display:block}
-.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.input-group{display:flex;flex-direction:column;gap:6px}
-</style>
-</head>
-<body>
-<div class="navbar">
-  <div class="nav-left">
-    <div class="brand"><img src="https://i.imgur.com/DOhS0Pv.png"><span class="school-name">Smartschool</span></div>
-  </div>
-  <div class="nav-right">
-    <div class="user-badge">
-      <img id="profilePic" src="https://i.imgur.com/lnO6zoW.png">
-      <div class="user-info"><div class="name" id="profileName">Jan Jansen</div><div class="role" id="profileRole">Leerling</div></div>
-    </div>
-    <button class="nav-item" onclick="toggleSettings()">⚙️</button>
-  </div>
-</div>
-<div class="container">
-  <div class="shell">
-    <div class="left-pane">
-      <div class="clock"><div class="time" id="clock">12:00</div><small id="date">Maandag</small></div>
-    </div>
-    <div class="center-pane">
-      <h2>Agenda</h2>
-      <div class="agenda-timetable">
-        <div class="timetable-day">Ma</div>
-        <div class="timetable-day">Di</div>
-        <div class="timetable-day">Wo</div>
-        <div class="timetable-day">Do</div>
-        <div class="timetable-day">Vr</div>
-        <div class="timetable-cell lesson"><div class="subject">Wiskunde</div><div class="meta">08:30 - 09:20</div></div>
-        <div class="timetable-cell lesson"><div class="subject">Nederlands</div><div class="meta">08:30 - 09:20</div></div>
-        <div class="timetable-cell lesson"><div class="subject">Engels</div><div class="meta">08:30 - 09:20</div></div>
-        <div class="timetable-cell lesson"><div class="subject">Geschiedenis</div><div class="meta">08:30 - 09:20</div></div>
-        <div class="timetable-cell lesson"><div class="subject">Biologie</div><div class="meta">08:30 - 09:20</div></div>
-      </div>
-    </div>
-    <div class="right-pane">
-      <div class="settings-page" id="settingsPage">
-        <h2>Instellingen</h2>
-        <div class="settings-grid">
-          <div class="input-group"><label>Naam</label><input type="text" id="inputName"></div>
-          <div class="input-group"><label>Rol</label><input type="text" id="inputRole"></div>
-          <div class="input-group"><label>Profielfoto URL</label><input type="text" id="inputPic"></div>
-          <div class="input-group"><button onclick="saveProfile()">Opslaan</button></div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dashboard</title>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Icons -->
+    <link rel="icon" href="https://static3.smart-school.net/smsc/svg/favicon/favicon.svg">
+    <link rel="mask-icon" href="https://static5.smart-school.net/smsc/svg/favicon/mask-icon.svg" color="#ff520e">
+    <link rel="apple-touch-icon" href="https://static5.smart-school.net/smsc/img/favicon/apple-touch-icon.png">
+
+    <!-- jQuery & jQueryUI -->
+    <script type="text/javascript" src="https://static1.smart-school.net/smsc/resources/jquery/3.7.1/jquery.min.rev-d2299f9fcf.js"></script>
+    <script type="text/javascript" src="https://static3.smart-school.net/smsc/resources/jqueryui/1.14.1/jquery-ui.min.rev-f9db301ab5.js"></script>
+    <link href="https://static1.smart-school.net/smsc/resources/jqueryui/1.14.1/jquery-ui.min.rev-d2f703837f.css" rel="stylesheet" />
+
+    <!-- Smartschool core styles -->
+    <link href="https://static3.smart-school.net/production/Topnav/main.rev-e1d0969e21.css" rel="stylesheet" />
+    <link href="https://static1.smart-school.net/modules/Agenda/dist/main-built.rev-18f879fcf4.css" rel="stylesheet" />
+    <link href="https://static5.smart-school.net/modules/Agenda/desktop/main/dist/main-built.rev-de3aa78583.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <a href="#mainContent" class="skip-link js-skip-link">Spring naar hoofdcontent</a>
+
+    <header id="smscTopContainer" class="smsc-topnav">
+      <nav class="topnav">
+        <div data-profile class="topnav__btn-wrapper">
+          <button class="js-btn-profile topnav__btn topnav__btn--profile">
+            <img src="https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/1061_1b9bd6e8-b313-4e85-ba95-3c26ad96d5cb/plain/1/res/48" alt="Profiel"/>
+            <div class="hlp-vert-box">
+              <span>Demo User</span>
+              <span class="topnav__btn__light"></span>
+            </div>
+            <div class="topnav__menu-arrow" aria-hidden="true"></div>
+          </button>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-<script>
-function updateClock(){
-  const now=new Date();
-  document.getElementById("clock").textContent=now.toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"});
-  document.getElementById("date").textContent=now.toLocaleDateString("nl-NL",{weekday:"long",day:"numeric",month:"long"});
-}
-setInterval(updateClock,1000);updateClock();
-function toggleSettings(){document.getElementById("settingsPage").classList.toggle("active")}
-function saveProfile(){
-  const name=document.getElementById("inputName").value;
-  const role=document.getElementById("inputRole").value;
-  const pic=document.getElementById("inputPic").value;
-  if(name)document.getElementById("profileName").textContent=name;
-  if(role)document.getElementById("profileRole").textContent=role;
-  if(pic)document.getElementById("profilePic").src=pic;
-}
-</script>
-</body>
+
+        <a href="#" class="js-btn-home topnav__btn topnav__btn--push-right">Start</a>
+
+        <div data-shortcuts class="topnav__btn-wrapper">
+          <button class="js-btn-shortcuts topnav__btn">Modules<div class="topnav__menu-arrow" aria-hidden="true"></div></button>
+          <div class="topnav__menu topnav__menu--shortcuts js-shortcuts-container js-autosize">
+            <a href="#messages" class="topnav__menuitem" role="menuitem">Berichten</a>
+            <a href="#forms" class="topnav__menuitem" role="menuitem">Formulieren</a>
+            <a href="#helpdesk" class="topnav__menuitem" role="menuitem">Helpdesk</a>
+            <a href="#agenda" class="topnav__menuitem" role="menuitem">Schoolagenda</a>
+            <a href="#results" class="topnav__menuitem" role="menuitem">Resultaten</a>
+          </div>
+        </div>
+
+        <div data-courses class="topnav__btn-wrapper">
+          <button class="js-btn-courses topnav__btn">Vakken</button>
+        </div>
+
+        <div data-links class="topnav__btn-wrapper">
+          <button class="js-btn-links topnav__btn">Links</button>
+        </div>
+
+        <a href="#messages" class="js-btn-messages topnav__btn">Berichten</a>
+        <div data-notifs class="topnav__btn-wrapper"><button class="js-btn-notifs topnav__btn">Meldingen</button></div>
+        <div data-search class="topnav__btn-wrapper"><button class="js-btn-search topnav__btn topnav__btn--icon topnav__btn--icon--search"></button></div>
+      </nav>
+    </header>
+
+    <main id="mainContent" class="smscMain">
+      <h1>Dashboard</h1>
+      <p>Welkom bij je dashboard! Gebruik de navigatie hierboven om naar verschillende onderdelen te gaan.</p>
+
+      <section id="agenda">
+        <h2>Agenda</h2>
+        <p>De agenda kan hier weergegeven worden.</p>
+      </section>
+
+      <section id="messages">
+        <h2>Berichten</h2>
+        <p>Hier komen je berichten.</p>
+      </section>
+
+      <section id="results">
+        <h2>Resultaten</h2>
+        <p>Hier komen de resultaten.</p>
+      </section>
+    </main>
+  </body>
 </html>
