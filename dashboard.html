@@ -2,108 +2,124 @@
 <html lang="nl">
 <head>
   <meta charset="utf-8" />
-  <title>Smartschool NextGen — Full</title>
+  <title>Smartschool NextGen — School Edition</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     :root{
-      --bg:#f4f8ff;
+      --bg:#f4f6f9;
       --card:#ffffff;
-      --muted:#6b7280;
-      --accent:#2b6cb0;
-      --accent-2:#16a34a;
-      --radius:12px;
+      --muted:#5b6168;
+      --accent:#c75a00;         /* dark orange sidebar */
+      --accent-2:#ff8a3d;
+      --blue-card:#bff0ff;     /* light cyan cards in timetable */
+      --timetable-bg:#7a1717;  /* dark red background like screenshot */
+      --radius:10px;
       --shadow: 0 6px 18px rgba(15,23,42,0.06);
     }
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: linear-gradient(180deg,#eef6ff 0%, var(--bg) 40%);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      background: linear-gradient(180deg,#fff 0%, var(--bg) 40%);
       color:#0f172a;
       min-height:100vh;
       display:flex;
     }
+
+    /* SIDEBAR */
     .sidebar{
       width:260px;
-      background:linear-gradient(180deg,#2b6cb0 0%, #3b82f6 100%);
+      background: linear-gradient(180deg,var(--accent) 0%, var(--accent-2) 100%);
       color:#fff;
       height:100vh;
       position:fixed;
       left:0; top:0;
-      padding:22px;
+      padding:20px;
       display:flex;
       flex-direction:column;
-      gap:14px;
-      box-shadow: 4px 0 24px rgba(11,35,77,0.12);
+      gap:12px;
+      box-shadow: 4px 0 24px rgba(0,0,0,0.12);
     }
-    .logo{display:flex; align-items:center; gap:10px;}
-    .logo .brand{font-weight:700; font-size:1.05rem; letter-spacing:0.2px;}
-    .profile{display:flex; gap:12px; align-items:center; margin-top:6px; padding:10px; border-radius:10px; background: rgba(255,255,255,0.06);}
+    .logo{display:flex;align-items:center;gap:10px}
+    .logo .brand{font-weight:800;font-size:1.05rem}
+    .profile{display:flex;gap:12px;align-items:center;padding:8px;border-radius:10px;background:rgba(255,255,255,0.06)}
     .profile img{width:56px;height:56px;border-radius:10px;object-fit:cover;border:2px solid rgba(255,255,255,0.12)}
-    .profile .meta small{opacity:0.95}
-    nav a{display:flex; align-items:center; gap:12px; color:rgba(255,255,255,0.98); text-decoration:none; padding:10px; border-radius:10px; transition:background .14s, transform .06s; font-weight:600; font-size:0.95rem;}
-    nav a:hover{background: rgba(255,255,255,0.08); transform:translateX(4px)}
-    .logout{margin-top:auto; display:flex; align-items:center; gap:10px; cursor:pointer; padding:10px; border-radius:10px; font-weight:600}
-    .main{margin-left:260px; padding:26px; width:100%; min-height:100vh;}
-    header{display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:18px;}
-    .search{display:flex; gap:10px; align-items:center; background:var(--card); padding:10px;border-radius:12px; box-shadow:var(--shadow); width:100%; max-width:720px;}
-    .search input{border:0; outline:0; font-size:1rem; width:100%; background:transparent;}
-    .clock{font-weight:700; color:var(--accent);}
-    .grid{display:grid; grid-template-columns: repeat(12,1fr); gap:18px;}
-    .card{grid-column: span 12; background:var(--card); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow);}
-    @media(min-width:880px){
-      .col-4{grid-column:span 4}
-      .col-6{grid-column:span 6}
-      .col-8{grid-column:span 8}
-      .col-12{grid-column:span 12}
-    }
-    h3{margin:0 0 10px 0; font-size:1.05rem}
-    p{color:var(--muted); margin:0;}
+    nav a{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;padding:10px;border-radius:8px;font-weight:700}
+    nav a:hover{background:rgba(255,255,255,0.06);transform:translateX(6px)}
+    .logout{margin-top:auto;padding:10px;border-radius:8px;cursor:pointer;font-weight:700}
+    .logout:hover{background:rgba(255,255,255,0.06)}
+
+    /* MAIN */
+    .main{margin-left:260px;flex:1;padding:20px}
+    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:12px}
+    .search{display:flex;align-items:center;gap:10px;background:var(--card);padding:10px;border-radius:12px;box-shadow:var(--shadow);width:100%;max-width:760px}
+    .search input{border:0;outline:0;background:transparent;font-size:1rem;width:100%}
+    .clock{font-weight:800;color:var(--accent)}
+    .muted{color:var(--muted)}
+
+    /* Cards & grid */
+    .card{background:var(--card);border-radius:12px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .col-8{grid-column:span 8}
+    .col-4{grid-column:span 4}
+    .col-12{grid-column:span 12}
+
+    input, select, textarea, button{padding:10px;border-radius:8px;border:1px solid #e6eef9;font-size:0.95rem}
+    button{background:var(--accent);color:#fff;border:none;cursor:pointer;font-weight:700}
+    button[disabled]{opacity:0.5;cursor:not-allowed}
+
     ul{list-style:none;padding:0;margin:0}
-    li{padding:8px;border-radius:10px;margin-bottom:8px;background:linear-gradient(180deg,#fbfdff,#f7fbff);display:flex;align-items:center;gap:10px}
-    input[type="text"], input[type="date"], input[type="number"], select, textarea{width:100%; padding:10px; border-radius:8px; border:1px solid #e6eef9; background:transparent; font-size:0.98rem;}
-    button{padding:10px 12px;border-radius:8px;border:0;background:var(--accent);color:#fff;font-weight:700; cursor:pointer}
-    button.ghost{background:transparent;color:var(--accent);border:1px solid #dbeafe}
-    .small{font-size:0.92rem}
-    .avatar-xs{width:36px;height:36px;border-radius:8px;object-fit:cover}
-    .tag{padding:6px 8px;border-radius:999px;font-weight:700;font-size:0.82rem}
-    .status-Aanwezig{background:rgba(22,163,74,0.12); color:var(--accent-2)}
-    .status-Te\ laat{background:rgba(245,158,11,0.12); color:#d97706}
-    .status-Afwezig{background:rgba(239,68,68,0.08); color:#ef4444}
-    .form-row{display:flex;gap:10px;align-items:center}
-    .form-row > *{flex:1}
-    .mini{max-width:160px}
-    @media(max-width:760px){
-      .sidebar{position:relative;width:100%;height:auto;display:none}
-      .main{margin-left:0;padding:14px}
-      .grid{gap:12px}
+    li{margin-bottom:8px}
+
+    /* Timetable (agenda) style — large red background with light blue cards */
+    .timetable-wrap{background:var(--timetable-bg);padding:18px;border-radius:12px;color:#fff}
+    .timetable{
+      display:grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap:14px;
+      align-items:start;
     }
-    .meta small{display:block;color:rgba(255,255,255,0.92)}
+    .day-col{min-height:180px;padding:8px;border-radius:8px;background:linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.03)); position:relative}
+    .day-col h4{margin:0 0 8px 0;font-size:0.95rem}
+    .tt-card{
+      background:var(--blue-card); color:#06304a; border-radius:8px;
+      padding:10px;margin-bottom:10px; box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+      font-size:0.85rem; position:relative;
+    }
+    .tt-time{font-size:0.78rem;color:#094a5d;margin-bottom:6px;font-weight:700}
+    .tt-sub{font-weight:800;margin-bottom:6px}
+    .tt-meta{font-size:0.75rem;color:#083748}
+
+    /* small helpers */
+    .row{display:flex;gap:10px;align-items:center}
+    .avatar-xs{width:36px;height:36px;border-radius:8px;object-fit:cover}
+    .muted-small{color:#6b7280;font-size:0.85rem}
     .right{margin-left:auto}
-    .file-link{color:var(--accent)}
-    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#eef2ff;font-weight:700;color:var(--accent)}
+
+    /* responsive */
+    @media (max-width:900px){
+      .timetable{grid-template-columns: repeat(2,1fr)}
+      .col-8,.col-4{grid-column:span 12}
+      .sidebar{display:none}
+      .main{margin-left:0}
+    }
   </style>
 </head>
 <body>
-
-  <aside class="sidebar" role="navigation" aria-label="Hoofdmenu">
-    <div class="logo">
-      <i class="fa fa-school fa-lg"></i>
-      <div class="brand">Smartschool <span style="opacity:.9;font-weight:500">NextGen</span></div>
-    </div>
+  <aside class="sidebar" aria-label="Hoofdmenu">
+    <div class="logo"><i class="fa fa-school"></i><div class="brand">Smartschool NextGen</div></div>
 
     <div class="profile">
       <img id="userPfp" src="" alt="Profielfoto">
-      <div class="meta">
-        <strong id="userName">Naam</strong>
-        <small id="userRole">Rol</small>
+      <div>
+        <strong id="userName">Naam</strong><br><small id="userRole">Rol</small>
       </div>
     </div>
 
     <nav>
       <a href="#" onclick="switchView('dashboard')"><i class="fa fa-home"></i> Dashboard</a>
-      <a href="#" onclick="switchView('agenda')"><i class="fa fa-calendar"></i> Agenda</a>
+      <a href="#" onclick="switchView('timetable')"><i class="fa fa-calendar"></i> Agenda</a>
       <a href="#" onclick="switchView('messages')"><i class="fa fa-envelope"></i> Berichten</a>
       <a href="#" onclick="switchView('results')"><i class="fa fa-graduation-cap"></i> Resultaten</a>
       <a href="#" onclick="switchView('attendance')"><i class="fa fa-user-check"></i> Afwezigheden</a>
@@ -114,9 +130,7 @@
       <a href="#" onclick="switchView('settings')"><i class="fa fa-cog"></i> Instellingen</a>
     </nav>
 
-    <div class="logout" onclick="logout()">
-      <i class="fa fa-sign-out-alt"></i> Uitloggen
-    </div>
+    <div class="logout" onclick="logout()"><i class="fa fa-sign-out-alt"></i> Uitloggen</div>
   </aside>
 
   <main class="main">
@@ -124,235 +138,168 @@
       <div class="search">
         <i class="fa fa-search" style="opacity:.6"></i>
         <input id="globalSearch" placeholder="Zoek leerlingen, vakken, bestanden...">
-        <div class="pill" style="margin-left:12px" id="welcomePill">Goedemorgen!</div>
       </div>
-      <div style="display:flex;align-items:center;gap:14px">
-        <div class="muted small" id="dateLabel"></div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="muted" id="dateLabel"></div>
         <div id="clock" class="clock">12:00</div>
       </div>
     </header>
 
-    <section id="dashboard" class="grid">
-      <div class="card col-8">
-        <h3>Welkom terug, <span id="welcomeName">Leerling</span>!</h3>
-        <p>Overzicht van vandaag — agenda, berichten en afwezigheden.</p>
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="card">
+      <h3>Welkom terug, <span id="welcomeName">Gebruiker</span>!</h3>
+      <p class="muted">Gebruik de navigatie links om naar onderdelen te gaan. Let op: alleen leraren kunnen gebruikers, afwezigheden, resultaten en bestanden beheren.</p>
+    </section>
 
-        <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap">
-          <div style="min-width:140px;padding:12px;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfdff);box-shadow:var(--shadow)">
-            <div class="muted small">Volgende les</div>
-            <div style="font-weight:800" id="nextLesson">—</div>
-            <div class="muted small" id="nextLessonTime">—</div>
-          </div>
-          <div style="min-width:140px;padding:12px;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfdff);box-shadow:var(--shadow)">
-            <div class="muted small">Berichten</div>
-            <div style="font-weight:800" id="dashboard-messages-count">0 ongelezen</div>
-          </div>
-          <div style="min-width:140px;padding:12px;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfdff);box-shadow:var(--shadow)">
-            <div class="muted small">Cafetaria</div>
-            <div style="font-weight:800" id="dashboard-canteen-count">Bekijk menu</div>
-          </div>
+    <!-- TIMETABLE / AGENDA (styled like provided screenshot) -->
+    <section id="timetable" class="card" style="display:none">
+      <h3>Agenda (weekoverzicht)</h3>
+      <p class="muted">De weergave is vergelijkbaar met een rooster: vak, lokaal, tijd en docent.</p>
+
+      <div class="timetable-wrap" style="margin-top:12px">
+        <div style="display:flex;justify-content:space-between;color:#fff;margin-bottom:8px">
+          <div>Maandag</div><div>Dinsdag</div><div>Woensdag</div><div>Donderdag</div><div>Vrijdag</div>
         </div>
-      </div>
 
-      <div class="card col-4">
-        <h3>Snelle acties</h3>
-        <p class="muted">Direct toegang tot veelgebruikte functies.</p>
-        <div style="margin-top:12px;display:flex;flex-direction:column;gap:10px">
-          <button onclick="switchView('attendance')" class="small"><i class="fa fa-user-check"></i> Afwezigheid registreren</button>
-          <button onclick="switchView('agenda')" class="small ghost"><i class="fa fa-calendar"></i> Nieuwe agenda-item</button>
-          <button onclick="switchView('messages')" class="small"><i class="fa fa-envelope"></i> Nieuw bericht</button>
+        <div class="timetable" id="timetableGrid">
+          <!-- day columns will be injected here -->
         </div>
-      </div>
 
-      <div class="card col-12">
-        <h3>Recente activiteiten</h3>
-        <ul id="activityList" style="margin-top:12px"></ul>
+        <!-- Quick add (teacher only) -->
+        <form id="ttAddForm" onsubmit="addTimetableItem(event)" style="margin-top:12px;display:flex;gap:8px;align-items:center">
+          <select id="ttDay">
+            <option value="1">Maandag</option><option value="2">Dinsdag</option><option value="3">Woensdag</option><option value="4">Donderdag</option><option value="5">Vrijdag</option>
+          </select>
+          <input id="ttTime" placeholder="08:25-10:05" required>
+          <input id="ttTitle" placeholder="Vak (bijv. ZW-Praktijk)" required>
+          <input id="ttRoom" placeholder="A207" style="width:90px">
+          <input id="ttTeacher" placeholder="Docent" style="width:140px">
+          <button id="ttAddBtn" type="submit">Toevoegen</button>
+        </form>
       </div>
     </section>
 
-    <section id="agenda" class="card" style="display:none">
-      <h3>Agenda</h3>
-      <p class="muted">Voeg belangrijke data toe zodat je niets mist.</p>
-
-      <form id="agendaForm" style="margin-top:12px" onsubmit="addAgenda(event)">
-        <div class="form-row">
-          <input type="date" id="agendaDate" required>
-          <input type="text" id="agendaText" placeholder="Activiteit (bijv. proefwerk geschiedenis)" required>
-          <button type="submit">Toevoegen</button>
-        </div>
-      </form>
-
-      <div style="margin-top:16px">
-        <ul id="agendaList"></ul>
-      </div>
-    </section>
-
+    <!-- MESSAGES -->
     <section id="messages" class="card" style="display:none">
       <h3>Berichten</h3>
-      <p class="muted">Communiceer snel met klasgenoten en leraren.</p>
-
-      <form id="msgForm" onsubmit="sendMessage(event)" style="margin-top:12px">
-        <div class="form-row">
-          <select id="msgTo"></select>
-          <input type="text" id="msgText" placeholder="Typ een bericht..." required>
-          <button type="submit">Verstuur</button>
-        </div>
+      <form id="msgForm" onsubmit="sendMessage(event)" style="display:flex;gap:8px;align-items:center;margin-top:12px">
+        <select id="msgTo"></select>
+        <input id="msgText" placeholder="Typ een bericht..." required>
+        <button type="submit">Verstuur</button>
       </form>
-
-      <div style="margin-top:14px">
-        <div id="msgList" style="max-height:260px; overflow:auto"></div>
-      </div>
+      <div id="msgList" style="margin-top:12px"></div>
     </section>
 
+    <!-- RESULTS -->
     <section id="results" class="card" style="display:none">
       <h3>Resultaten</h3>
-      <p class="muted">Houd cijfers bij per vak. Alleen leraren kunnen cijfers toevoegen of bewerken; leerlingen zien hun eigen resultaten.</p>
-
-      <form id="gradeForm" onsubmit="addGrade(event)" style="margin-top:12px">
-        <div class="form-row">
-          <select id="gradeStudent"></select>
-          <input type="text" id="course" placeholder="Vak (bijv. Nederlands)" required>
-          <input type="number" id="grade" placeholder="Punt (0 - 100)" min="0" max="100" required>
-          <button type="submit">Opslaan</button>
-        </div>
+      <p class="muted">Alleen leraren kunnen cijfers toevoegen of verwijderen. Leerlingen zien hun eigen resultaten.</p>
+      <form id="gradeForm" onsubmit="addGrade(event)" style="display:flex;gap:8px;align-items:center;margin-top:12px">
+        <select id="gradeStudent"></select>
+        <input id="course" placeholder="Vak" required>
+        <input id="grade" type="number" placeholder="Punt" required>
+        <button type="submit">Opslaan</button>
       </form>
-
-      <div style="margin-top:12px">
-        <ul id="gradeList"></ul>
-      </div>
+      <ul id="gradeList" style="margin-top:12px"></ul>
     </section>
 
+    <!-- ATTENDANCE -->
     <section id="attendance" class="card" style="display:none">
-      <h3>Afwezigheden & aanwezigheid</h3>
-      <p class="muted">Selecteer een leerling en markeer de huidige status met datum & tijd.</p>
-
-      <form id="attForm" onsubmit="setAttendance(event)" style="margin-top:12px">
-        <div class="form-row">
-          <select id="attUser"></select>
-          <select id="attStatus">
-            <option value="Aanwezig">Aanwezig</option>
-            <option value="Te laat">Te laat</option>
-            <option value="Afwezig">Afwezig</option>
-          </select>
-          <input type="text" id="attNote" placeholder="opt. reden / opmerking">
-          <button type="submit">Opslaan</button>
-        </div>
+      <h3>Afwezigheden</h3>
+      <p class="muted">Alleen leraren kunnen afwezigheden/aanwezigheden registreren.</p>
+      <form id="attForm" onsubmit="setAttendance(event)" style="display:flex;gap:8px;align-items:center;margin-top:12px">
+        <select id="attUser"></select>
+        <select id="attStatus"><option>Aanwezig</option><option>Te laat</option><option>Afwezig</option></select>
+        <input id="attNote" placeholder="Opt. reden / opmerking">
+        <button type="submit">Opslaan</button>
       </form>
 
-      <div style="margin-top:14px; display:flex; gap:12px; flex-wrap:wrap;">
-        <div style="flex:1; min-width:320px">
+      <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap">
+        <div style="flex:1;min-width:300px">
           <h4>Huidige status per leerling</h4>
           <ul id="attList"></ul>
         </div>
-
-        <div style="flex:1; min-width:320px">
+        <div style="flex:1;min-width:300px">
           <h4>Geschiedenis</h4>
-          <div style="max-height:280px;overflow:auto">
-            <ul id="attHistory"></ul>
-          </div>
+          <div style="max-height:260px;overflow:auto"><ul id="attHistory"></ul></div>
         </div>
       </div>
     </section>
 
+    <!-- FILES -->
     <section id="files" class="card" style="display:none">
       <h3>Bestanden</h3>
-      <p class="muted">Deelmateriaal en documenten. Alleen leraren kunnen bestanden uploaden of verwijderen.</p>
-
-      <div id="fileUploadBox" style="margin-top:12px; display:flex; gap:10px; align-items:center;">
-        <input type="file" id="fileInput">
-        <input type="text" id="fileDesc" placeholder="Korte omschrijving (optioneel)">
+      <p class="muted">Alleen leraren kunnen bestanden uploaden of verwijderen.</p>
+      <div id="fileUploadBox" style="display:flex;gap:8px;align-items:center;margin-top:12px">
+        <input id="fileInput" type="file"><input id="fileDesc" placeholder="Korte omschrijving">
         <button onclick="uploadFile()" id="uploadBtn">Upload</button>
       </div>
-
-      <div style="margin-top:14px">
-        <ul id="fileList"></ul>
-      </div>
+      <ul id="fileList" style="margin-top:12px"></ul>
     </section>
 
+    <!-- FORMS -->
     <section id="forms" class="card" style="display:none">
       <h3>Formulieren</h3>
-      <p class="muted">Snelle antwoorden of inzendingen.</p>
-
-      <form onsubmit="addForm(event)" style="margin-top:12px">
-        <div class="form-row">
-          <input type="text" id="formText" placeholder="Antwoord..." required>
-          <button type="submit">Indienen</button>
-        </div>
+      <form onsubmit="addForm(event)" style="display:flex;gap:8px;align-items:center;margin-top:12px">
+        <input id="formText" placeholder="Antwoord..." required><button type="submit">Indienen</button>
       </form>
-
       <ul id="formList" style="margin-top:12px"></ul>
     </section>
 
+    <!-- CANTEEN -->
     <section id="canteen" class="card" style="display:none">
       <h3>Cafetaria</h3>
-      <p class="muted">Bestel je lunch — prijzen zijn voorbeelden.</p>
-
-      <form onsubmit="orderFood(event)" style="margin-top:12px">
-        <div class="form-row">
-          <select id="foodItem">
-            <option value="Broodje kaas|3.00">Broodje kaas — €3,00</option>
-            <option value="Pizza|5.50">Pizza — €5,50</option>
-            <option value="Salade|4.00">Salade — €4,00</option>
-            <option value="Pasta|4.50">Pasta — €4,50</option>
-          </select>
-          <button type="submit">Bestel</button>
-        </div>
+      <form onsubmit="orderFood(event)" style="display:flex;gap:8px;align-items:center;margin-top:12px">
+        <select id="foodItem">
+          <option value="Broodje kaas|3.00">Broodje kaas — €3,00</option>
+          <option value="Pizza|5.50">Pizza — €5,50</option>
+          <option value="Salade|4.00">Salade — €4,00</option>
+        </select>
+        <button type="submit">Bestel</button>
       </form>
-
-      <div style="margin-top:12px">
-        <ul id="orderList"></ul>
-        <p class="muted">Totaal: € <strong id="totalPrice">0.00</strong></p>
-      </div>
+      <ul id="orderList" style="margin-top:12px"></ul>
+      <p class="muted">Totaal: € <strong id="totalPrice">0.00</strong></p>
     </section>
 
+    <!-- TRANSPORT -->
     <section id="transport" class="card" style="display:none">
       <h3>Vervoer</h3>
-      <p class="muted">Informatie over schoolbussen en haltes.</p>
-      <ul style="margin-top:12px">
-        <li><strong>Bus 12</strong> — Halte: Centrum — Vertrek 07:45</li>
-        <li><strong>Bus 7</strong> — Halte: Noord — Vertrek 07:55</li>
+      <ul>
+        <li><strong>Bus 12</strong> — Halte: Centrum — 07:45</li>
+        <li><strong>Bus 7</strong> — Halte: Noord — 07:55</li>
       </ul>
     </section>
 
+    <!-- SETTINGS -->
     <section id="settings" class="card" style="display:none">
       <h3>Instellingen</h3>
-      <p class="muted">Alleen leraren kunnen namen & profielfoto's van leerlingen aanpassen; leerlingen zien opties maar kunnen deze niet bewerken.</p>
+      <p class="muted">Alleen leraren kunnen gebruikers toevoegen of bewerken. Leerlingen kunnen dit niet.</p>
 
-      <div style="margin-top:12px; display:flex; gap:12px; align-items:center">
-        <input type="text" id="newName" placeholder="Nieuwe naam (alleen leraren)">
-        <select id="pfpSelect"></select>
-        <button id="saveProfileBtn" onclick="updateProfile()">Opslaan</button>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:12px">
+        <input id="newUserName" placeholder="Nieuwe gebruiker (volledige naam)">
+        <select id="newUserRole"><option>Leerling</option><option>Leraar</option></select>
+        <button id="addUserBtn" onclick="addAppUser()">Voeg gebruiker toe</button>
       </div>
 
-      <div style="margin-top:14px">
-        <h4>Applicatiegebruikers</h4>
-        <p class="muted">Beheer lijst met gebruikers die verschijnen in dropdowns (alleen leraren).</p>
-        <div style="display:flex;gap:8px;margin-top:8px">
-          <input id="newUserName" placeholder="Gebruikersnaam (leraar)">
-          <select id="newUserRole">
-            <option>Leerling</option>
-            <option>Leraar</option>
-          </select>
-          <button id="addUserBtn" onclick="addAppUser()">Voeg gebruiker toe</button>
-        </div>
-        <ul id="appUsersList" style="margin-top:12px"></ul>
-      </div>
+      <div style="margin-top:12px"><h4>Gebruikers</h4><ul id="appUsersList"></ul></div>
     </section>
-
   </main>
 
   <script>
+    /* -------------------------
+       Initial persistent data
+       ------------------------- */
     if(!localStorage.getItem("user_images")){
-      const map = {
+      const imgs = {
+        "Sophie":"https://via.placeholder.com/150/c1ffd7/0b5a2b?text=Sophie",
         "John":"https://via.placeholder.com/150/9fc5ff/003366?text=John",
         "Emma":"https://via.placeholder.com/150/ffd1dc/6b0f28?text=Emma",
         "Lucas":"https://via.placeholder.com/150/ffd98e/664400?text=Lucas",
-        "Sophie":"https://via.placeholder.com/150/c1ffd7/0b5a2b?text=Sophie",
         "Alice":"https://via.placeholder.com/150/d1e8ff/0a3b66?text=Alice",
         "Bob":"https://via.placeholder.com/150/e6ffd9/0b5a2b?text=Bob",
         "Charlie":"https://via.placeholder.com/150/ffe5b4/5a3b00?text=Charlie"
       };
-      localStorage.setItem("user_images", JSON.stringify(map));
+      localStorage.setItem("user_images", JSON.stringify(imgs));
     }
     if(!localStorage.getItem("user_roles")){
       const roles = {"Sophie":"Leraar","John":"Leerling","Emma":"Leerling","Lucas":"Leerling","Alice":"Leerling","Bob":"Leerling","Charlie":"Leerling"};
@@ -361,311 +308,375 @@
     if(!localStorage.getItem("app_users")){
       localStorage.setItem("app_users", JSON.stringify(["Sophie","John","Emma","Lucas","Alice","Bob","Charlie"]));
     }
+    // sample timetable entries (like screenshot) stored as array of objects
+    if(!localStorage.getItem("timetable_items")){
+      const sample = [
+        {day:1,time:"08:25-10:05",title:"ZW-Praktijk",room:"A207",teacher:"Klara Pauwels"},
+        {day:1,time:"10:15-11:15",title:"ZW-Praktijk",room:"A109/H110",teacher:"Sterre Vanlommel"},
+        {day:1,time:"11:05-11:55",title:"ZW-Klasuur",room:"A204",teacher:"Charlien Mertens"},
+
+        {day:2,time:"08:25-09:15",title:"Godsdienst",room:"A204",teacher:"Anouk Goor"},
+        {day:2,time:"09:15-10:05",title:"Artistieke vorming",room:"B101",teacher:"Bieke Vrins"},
+        {day:2,time:"10:25-11:15",title:"ZW-Indirecte Zorg",room:"A109/H110",teacher:"Sterre Vanlommel"},
+
+        {day:3,time:"08:25-10:05",title:"ZW-Maaltijdzorg",room:"A109/H110",teacher:"Klara Pauwels"},
+        {day:3,time:"10:15-11:15",title:"Wiskunde",room:"A204",teacher:"Sarah Driesen"},
+        {day:3,time:"11:05-11:55",title:"ZW-Gezondheid en welzijn",room:"A204",teacher:"An Vervrangen"},
+
+        {day:4,time:"08:25-09:15",title:"Godsdienst",room:"A204",teacher:"Anouk Goor"},
+        {day:4,time:"09:15-10:05",title:"ZW-Pedagogisch handelen",room:"A204",teacher:"Charlien Mertens"},
+        {day:4,time:"10:15-11:15",title:"Informatica",room:"A204",teacher:"Wendy Thijs"},
+
+        {day:5,time:"09:15-10:05",title:"Frans",room:"A204",teacher:"Tinne Helsen"},
+        {day:5,time:"10:15-11:15",title:"Maatschappelijke vorming",room:"A204",teacher:"Marleen Holvoet"},
+        {day:5,time:"13:35-15:15",title:"Lichamelijke opvoeding",room:"Sportlokalen",teacher:"Katrien Erpels"}
+      ];
+      localStorage.setItem("timetable_items", JSON.stringify(sample));
+    }
+
+    // default logged in user for demo if missing
     if(!localStorage.getItem("loggedInUser")){
       localStorage.setItem("loggedInUser","John");
       localStorage.setItem("userRole","Leerling");
     }
 
+    /* -------------------------
+       Init variables
+       ------------------------- */
     const currentUser = localStorage.getItem("loggedInUser");
     const currentRole = localStorage.getItem("userRole") || "Leerling";
-    const userImages = JSON.parse(localStorage.getItem("user_images") || "{}");
-    const userRoles = JSON.parse(localStorage.getItem("user_roles") || "{}");
-    const appUsers = JSON.parse(localStorage.getItem("app_users") || "[]");
+    const userImages = JSON.parse(localStorage.getItem("user_images")||"{}");
+    const userRoles = JSON.parse(localStorage.getItem("user_roles")||"{}");
 
     document.getElementById("userName").textContent = currentUser;
     document.getElementById("welcomeName").textContent = currentUser;
     document.getElementById("userRole").textContent = currentRole;
     document.getElementById("userPfp").src = userImages[currentUser] || Object.values(userImages)[0];
 
+    /* -------------------------
+       Utility & UI functions
+       ------------------------- */
+    function updateClock(){
+      document.getElementById("clock").textContent = new Date().toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"});
+      document.getElementById("dateLabel").textContent = new Date().toLocaleDateString("nl-NL");
+    }
+    setInterval(updateClock,1000); updateClock();
+
     function switchView(id){
       document.querySelectorAll("main section").forEach(s=>s.style.display='none');
       document.getElementById(id).style.display='block';
-      if(id==='dashboard') loadDashboard();
+      if(id==="timetable") renderTimetable();
+      if(id==="messages") renderMessages();
+      if(id==="results") renderGrades();
+      if(id==="attendance") renderAttendance();
+      if(id==="files") renderFiles();
+      if(id==="forms") renderForms();
+      if(id==="canteen") renderOrders();
+      if(id==="settings") renderUsersList();
     }
 
     function logout(){
       localStorage.removeItem("loggedInUser");
       localStorage.removeItem("userRole");
-      window.location.href = "index.html";
+      location.href = "index.html";
     }
 
-    function updateClock(){
-      document.getElementById("clock").textContent=new Date().toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"});
-      document.getElementById("dateLabel").textContent=new Date().toLocaleDateString("nl-NL");
-    }
-    setInterval(updateClock,1000); updateClock();
-
+    /* -------------------------
+       Populate user control dropdowns & lists
+       ------------------------- */
     function populateUserControls(){
       const users = JSON.parse(localStorage.getItem("app_users")||"[]");
-      document.getElementById("msgTo").innerHTML = users.filter(u=>u!==currentUser).map(u=>`<option value="${u}">${u}</option>`).join("");
-      document.getElementById("attUser").innerHTML = users.map(u=>`<option value="${u}">${u}</option>`).join("");
-      document.getElementById("gradeStudent").innerHTML = users.map(u=>`<option value="${u}">${u}</option>`).join("");
-      document.getElementById("gradeStudent").value = currentUser;
-      document.getElementById("pfpSelect").innerHTML = users.map(u=>`<option value="${u}">${u}</option>`).join("");
+      document.getElementById("msgTo").innerHTML = users.filter(u=>u!==currentUser).map(u=>`<option>${u}</option>`).join("");
+      document.getElementById("attUser").innerHTML = users.map(u=>`<option>${u}</option>`).join("");
+      document.getElementById("gradeStudent").innerHTML = users.map(u=>`<option>${u}</option>`).join("");
+    }
+
+    function renderUsersList(){
+      const users = JSON.parse(localStorage.getItem("app_users")||"[]");
+      const imgs = JSON.parse(localStorage.getItem("user_images")||"{}");
+      const roles = JSON.parse(localStorage.getItem("user_roles")||"{}");
       document.getElementById("appUsersList").innerHTML = users.map(u=>{
-        const r = (userRoles[u]||"Leerling");
-        return `<li style="display:flex;align-items:center;gap:10px">
-          <img src="${(userImages[u]||Object.values(userImages)[0])}" class="avatar-xs">
-          <div><strong>${u}</strong><div class="muted small">${r}</div></div>
-          ${(currentRole==="Leraar")?`<button style="margin-left:auto" onclick="editUser('${u}')">Bewerk</button>`:""}
+        const r = roles[u] || "Leerling";
+        return `<li style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;background:#fff;margin-bottom:8px">
+          <img src="${imgs[u]||Object.values(imgs)[0]}" class="avatar-xs">
+          <div><strong>${u}</strong><div class="muted-small">${r}</div></div>
+          ${currentRole === "Leraar" ? `<div style="margin-left:auto"><button onclick="promptEditUser('${u}')">Bewerk</button></div>` : ""}
         </li>`;
-      }).join("");
+      }).join("") || "<li class='muted-small'>Geen gebruikers</li>";
     }
 
-    function addActivity(text){
-      const activities = JSON.parse(localStorage.getItem("activities")||"[]");
-      activities.unshift({text,date:new Date().toLocaleString()});
-      localStorage.setItem("activities", JSON.stringify(activities.slice(0,30)));
-      renderActivities();
-    }
-    function renderActivities(){
-      const activities = JSON.parse(localStorage.getItem("activities")||"[]");
-      document.getElementById("activityList").innerHTML = activities.map(a=>`<li><div style="flex:1"><strong>${a.text}</strong><div class="muted small">${a.date}</div></div></li>`).join("");
-    }
-    renderActivities();
+    /* -------------------------
+       Timetable (agenda) rendering
+       ------------------------- */
+    function renderTimetable(){
+      const container = document.getElementById("timetableGrid");
+      container.innerHTML = "";
+      const days = ["Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag"];
+      const items = JSON.parse(localStorage.getItem("timetable_items")||"[]");
 
-    if(currentRole !== "Leraar"){
-      document.getElementById("gradeForm").style.display = "none";
-      document.getElementById("fileUploadBox").style.display = "none";
-      document.getElementById("saveProfileBtn").style.display = "none";
-      document.getElementById("addUserBtn").style.display = "none";
+      for(let d=1; d<=5; d++){
+        const col = document.createElement("div");
+        col.className = "day-col";
+        col.innerHTML = `<h4>${days[d-1]}</h4>`;
+        const filtered = items.filter(it => it.day === d);
+        // sort by time if possible (string)
+        filtered.sort((a,b)=> a.time.localeCompare(b.time));
+        filtered.forEach(it=>{
+          const card = document.createElement("div");
+          card.className = "tt-card";
+          card.innerHTML = `<div class="tt-time">${it.time}</div>
+                            <div class="tt-sub">${it.title} • ${it.room || ""}</div>
+                            <div class="tt-meta">${it.teacher || ""}</div>`;
+          col.appendChild(card);
+        });
+        container.appendChild(col);
+      }
+
+      // control visibility: only teachers can add
+      const isTeacher = currentRole === "Leraar";
+      document.getElementById("ttAddForm").style.display = isTeacher ? "flex" : "none";
     }
 
-    function addAgenda(e){
+    function addTimetableItem(e){
       e.preventDefault();
-      const d=document.getElementById("agendaDate").value;
-      const t=document.getElementById("agendaText").value;
-      if(!d||!t) return;
-      const key = "agenda_" + currentUser;
-      const list = JSON.parse(localStorage.getItem(key) || "[]");
-      list.push({date:d,text:t});
-      localStorage.setItem(key, JSON.stringify(list));
-      renderAgenda();
-      addActivity(`Agenda toegevoegd: ${t} (${d})`);
+      if(currentRole !== "Leraar") return alert("Alleen leraren mogen het rooster bewerken.");
+      const day = parseInt(document.getElementById("ttDay").value,10);
+      const time = document.getElementById("ttTime").value.trim();
+      const title = document.getElementById("ttTitle").value.trim();
+      const room = document.getElementById("ttRoom").value.trim();
+      const teacher = document.getElementById("ttTeacher").value.trim();
+      if(!time||!title) return;
+      const items = JSON.parse(localStorage.getItem("timetable_items")||"[]");
+      items.push({day,time,title,room,teacher});
+      localStorage.setItem("timetable_items", JSON.stringify(items));
+      renderTimetable();
+      addActivity(`Rooster toegevoegd: ${title} (${time})`);
       e.target.reset();
     }
-    function renderAgenda(){
-      const key = "agenda_" + currentUser;
-      const list = JSON.parse(localStorage.getItem(key) || "[]");
-      document.getElementById("agendaList").innerHTML = list.map(a=>`<li><strong>${a.date}</strong> — ${a.text}</li>`).join("") || "<li class='muted'>Geen items</li>";
-    }
-    renderAgenda();
 
+    /* -------------------------
+       Messages
+       ------------------------- */
     function sendMessage(e){
       e.preventDefault();
-      const to=document.getElementById("msgTo").value;
-      const text=document.getElementById("msgText").value;
+      const to = document.getElementById("msgTo").value;
+      const text = document.getElementById("msgText").value.trim();
       if(!text) return;
-      const key="messages_all";
-      const messages=JSON.parse(localStorage.getItem(key)||"[]");
-      messages.push({from:currentUser,to,text,date:new Date().toLocaleString()});
-      localStorage.setItem(key,JSON.stringify(messages));
+      const key = "messages_all";
+      const arr = JSON.parse(localStorage.getItem(key)||"[]");
+      arr.push({from:currentUser,to,text,date:new Date().toLocaleString()});
+      localStorage.setItem(key, JSON.stringify(arr));
       renderMessages();
       addActivity(`Bericht gestuurd aan ${to}`);
       e.target.reset();
     }
     function renderMessages(){
-      const messages=JSON.parse(localStorage.getItem("messages_all")||"[]");
-      const visible = messages.filter(m=>m.from===currentUser||m.to===currentUser);
-      document.getElementById("msgList").innerHTML = visible.length ? visible.reverse().map(m=>`<div style="padding:8px;border-radius:8px;margin-bottom:8px;background:#f8fbff"><strong>${m.from} ➝ ${m.to}</strong><div class="muted small">${m.date}</div><div>${m.text}</div></div>`).join("") : "<div class='muted'>Geen berichten</div>";
-      document.getElementById("dashboard-messages-count").textContent = visible.filter(m=>m.to===currentUser).length + " ongelezen";
+      const messages = JSON.parse(localStorage.getItem("messages_all")||"[]");
+      const visible = messages.filter(m=>m.from===currentUser || m.to===currentUser);
+      document.getElementById("msgList").innerHTML = visible.length ? visible.reverse().map(m=>`<div style="background:#fff;border-radius:8px;padding:8px;margin-bottom:8px"><strong>${m.from} ➝ ${m.to}</strong><div class="muted-small">${m.date}</div><div>${m.text}</div></div>`).join("") : "<div class='muted-small'>Geen berichten</div>";
+      // update quick info counts (optional)
     }
-    renderMessages();
 
+    /* -------------------------
+       Grades (results)
+       ------------------------- */
     function addGrade(e){
       e.preventDefault();
-      if(currentRole!=="Leraar") return alert("Alleen leraren kunnen cijfers toevoegen.");
-      const s=document.getElementById("gradeStudent").value;
-      const c=document.getElementById("course").value;
-      const g=document.getElementById("grade").value;
-      if(!s||!c||!g) return;
-      const key="grades_all";
-      const grades=JSON.parse(localStorage.getItem(key)||"[]");
-      grades.push({student:s,course:c,grade:g,date:new Date().toLocaleDateString()});
-      localStorage.setItem(key,JSON.stringify(grades));
+      if(currentRole !== "Leraar") return alert("Alleen leraren kunnen cijfers toevoegen.");
+      const student = document.getElementById("gradeStudent").value;
+      const course = document.getElementById("course").value.trim();
+      const gradeVal = document.getElementById("grade").value;
+      if(!student||!course||!gradeVal) return;
+      const key = "grades_all";
+      const arr = JSON.parse(localStorage.getItem(key)||"[]");
+      arr.push({student,course,grade:gradeVal,date:new Date().toLocaleDateString()});
+      localStorage.setItem(key, JSON.stringify(arr));
       renderGrades();
-      addActivity(`Cijfer toegevoegd: ${s} — ${c} ${g}`);
+      addActivity(`Cijfer toegevoegd: ${student} — ${course} ${gradeVal}`);
       document.getElementById("gradeForm").reset();
     }
-    function renderGrades(){
-      const key="grades_all";
-      const grades=JSON.parse(localStorage.getItem(key)||"[]");
-      let visible = grades;
-      if(currentRole !== "Leraar"){ visible = grades.filter(g=>g.student===currentUser); }
-      document.getElementById("gradeList").innerHTML = visible.length ? visible.map(g=>`<li><strong>${g.student}</strong> — ${g.course}: ${g.grade} <div class="muted small">${g.date}</div></li>`).join("") : "<li class='muted'>Geen resultaten</li>";
-    }
-    renderGrades();
 
+    function renderGrades(){
+      const arr = JSON.parse(localStorage.getItem("grades_all")||"[]");
+      const visible = currentRole === "Leraar" ? arr : arr.filter(g=>g.student === currentUser);
+      document.getElementById("gradeList").innerHTML = visible.length ? visible.map(g=>`<li style="background:#fff;padding:8px;border-radius:8px"><strong>${g.student}</strong> — ${g.course}: ${g.grade} <div class="muted-small">${g.date}</div></li>`).join("") : "<li class='muted-small'>Geen resultaten</li>";
+    }
+
+    /* -------------------------
+       Attendance
+       ------------------------- */
     function setAttendance(e){
       e.preventDefault();
-      if(currentRole !== "Leraar") return alert("Alleen leraren kunnen aanwezigheden registreren.");
-      const name=document.getElementById("attUser").value;
-      const status=document.getElementById("attStatus").value;
-      const note=document.getElementById("attNote").value;
-      const key="attendance_all";
-      const arr=JSON.parse(localStorage.getItem(key)||"[]");
-      const time=new Date().toLocaleString();
-      arr.unshift({name,status,note,time});
-      localStorage.setItem(key,JSON.stringify(arr));
+      if(currentRole !== "Leraar") return alert("Alleen leraren mogen afwezigheden registreren.");
+      const name = document.getElementById("attUser").value;
+      const status = document.getElementById("attStatus").value;
+      const note = document.getElementById("attNote").value.trim();
+      const key = "attendance_all";
+      const arr = JSON.parse(localStorage.getItem(key)||"[]");
+      arr.unshift({name,status,note,time:new Date().toLocaleString()});
+      localStorage.setItem(key, JSON.stringify(arr.slice(0,500)));
       renderAttendance();
       addActivity(`Aanwezigheid: ${name} — ${status}`);
       document.getElementById("attForm").reset();
     }
+
     function renderAttendance(){
-      const key="attendance_all";
-      const arr=JSON.parse(localStorage.getItem(key)||"[]");
-      const latestPer = {};
-      arr.forEach(a=>{ if(!latestPer[a.name]) latestPer[a.name]=a; });
+      const arr = JSON.parse(localStorage.getItem("attendance_all")||"[]");
+      const latest = {};
+      arr.forEach(a=>{ if(!latest[a.name]) latest[a.name] = a; });
       const users = JSON.parse(localStorage.getItem("app_users")||"[]");
       document.getElementById("attList").innerHTML = users.map(u=>{
-        const s = latestPer[u];
-        if(s) return `<li><img src="${userImages[u]||Object.values(userImages)[0]}" class="avatar-xs"><div style="flex:1"><strong>${u}</strong><div class="muted small">${s.status} — ${s.time}${s.note?` • ${s.note}`:""}</div></div></li>`;
-        return `<li><img src="${userImages[u]||Object.values(userImages)[0]}" class="avatar-xs"><div style="flex:1"><strong>${u}</strong><div class="muted small">Geen registratie</div></div></li>`;
+        const s = latest[u];
+        if(s) return `<li style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:8px"><img src="${userImages[u]||Object.values(userImages)[0]}" class="avatar-xs"><div style="flex:1"><strong>${u}</strong><div class="muted-small">${s.status} • ${s.time}${s.note?` • ${s.note}`:""}</div></div></li>`;
+        return `<li style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:8px"><img src="${userImages[u]||Object.values(userImages)[0]}" class="avatar-xs"><div style="flex:1"><strong>${u}</strong><div class="muted-small">Geen registratie</div></div></li>`;
       }).join("");
-      document.getElementById("attHistory").innerHTML = arr.length ? arr.map(a=>`<li><strong>${a.name}</strong> — ${a.status} <div class="muted small">${a.time}${a.note?` • ${a.note}`:""}</div></li>`).join("") : "<li class='muted'>Geen geschiedenis</li>";
+      document.getElementById("attHistory").innerHTML = arr.length ? arr.map(a=>`<li style="background:#fff;padding:8px;border-radius:8px"><strong>${a.name}</strong> — ${a.status}<div class="muted-small">${a.time}${a.note?` • ${a.note}`:""}</div></li>`).join("") : "<li class='muted-small'>Geen geschiedenis</li>";
     }
-    renderAttendance();
 
+    /* -------------------------
+       Files
+       ------------------------- */
     function uploadFile(){
-      if(currentRole!=="Leraar") return alert("Alleen leraren kunnen bestanden uploaden.");
-      const input=document.getElementById("fileInput");
-      const f=input.files[0];
+      if(currentRole !== "Leraar") return alert("Alleen leraren kunnen bestanden uploaden.");
+      const input = document.getElementById("fileInput");
+      const f = input.files[0];
       if(!f) return;
       const url = URL.createObjectURL(f);
-      const desc=document.getElementById("fileDesc").value || "";
-      const key="files_all";
-      const files=JSON.parse(localStorage.getItem(key)||"[]");
-      files.unshift({name:f.name,url,desc,by:currentUser,date:new Date().toLocaleString()});
-      localStorage.setItem(key,JSON.stringify(files));
+      const desc = document.getElementById("fileDesc").value.trim();
+      const key = "files_all";
+      const arr = JSON.parse(localStorage.getItem(key)||"[]");
+      arr.unshift({name:f.name,url,desc,by:currentUser,date:new Date().toLocaleString()});
+      localStorage.setItem(key, JSON.stringify(arr));
       renderFiles();
       addActivity(`Bestand geüpload: ${f.name}`);
-      input.value=""; document.getElementById("fileDesc").value="";
+      input.value = ""; document.getElementById("fileDesc").value = "";
     }
+
     function renderFiles(){
-      const key="files_all";
-      const files=JSON.parse(localStorage.getItem(key)||"[]");
-      document.getElementById("fileList").innerHTML = files.length ? files.map((f,i)=>`<li style="display:flex;align-items:center;gap:8px"><div style="flex:1"><a class="file-link" href="${f.url}" download="${f.name}">${f.name}</a><div class="muted small">${f.desc} • Geüpload door ${f.by} • ${f.date}</div></div>${currentRole==="Leraar"?`<button onclick="removeFile(${i})">Verwijder</button>`:""}</li>`).join("") : "<li class='muted'>Geen bestanden</li>";
+      const arr = JSON.parse(localStorage.getItem("files_all")||"[]");
+      document.getElementById("fileList").innerHTML = arr.length ? arr.map((f,i)=>`<li style="display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:8px"><div style="flex:1"><a href="${f.url}" class="muted-small" download="${f.name}">${f.name}</a><div class="muted-small">${f.desc} • ${f.by} • ${f.date}</div></div>${currentRole==="Leraar"?`<button onclick="removeFile(${i})">Verwijder</button>`:""}</li>`).join("") : "<li class='muted-small'>Geen bestanden</li>";
     }
-    function removeFile(index){
-      if(currentRole!=="Leraar") return;
-      const key="files_all";
-      const files=JSON.parse(localStorage.getItem(key)||"[]");
-      files.splice(index,1);
-      localStorage.setItem(key,JSON.stringify(files));
+    function removeFile(i){
+      if(currentRole !== "Leraar") return;
+      const arr = JSON.parse(localStorage.getItem("files_all")||"[]");
+      arr.splice(i,1);
+      localStorage.setItem("files_all",JSON.stringify(arr));
       renderFiles();
     }
-    renderFiles();
 
+    /* -------------------------
+       Forms
+       ------------------------- */
     function addForm(e){
       e.preventDefault();
-      const t=document.getElementById("formText").value;
+      const t = document.getElementById("formText").value.trim();
       if(!t) return;
-      const key="forms_"+currentUser;
-      const arr=JSON.parse(localStorage.getItem(key)||"[]");
+      const key = "forms_"+currentUser;
+      const arr = JSON.parse(localStorage.getItem(key)||"[]");
       arr.unshift({text:t,date:new Date().toLocaleString()});
-      localStorage.setItem(key,JSON.stringify(arr));
+      localStorage.setItem(key, JSON.stringify(arr));
       renderForms();
-      addActivity(`Formulier ingediend`);
+      addActivity("Formulier ingediend");
       e.target.reset();
     }
     function renderForms(){
-      const key="forms_"+currentUser;
-      const arr=JSON.parse(localStorage.getItem(key)||"[]");
-      document.getElementById("formList").innerHTML = arr.length ? arr.map(f=>`<li><strong>${f.text}</strong><div class="muted small">${f.date}</div></li>`).join("") : "<li class='muted'>Geen inzendingen</li>";
+      const key = "forms_"+currentUser;
+      const arr = JSON.parse(localStorage.getItem(key)||"[]");
+      document.getElementById("formList").innerHTML = arr.length ? arr.map(f=>`<li style="background:#fff;padding:8px;border-radius:8px"><strong>${f.text}</strong><div class="muted-small">${f.date}</div></li>`).join("") : "<li class='muted-small'>Geen inzendingen</li>";
     }
-    renderForms();
 
+    /* -------------------------
+       Canteen orders
+       ------------------------- */
     function orderFood(e){
       e.preventDefault();
-      const val=document.getElementById("foodItem").value;
-      const [item,price]=val.split("|");
-      const key="canteen_"+currentUser;
-      const arr=JSON.parse(localStorage.getItem(key)||"[]");
+      const val = document.getElementById("foodItem").value;
+      const [item,price] = val.split("|");
+      const key = "canteen_"+currentUser;
+      const arr = JSON.parse(localStorage.getItem(key)||"[]");
       arr.push({item,price:parseFloat(price),date:new Date().toLocaleString()});
       localStorage.setItem(key,JSON.stringify(arr));
       renderOrders();
       addActivity(`Bestelling geplaatst: ${item}`);
     }
     function renderOrders(){
-      const key="canteen_"+currentUser;
-      const arr=JSON.parse(localStorage.getItem(key)||"[]");
-      document.getElementById("orderList").innerHTML = arr.length ? arr.map(o=>`<li>${o.item} — €${o.price.toFixed(2)} <div class="muted small">${o.date}</div></li>`).join("") : "<li class='muted'>Geen bestellingen</li>";
+      const key = "canteen_"+currentUser;
+      const arr = JSON.parse(localStorage.getItem(key)||"[]");
+      document.getElementById("orderList").innerHTML = arr.length ? arr.map(o=>`<li style="background:#fff;padding:8px;border-radius:8px">${o.item} — €${o.price.toFixed(2)}<div class="muted-small">${o.date}</div></li>`).join("") : "<li class='muted-small'>Geen bestellingen</li>";
       const total = arr.reduce((s,o)=>s+o.price,0);
       document.getElementById("totalPrice").textContent = total.toFixed(2);
     }
-    renderOrders();
 
+    /* -------------------------
+       Users management (teacher only)
+       ------------------------- */
     function addAppUser(){
-      if(currentRole!=="Leraar") return alert("Alleen leraren kunnen gebruikers toevoegen.");
-      const name=document.getElementById("newUserName").value.trim();
-      const roleSel=document.getElementById("newUserRole").value;
-      if(!name) return;
-      const users=JSON.parse(localStorage.getItem("app_users")||"[]");
-      if(users.includes(name)) return alert("Naam bestaat al.");
+      if(currentRole !== "Leraar") return alert("Alleen leraren kunnen gebruikers toevoegen.");
+      const name = document.getElementById("newUserName").value.trim();
+      const roleSel = document.getElementById("newUserRole").value;
+      if(!name) return alert("Voer een naam in.");
+      const users = JSON.parse(localStorage.getItem("app_users")||"[]");
+      if(users.includes(name)) return alert("Gebruiker bestaat al.");
       users.push(name);
-      localStorage.setItem("app_users",JSON.stringify(users));
-      const roles=JSON.parse(localStorage.getItem("user_roles")||"{}");
-      roles[name]=roleSel;
-      localStorage.setItem("user_roles",JSON.stringify(roles));
-      const imgs=JSON.parse(localStorage.getItem("user_images")||"{}");
-      imgs[name]=`https://via.placeholder.com/150/cccccc/333333?text=${encodeURIComponent(name)}`;
-      localStorage.setItem("user_images",JSON.stringify(imgs));
+      localStorage.setItem("app_users", JSON.stringify(users));
+      const roles = JSON.parse(localStorage.getItem("user_roles")||"{}");
+      roles[name] = roleSel;
+      localStorage.setItem("user_roles", JSON.stringify(roles));
+      const imgs = JSON.parse(localStorage.getItem("user_images")||"{}");
+      imgs[name] = `https://via.placeholder.com/150/cccccc/333333?text=${encodeURIComponent(name)}`;
+      localStorage.setItem("user_images", JSON.stringify(imgs));
       populateUserControls();
+      renderUsersList();
       addActivity(`Gebruiker toegevoegd: ${name}`);
-      document.getElementById("newUserName").value="";
+      document.getElementById("newUserName").value = "";
     }
 
-    function editUser(name){
-      if(currentRole!=="Leraar") return;
+    function promptEditUser(name){
+      if(currentRole !== "Leraar") return;
       const newName = prompt("Nieuwe naam voor " + name, name);
-      if(!newName) return;
-      const images = JSON.parse(localStorage.getItem("user_images")||"{}");
-      const roles = JSON.parse(localStorage.getItem("user_roles")||"{}");
+      if(!newName || newName.trim()===name) return;
       const users = JSON.parse(localStorage.getItem("app_users")||"[]");
       const idx = users.indexOf(name);
-      if(idx<0) return;
-      users[idx]=newName;
-      images[newName]=images[name] || `https://via.placeholder.com/150/cccccc/333333?text=${encodeURIComponent(newName)}`;
-      roles[newName]=roles[name] || "Leerling";
-      delete images[name]; delete roles[name];
-      localStorage.setItem("app_users",JSON.stringify(users));
-      localStorage.setItem("user_images",JSON.stringify(images));
-      localStorage.setItem("user_roles",JSON.stringify(roles));
+      if(idx === -1) return;
+      users[idx] = newName;
+      localStorage.setItem("app_users", JSON.stringify(users));
+      const roles = JSON.parse(localStorage.getItem("user_roles")||"{}");
+      roles[newName] = roles[name] || "Leerling";
+      delete roles[name];
+      localStorage.setItem("user_roles", JSON.stringify(roles));
+      const imgs = JSON.parse(localStorage.getItem("user_images")||"{}");
+      imgs[newName] = imgs[name] || `https://via.placeholder.com/150/cccccc/333333?text=${encodeURIComponent(newName)}`;
+      delete imgs[name];
+      localStorage.setItem("user_images", JSON.stringify(imgs));
       populateUserControls();
-      renderAll();
+      renderUsersList();
       addActivity(`Gebruiker hernoemd: ${name} → ${newName}`);
     }
 
-    function updateProfile(){
-      if(currentRole!=="Leraar") return;
-      const selected = document.getElementById("pfpSelect").value;
-      const newName = document.getElementById("newName").value.trim();
-      if(!selected) return;
-      if(newName){
-        const users=JSON.parse(localStorage.getItem("app_users")||"[]");
-        const idx = users.indexOf(selected);
-        if(idx>=0){
-          const images = JSON.parse(localStorage.getItem("user_images")||"{}");
-          const roles = JSON.parse(localStorage.getItem("user_roles")||"{}");
-          users[idx]=newName;
-          images[newName]=images[selected] || `https://via.placeholder.com/150/cccccc/333333?text=${encodeURIComponent(newName)}`;
-          roles[newName]=roles[selected] || "Leerling";
-          delete images[selected]; delete roles[selected];
-          localStorage.setItem("app_users",JSON.stringify(users));
-          localStorage.setItem("user_images",JSON.stringify(images));
-          localStorage.setItem("user_roles",JSON.stringify(roles));
-          populateUserControls();
-          renderAll();
-          addActivity(`Profiel geüpdatet: ${selected} → ${newName}`);
-        }
-      } else {
-        alert("Voer een nieuwe naam in om te hernoemen.");
-      }
+    /* -------------------------
+       Tiny activity feed (for dashboard)
+       ------------------------- */
+    function addActivity(text){
+      const key = "activities";
+      const arr = JSON.parse(localStorage.getItem(key)||"[]");
+      arr.unshift({text,date:new Date().toLocaleString()});
+      localStorage.setItem(key, JSON.stringify(arr.slice(0,50)));
+      renderActivities();
+    }
+    function renderActivities(){
+      const arr = JSON.parse(localStorage.getItem("activities")||"[]");
+      const el = document.getElementById("activityList");
+      if(!el) return;
+      el.innerHTML = arr.length ? arr.map(a=>`<li style="background:#fff;padding:8px;border-radius:8px;margin-bottom:8px"><strong>${a.text}</strong><div class="muted-small">${a.date}</div></li>`).join("") : "<li class='muted-small'>Geen activiteiten</li>";
     }
 
+    /* -------------------------
+       Renderers and initialization
+       ------------------------- */
     function renderAll(){
       populateUserControls();
-      renderAgenda();
+      renderUsersList();
+      renderTimetable();
       renderMessages();
       renderGrades();
       renderAttendance();
@@ -673,30 +684,25 @@
       renderForms();
       renderOrders();
       renderActivities();
-      document.getElementById("userPfp").src = JSON.parse(localStorage.getItem("user_images")||"{}")[currentUser] || Object.values(JSON.parse(localStorage.getItem("user_images")||"{}"))[0];
-      document.getElementById("userName").textContent = localStorage.getItem("loggedInUser") || currentUser;
+      // administrative UI locks
+      const isTeacher = currentRole === "Leraar";
+      document.getElementById("addUserBtn").style.display = isTeacher ? "inline-block" : "none";
+      document.getElementById("uploadBtn").disabled = !isTeacher;
+      document.getElementById("ttAddBtn").disabled = !isTeacher;
+      document.getElementById("attForm").querySelectorAll("select,input,button").forEach(el=>{
+        if(el.tagName !== "BUTTON") el.disabled = !isTeacher;
+      });
+      document.getElementById("gradeForm").querySelectorAll("select,input,button").forEach(el=>{
+        if(el.tagName !== "BUTTON"){ el.disabled = !isTeacher; }
+      });
     }
 
-    function loadDashboard(){
-      const agendaKey = "agenda_" + currentUser;
-      const a = JSON.parse(localStorage.getItem(agendaKey) || "[]");
-      if(a.length){
-        document.getElementById("nextLesson").textContent = a[0].text;
-        document.getElementById("nextLessonTime").textContent = a[0].date;
-      } else {
-        document.getElementById("nextLesson").textContent = "Geen";
-        document.getElementById("nextLessonTime").textContent = "";
-      }
-    }
-
-    function renderActivities(){
-      const activities = JSON.parse(localStorage.getItem("activities")||"[]");
-      document.getElementById("activityList").innerHTML = activities.map(a=>`<li><div style="flex:1"><strong>${a.text}</strong><div class="muted small">${a.date}</div></div></li>`).join("") || "<li class='muted'>Nog geen activiteiten</li>";
-    }
-
+    // initial population
     populateUserControls();
     renderAll();
-    loadDashboard();
+
+    // default view
+    switchView("dashboard");
   </script>
 </body>
 </html>
