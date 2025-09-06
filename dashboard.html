@@ -1,152 +1,354 @@
 <!doctype html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Smartschool NextGen Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    :root {
-      --bg:#f4f6f8; --card:#ffffff; --accent:#ff7043; --accent2:#ff9f68;
-      --radius:14px; --shadow:0 6px 18px rgba(0,0,0,0.08);
+    :root{
+      --accent: #ff7043;
+      --accent-dark: #e74c3c;
+      --bg: #f5f7f8;
+      --card: #ffffff;
+      --muted: #7b8694;
+      --radius: 12px;
     }
-    *{box-sizing:border-box;}
-    body,html{margin:0;font-family:Inter,system-ui;background:var(--bg);height:100%;}
-    .app{display:grid;grid-template-columns:260px 1fr;min-height:100vh;}
-    .sidebar{background:linear-gradient(180deg,var(--accent),#e74c3c);color:#fff;padding:20px;display:flex;flex-direction:column;transition:all .3s;}
-    .brand{font-weight:700;font-size:18px;margin-bottom:30px;}
-    .nav{display:flex;flex-direction:column;gap:8px;}
-    .nav button{border:0;background:transparent;color:#fff;padding:12px;border-radius:10px;text-align:left;cursor:pointer;font-weight:600;transition:0.2s;display:flex;align-items:center;}
-    .nav button.active,.nav button:hover{background:rgba(255,255,255,0.2);}
-    .nav button i{margin-right:10px;}
-    .profile{margin-top:auto;display:flex;align-items:center;gap:10px;border-top:1px solid rgba(255,255,255,.2);padding-top:15px;}
-    .profile img{width:45px;height:45px;border-radius:50%;object-fit:cover;}
-    .logout{background:#fff;color:#e74c3c;font-size:14px;padding:6px 10px;border-radius:8px;cursor:pointer;font-weight:600;}
-    .main{display:flex;flex-direction:column;}
-    .topbar{display:flex;align-items:center;justify-content:space-between;padding:15px 25px;background:#fff;box-shadow:var(--shadow);}
-    .icon-btn{border:0;background:var(--bg);border-radius:8px;padding:10px;cursor:pointer;}
-    .content{padding:25px;overflow:auto;}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
-    .card{background:var(--card);padding:20px;border-radius:var(--radius);box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:all .3s ease;}
-    .card.show{opacity:1;transform:translateY(0);}
-    .agenda-item{padding:10px;background:var(--bg);border-radius:10px;margin-bottom:8px;}
-    .msg{display:flex;gap:10px;align-items:center;padding:12px;border-radius:10px;background:var(--bg);margin-bottom:10px;}
-    .msg .avatar{width:40px;height:40px;border-radius:50%;background:#ddd;}
-    .progress{width:120px;height:120px;border-radius:50%;background:conic-gradient(var(--accent) calc(var(--p)*1%),#ddd 0);display:flex;align-items:center;justify-content:center;font-weight:700;color:#333;font-size:20px;margin:auto;}
-    .clock{font-size:18px;font-weight:600;color:#444;}
-    .view{display:none;}
-    .view.active{display:block;animation:fadeIn .3s ease;}
-    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    *{box-sizing:border-box}
+    body,html{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:var(--bg);}
+    .app{display:grid;grid-template-columns:300px 1fr;min-height:100vh;}
+    /* Sidebar */
+    .sidebar{background:linear-gradient(180deg,var(--accent),var(--accent-dark));color:#fff;padding:24px;display:flex;flex-direction:column;gap:10px}
+    .brand{font-weight:700;font-size:20px;margin-bottom:6px}
+    .nav{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+    .nav button{display:flex;align-items:center;gap:12px;border:0;background:transparent;color:rgba(255,255,255,0.95);padding:12px;border-radius:10px;cursor:pointer;font-weight:600}
+    .nav button.active{background:rgba(255,255,255,0.15)}
+    .nav button i{width:20px;text-align:center}
+    .profile-row{margin-top:auto;display:flex;align-items:center;gap:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08)}
+    .profile-row img{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.18)}
+    .logoutBtn{background:#fff;color:var(--accent-dark);padding:8px 10px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+    /* Topbar */
+    .main{display:flex;flex-direction:column}
+    .topbar{display:flex;justify-content:space-between;align-items:center;padding:18px 26px;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+    .greeting{font-weight:600;color:#333}
+    .clock{font-weight:700}
+    .content{padding:22px;overflow:auto}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+    .card{background:var(--card);padding:18px;border-radius:var(--radius);box-shadow:0 6px 18px rgba(0,0,0,0.04)}
+    h2{margin:0 0 12px 0;font-size:18px}
+    .agenda-item{padding:10px;background:#f7fafb;border-radius:10px;margin-bottom:10px}
+    .msg-list{display:flex;flex-direction:column;gap:8px}
+    .msg{padding:10px;border-radius:10px;background:#f7fafb}
+    .small{font-size:13px;color:var(--muted)}
+    /* Tables / lists */
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;text-align:left;border-bottom:1px solid #eef2f5}
+    .btn{padding:8px 10px;border-radius:8px;border:0;cursor:pointer}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-ghost{background:transparent;border:1px solid #e6e9ec}
+    .input,select,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #e6e9ec}
+    .muted{color:var(--muted)}
+    .center{text-align:center}
     @media(max-width:900px){.app{grid-template-columns:70px 1fr}.nav button span{display:none}}
   </style>
 </head>
 <body>
-<div class="app">
-  <aside class="sidebar">
-    <div class="brand">Smartschool NG</div>
-    <nav class="nav">
-      <button class="active" data-view="dashboard"><i class="fa fa-house"></i><span>Dashboard</span></button>
-      <button data-view="agenda"><i class="fa fa-calendar-days"></i><span>Agenda</span></button>
-      <button data-view="messages"><i class="fa fa-envelope"></i><span>Berichten</span></button>
-      <button data-view="results"><i class="fa fa-chart-line"></i><span>Resultaten</span></button>
-      <button data-view="attendance"><i class="fa fa-user-check"></i><span>Afwezigheden</span></button>
-      <button data-view="files"><i class="fa fa-folder"></i><span>Bestanden</span></button>
-      <button data-view="forms"><i class="fa fa-file-lines"></i><span>Formulieren</span></button>
-      <button data-view="canteen"><i class="fa fa-utensils"></i><span>Cafetaria</span></button>
-      <button data-view="transport"><i class="fa fa-bus"></i><span>Vervoer</span></button>
-      <button data-view="settings"><i class="fa fa-gear"></i><span>Instellingen</span></button>
-    </nav>
-    <div class="profile">
-      <img id="profileImg" src="https://i.pravatar.cc/100" alt="user"/>
+  <div class="app">
+    <aside class="sidebar">
       <div>
-        <div id="profileName">Demo User</div>
-        <small id="profileRole">Leerling</small>
+        <div class="brand">Smartschool NG</div>
+        <div class="small">Leerplatform</div>
       </div>
-      <div class="logout" onclick="logout()">Log uit</div>
-    </div>
-  </aside>
-  <div class="main">
-    <header class="topbar">
-      <div id="greeting"></div>
-      <div class="clock" id="clock"></div>
-      <div><button class="icon-btn"><i class="fa fa-bell"></i></button></div>
-    </header>
-    <div class="content">
-      <!-- Dashboard -->
-      <section id="dashboard" class="view active">
-        <div class="grid">
-          <div class="card">
-            <h2>Welkom terug!</h2>
-            <p id="welcomeMsg"></p>
-          </div>
-          <div class="card">
-            <h2>Vandaag in Agenda</h2>
-            <div id="agendaList"></div>
-          </div>
-          <div class="card">
-            <h2>Recente berichten</h2>
-            <div class="msg"><div class="avatar"></div><div><strong>Directie</strong><br/>Oudercontact morgen</div></div>
-            <div class="msg"><div class="avatar"></div><div><strong>Jan Jansen</strong><br/>Kan je mijn taak nakijken?</div></div>
-          </div>
-          <div class="card" style="text-align:center">
-            <h2>Attentie</h2>
-            <div class="progress" id="attendanceProgress" style="--p:85">85%</div>
-            <small>Aanwezigheden dit semester</small>
-          </div>
+
+      <nav class="nav" id="sidebarNav">
+        <button class="active" data-view="dashboard"><i class="fa fa-house"></i><span>Dashboard</span></button>
+        <button data-view="agenda"><i class="fa fa-calendar-days"></i><span>Agenda</span></button>
+        <button data-view="messages"><i class="fa fa-envelope"></i><span>Berichten</span></button>
+        <button data-view="results"><i class="fa fa-chart-line"></i><span>Resultaten</span></button>
+        <button data-view="attendance"><i class="fa fa-user-check"></i><span>Afwezigheden</span></button>
+        <button data-view="files"><i class="fa fa-folder"></i><span>Bestanden</span></button>
+        <button data-view="forms"><i class="fa fa-file-lines"></i><span>Formulieren</span></button>
+        <button data-view="canteen"><i class="fa fa-utensils"></i><span>Cafetaria</span></button>
+        <button data-view="transport"><i class="fa fa-bus"></i><span>Vervoer</span></button>
+        <button data-view="settings"><i class="fa fa-gear"></i><span>Instellingen</span></button>
+        <!-- teacher-only button inserted by script when role===Leraar -->
+      </nav>
+
+      <div class="profile-row">
+        <img id="sidebarPfp" src="https://i.pravatar.cc/150" alt="pfp">
+        <div style="flex:1">
+          <div id="sidebarUser" style="font-weight:700">Demo User</div>
+          <div class="small" id="sidebarRole">Leerling</div>
         </div>
-      </section>
-      <!-- Agenda -->
-      <section id="agenda" class="view"><h2>Agenda</h2><div class="card"><div id="agendaFull"></div></div></section>
-      <!-- Other pages -->
-      <section id="messages" class="view"><h2>Berichten</h2><div class="card">[Inbox]</div></section>
-      <section id="results" class="view"><h2>Resultaten</h2><div class="card">[Rapport]</div></section>
-      <section id="attendance" class="view"><h2>Afwezigheden</h2><div class="card">[Afwezigheden overzicht]</div></section>
-      <section id="files" class="view"><h2>Bestanden</h2><div class="card">[Documenten]</div></section>
-      <section id="forms" class="view"><h2>Formulieren</h2><div class="card">[Formulieren lijst]</div></section>
-      <section id="canteen" class="view"><h2>Cafetaria</h2><div class="card" id="canteenMenu"></div></section>
-      <section id="transport" class="view"><h2>Vervoer</h2><div class="card">[Busroutes]</div></section>
-      <section id="settings" class="view"><h2>Instellingen</h2><div class="card">[Instellingen]</div></section>
+        <button class="logoutBtn" id="logoutBtn">Log uit</button>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="greeting" id="topGreeting">Goede dag</div>
+        <div class="clock" id="topClock"></div>
+        <div><button class="btn btn-ghost" title="Notificaties"><i class="fa fa-bell"></i></button></div>
+      </header>
+
+      <main class="content">
+        <!-- Dashboard -->
+        <section id="dashboard" class="view">
+          <div class="grid">
+            <div class="card">
+              <h2>Welkom</h2>
+              <p id="welcomeText" class="small"></p>
+              <div style="margin-top:8px">
+                <strong>Rol:</strong> <span id="welcomeRole"></span>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Vandaag in Agenda</h2>
+              <div id="agendaPreview"></div>
+            </div>
+
+            <div class="card">
+              <h2>Recente berichten</h2>
+              <div id="recentMessages" class="msg-list"></div>
+            </div>
+
+            <div class="card center">
+              <h2>Attentie</h2>
+              <div style="font-size:28px;font-weight:700">85%</div>
+              <div class="small">Aanwezigheden dit semester</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Agenda -->
+        <section id="agenda" class="view" style="display:none">
+          <div class="card">
+            <h2>Volledig lesrooster</h2>
+            <div id="agendaFull"></div>
+          </div>
+        </section>
+
+        <!-- Messages -->
+        <section id="messages" class="view" style="display:none">
+          <div class="grid">
+            <div class="card" style="min-width:350px">
+              <h2>Inbox</h2>
+              <div id="inboxList"></div>
+            </div>
+
+            <div class="card">
+              <h2>Nieuw bericht</h2>
+              <label class="small">Aan</label>
+              <select id="msgRecipient" class="input"></select>
+              <label class="small" style="margin-top:8px">Onderwerp</label>
+              <input id="msgSubject" class="input" placeholder="Onderwerp" />
+              <label class="small" style="margin-top:8px">Bericht</label>
+              <textarea id="msgBody" class="input" rows="6" placeholder="Schrijf je bericht..."></textarea>
+              <div style="margin-top:10px;display:flex;gap:8px">
+                <button class="btn btn-primary" onclick="sendMessage()">Verzend</button>
+                <button class="btn" onclick="clearCompose()">Wis</button>
+              </div>
+              <div id="msgSendResult" class="small muted" style="margin-top:8px"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Results -->
+        <section id="results" class="view" style="display:none">
+          <div class="grid">
+            <div class="card">
+              <h2>Resultaten / Punten</h2>
+              <div id="gradesSection"></div>
+            </div>
+            <div class="card">
+              <h2>Overzicht</h2>
+              <div id="gradesOverview"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Attendance -->
+        <section id="attendance" class="view" style="display:none">
+          <div class="card">
+            <h2>Afwezigheden</h2>
+            <p class="small">Overzicht van gemelde afwezigheden (demo).</p>
+            <table>
+              <thead><tr><th>Datum</th><th>Leerling</th><th>Reden</th></tr></thead>
+              <tbody id="absencesTable"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Files -->
+        <section id="files" class="view" style="display:none">
+          <div class="card">
+            <h2>Bestanden</h2>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input type="file" id="fileInput" />
+              <button class="btn btn-primary" onclick="uploadFile()">Upload</button>
+            </div>
+            <div style="margin-top:12px">
+              <h3 class="small">Gedeelde bestanden</h3>
+              <ul id="fileList"></ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Forms -->
+        <section id="forms" class="view" style="display:none">
+          <div class="card">
+            <h2>Formulieren</h2>
+            <ul id="formList">
+              <li>Inschrijvingsformulier - <span class="small muted">01-09-2025</span></li>
+              <li>Toestemmingsbrief excursie - <span class="small muted">15-09-2025</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Canteen -->
+        <section id="canteen" class="view" style="display:none">
+          <div class="card">
+            <h2>Cafetaria — Foodmaker</h2>
+            <p class="small">Dagmenu van Foodmaker</p>
+            <div id="canteenMenu"></div>
+            <div style="margin-top:12px">
+              <h3 class="small">Bestellingen</h3>
+              <ul id="canteenOrders"></ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Transport -->
+        <section id="transport" class="view" style="display:none">
+          <div class="card">
+            <h2>Vervoer</h2>
+            <p class="small">Busroutes (demo)</p>
+            <ul>
+              <li>Route 12 - Halte: Station → School (07:45)</li>
+              <li>Route 8 - Halte: Centrum → School (08:00)</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Settings -->
+        <section id="settings" class="view" style="display:none">
+          <div class="card">
+            <h2>Instellingen</h2>
+            <div style="display:grid;gap:8px">
+              <label class="small">Profielfoto URL</label>
+              <input id="setPfp" class="input" placeholder="https://..." />
+              <button class="btn btn-primary" onclick="updatePfp()">Wijzig foto</button>
+              <hr />
+              <button class="btn" onclick="logout()">Log uit</button>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   </div>
-</div>
+
 <script>
-  // Sidebar navigation
-  const buttons=document.querySelectorAll('.nav button');
-  const views=document.querySelectorAll('.view');
-  buttons.forEach(btn=>btn.addEventListener('click',()=>{
-    buttons.forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const id=btn.dataset.view;
-    views.forEach(v=>v.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-  }));
-
-  // Load user data from login
-  const user=localStorage.getItem('loggedInUser');
-  const role=localStorage.getItem('userRole');
-  const pfp=localStorage.getItem('userPfp');
-  if(!user){ window.location.href='login.html'; }
-  document.getElementById('profileName').textContent=user;
-  document.getElementById('profileRole').textContent=role;
-  document.getElementById('profileImg').src=pfp || "https://i.pravatar.cc/100";
-  document.getElementById('welcomeMsg').textContent=`Fijn dat je er bent, ${user}!`;
-
-  // Greeting
-  const hour=new Date().getHours();
-  let greet="Goede dag";
-  if(hour<12) greet="Goedemorgen"; else if(hour<18) greet="Goedemiddag"; else greet="Goedenavond";
-  document.getElementById('greeting').textContent=greet;
-
-  // Clock
-  function updateClock(){
-    const now=new Date();
-    document.getElementById('clock').textContent=now.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
+  // --- Helpers & initial state ---
+  const currentUser = localStorage.getItem('loggedInUser');
+  const currentRole = localStorage.getItem('userRole') || 'Leerling';
+  const currentPfp = localStorage.getItem('userPfp') || 'https://i.pravatar.cc/150';
+  if (!currentUser) {
+    // if not logged in, go to login
+    window.location.href = 'login.html';
   }
-  setInterval(updateClock,1000);updateClock();
 
-  // Real lessons from screenshot
-  const lessonsToday=[
+  // Ensure storage structures exist
+  if (!localStorage.getItem('app_users')) localStorage.setItem('app_users', JSON.stringify([currentUser]));
+  if (!localStorage.getItem('messages')) localStorage.setItem('messages', JSON.stringify([]));
+  if (!localStorage.getItem('grades')) localStorage.setItem('grades', JSON.stringify({}));
+  if (!localStorage.getItem('files')) localStorage.setItem('files', JSON.stringify([]));
+  if (!localStorage.getItem('canteen_orders')) localStorage.setItem('canteen_orders', JSON.stringify([]));
+
+  // Read the available users (populated by login.html)
+  const appUsers = JSON.parse(localStorage.getItem('app_users') || '[]');
+
+  // UI elements
+  document.getElementById('sidebarUser').textContent = currentUser;
+  document.getElementById('sidebarRole').textContent = currentRole;
+  document.getElementById('sidebarPfp').src = currentPfp;
+  document.getElementById('topGreeting').textContent = currentGreeting();
+  document.getElementById('topClock').textContent = getTime();
+  document.getElementById('welcomeText').textContent = `Fijn dat je er bent, ${currentUser}!`;
+  document.getElementById('welcomeRole').textContent = currentRole;
+
+  // Show teacher-only button if role is Leraar
+  if (currentRole === 'Leraar') {
+    const nav = document.getElementById('sidebarNav');
+    const btn = document.createElement('button');
+    btn.dataset.view = 'gradeinput';
+    btn.innerHTML = '<i class="fa fa-pen"></i><span>Punten Ingeven</span>';
+    btn.addEventListener('click', () => switchView('gradeinput', btn));
+    nav.appendChild(btn);
+
+    // add gradeinput view section
+    const sec = document.createElement('section');
+    sec.id = 'gradeinput';
+    sec.className = 'view';
+    sec.style.display = 'none';
+    sec.innerHTML = `
+      <div class="card">
+        <h2>Punten Ingeven</h2>
+        <label class="small">Selecteer Les</label>
+        <select id="gradeLesson" class="input"></select>
+        <label class="small">Selecteer Leerling</label>
+        <select id="gradeStudent" class="input"></select>
+        <label class="small">Punten</label>
+        <input id="gradeValue" class="input" placeholder="Bijv. 8.5 of 80%">
+        <div style="margin-top:10px">
+          <button class="btn btn-primary" onclick="saveGrade()">Sla op</button>
+        </div>
+        <div id="gradeMsg" class="small muted" style="margin-top:8px"></div>
+      </div>
+    `;
+    document.querySelector('main .content').appendChild(sec);
+  }
+
+  // Sidebar nav behavior
+  document.querySelectorAll('.nav button').forEach(b => {
+    b.addEventListener('click', () => switchView(b.dataset.view, b));
+  });
+
+  function switchView(viewId, btnEl) {
+    document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+    const v = document.getElementById(viewId);
+    if (v) v.style.display = 'block';
+    document.querySelectorAll('.nav button').forEach(nb => nb.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+    // update dynamic contents when switching
+    if (viewId === 'messages') renderMessagesUI();
+    if (viewId === 'agenda') renderAgendaFull();
+    if (viewId === 'results') renderResults();
+    if (viewId === 'files') renderFiles();
+    if (viewId === 'canteen') renderCanteen();
+  }
+
+  // initial view: dashboard
+  switchView('dashboard', document.querySelector('.nav button[data-view="dashboard"]'));
+
+  // Clock update
+  setInterval(()=> {
+    document.getElementById('topClock').textContent = getTime();
+  }, 1000);
+
+  function getTime() {
+    return new Date().toLocaleTimeString('nl-NL', {hour:'2-digit',minute:'2-digit'});
+  }
+  function currentGreeting() {
+    const h = new Date().getHours();
+    if (h < 12) return 'Goedemorgen';
+    if (h < 18) return 'Goedemiddag';
+    return 'Goedenavond';
+  }
+
+  // --- Agenda (use the lessons you specified) ---
+  const lessonsToday = [
     "08:25 – ZW-Praktijk • A207 Keuken groot – Klara Pauwels",
     "08:25 – Godsdienst • A204 – Anouk Goor",
     "08:25 – ZW-Maaltijdzorg • A109/H110 Deel keuken, A204 – Klara Pauwels",
@@ -169,16 +371,323 @@
     "13:35 – Lichamelijke opvoeding • Sportlokalen – Katrien Erpels",
     "14:35 – ZW-Gezondheid en welzijn • A204 – An Vervangen"
   ];
-  document.getElementById('agendaList').innerHTML=lessonsToday.slice(0,4).map(a=>`<div class='agenda-item'>${a}</div>`).join('');
-  document.getElementById('agendaFull').innerHTML=lessonsToday.map(a=>`<div class='agenda-item'>${a}</div>`).join('');
 
-  // Canteen mock
-  const menus=["Pasta bolognese €4,50","Kip curry €4,20","Lasagne €4,00","Soep & brood €3,00"];
-  const day=new Date().getDay();
-  document.getElementById('canteenMenu').innerHTML=menus[day%menus.length]+ " <button>Bestel</button>";
+  function renderAgendaPreview() {
+    document.getElementById('agendaPreview').innerHTML = lessonsToday.slice(0,4).map(s => `<div class="agenda-item">${s}</div>`).join('');
+  }
+  function renderAgendaFull() {
+    document.getElementById('agendaFull').innerHTML = lessonsToday.map(s => `<div class="agenda-item">${s}</div>`).join('');
+  }
+  renderAgendaPreview();
 
-  // Logout
-  function logout(){localStorage.removeItem('loggedInUser');localStorage.removeItem('userRole');localStorage.removeItem('userPfp');window.location.href='login.html';}
+  // --- Messages: send & inbox ---
+  function renderMessagesUI() {
+    // fill recipient dropdown with app users except current
+    const recipients = JSON.parse(localStorage.getItem('app_users') || '[]').filter(u => u !== currentUser);
+    const sel = document.getElementById('msgRecipient');
+    sel.innerHTML = '';
+    recipients.forEach(r => {
+      const o = document.createElement('option'); o.value = r; o.textContent = r; sel.appendChild(o);
+    });
+
+    renderInbox();
+    renderRecentMessages();
+  }
+
+  function sendMessage() {
+    const to = document.getElementById('msgRecipient').value;
+    const subject = document.getElementById('msgSubject').value.trim();
+    const body = document.getElementById('msgBody').value.trim();
+    const res = document.getElementById('msgSendResult');
+
+    if (!to || !subject || !body) {
+      res.textContent = 'Vul ontvanger, onderwerp en bericht in.';
+      return;
+    }
+
+    const messages = JSON.parse(localStorage.getItem('messages') || '[]');
+    messages.push({
+      id: Date.now(),
+      from: currentUser,
+      to,
+      subject,
+      body,
+      date: new Date().toISOString()
+    });
+    localStorage.setItem('messages', JSON.stringify(messages));
+    res.textContent = 'Bericht verzonden.';
+    document.getElementById('msgSubject').value = '';
+    document.getElementById('msgBody').value = '';
+    renderInbox();
+    renderRecentMessages();
+    setTimeout(()=> res.textContent = '', 2500);
+  }
+
+  function renderInbox() {
+    const messages = JSON.parse(localStorage.getItem('messages') || '[]');
+    const inbox = messages.filter(m => m.to === currentUser).reverse();
+    const container = document.getElementById('inboxList');
+    if (!container) return;
+    container.innerHTML = '';
+    if (inbox.length === 0) {
+      container.innerHTML = '<div class="small muted">Geen berichten.</div>';
+      return;
+    }
+    inbox.forEach(m => {
+      const el = document.createElement('div');
+      el.className = 'msg';
+      el.innerHTML = `<strong>${m.subject}</strong><div class="small">Van: ${m.from} • ${new Date(m.date).toLocaleString()}</div><div style="margin-top:6px">${m.body}</div>`;
+      container.appendChild(el);
+    });
+  }
+
+  function renderRecentMessages() {
+    const messages = JSON.parse(localStorage.getItem('messages') || '[]');
+    const recents = messages.filter(m => m.to === currentUser || m.from === currentUser).slice(-3).reverse();
+    const box = document.getElementById('recentMessages');
+    if (!box) return;
+    box.innerHTML = '';
+    if (recents.length === 0) box.innerHTML = '<div class="small muted">Geen recente berichten</div>';
+    recents.forEach(m => {
+      const d = document.createElement('div');
+      d.className = 'msg';
+      d.innerHTML = `<strong>${m.subject}</strong><div class="small">${m.from} → ${m.to}</div>`;
+      box.appendChild(d);
+    });
+  }
+
+  function clearCompose(){
+    document.getElementById('msgSubject').value = '';
+    document.getElementById('msgBody').value = '';
+    document.getElementById('msgSendResult').textContent = '';
+  }
+
+  // --- Grades (Resultaten) ---
+  function renderResults() {
+    const grades = JSON.parse(localStorage.getItem('grades') || '{}');
+
+    // left: if teacher -> show grade input helper, else show student's grades
+    const gradesSection = document.getElementById('gradesSection');
+    const lessonsSelectHtml = lessonsToday.map(l => `<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join('');
+    if (currentRole === 'Leraar') {
+      // teacher can grade from the gradeinput view or here show quick links
+      gradesSection.innerHTML = `
+        <div class="small">Je kan ook naar "Punten Ingeven" in de sidebar.</div>
+        <div style="margin-top:10px">
+          <label class="small">Snelle les-select</label>
+          <select id="quickLesson" class="input">${lessonsSelectHtml}</select>
+          <label class="small" style="margin-top:8px">Selecteer leerling</label>
+          <select id="quickStudent" class="input">${JSON.parse(localStorage.getItem('app_users')||'[]').map(u => `<option value="${u}">${u}</option>`).join('')}</select>
+          <label class="small" style="margin-top:8px">Punten</label>
+          <input id="quickPoints" class="input" placeholder="Bijv. 8.5">
+          <div style="margin-top:8px"><button class="btn btn-primary" onclick="quickSaveGrade()">Opslaan</button></div>
+          <div id="quickRes" class="small muted" style="margin-top:6px"></div>
+        </div>
+      `;
+    } else {
+      // student: list their grades
+      const myGrades = grades[currentUser] || {};
+      if (Object.keys(myGrades).length === 0) {
+        gradesSection.innerHTML = `<div class="small muted">Je hebt nog geen punten.</div>`;
+      } else {
+        let html = '<table><thead><tr><th>Les</th><th>Punten</th></tr></thead><tbody>';
+        for (const lesson in myGrades) {
+          html += `<tr><td>${escapeHtml(lesson)}</td><td>${escapeHtml(myGrades[lesson])}</td></tr>`;
+        }
+        html += '</tbody></table>';
+        gradesSection.innerHTML = html;
+      }
+    }
+
+    // right: overview for everyone: teacher sees all grades, students see class average
+    const overview = document.getElementById('gradesOverview');
+    if (currentRole === 'Leraar') {
+      // show all entries
+      let list = '<div class="small">Alle opgeslagen punten (per leerling)</div><div style="margin-top:8px">';
+      for (const student in grades) {
+        list += `<div style="margin-bottom:8px"><strong>${student}</strong><div class="small">`;
+        const studentGrades = grades[student];
+        if (!studentGrades || Object.keys(studentGrades).length === 0) {
+          list += 'Geen punten';
+        } else {
+          list += Object.entries(studentGrades).map(([les, val]) => `${les}: ${val}`).join('<br>');
+        }
+        list += '</div></div>';
+      }
+      list += '</div>';
+      overview.innerHTML = list;
+    } else {
+      // class average (simple)
+      const students = Object.keys(grades);
+      if (students.length === 0) overview.innerHTML = '<div class="small muted">Geen punten beschikbaar</div>';
+      else {
+        let html = '<div class="small">Klassenoverzicht (sample)</div>';
+        students.forEach(s => {
+          html += `<div style="margin-top:8px"><strong>${s}</strong><div class="small">${Object.entries(grades[s]||{}).map(([l,v]) => `${l}: ${v}`).join('<br>') || 'Geen punten'}</div></div>`;
+        });
+        overview.innerHTML = html;
+      }
+    }
+  }
+
+  function quickSaveGrade(){
+    const lesson = document.getElementById('quickLesson').value;
+    const student = document.getElementById('quickStudent').value;
+    const points = document.getElementById('quickPoints').value.trim();
+    const res = document.getElementById('quickRes');
+    if (!lesson || !student || !points) { res.textContent = 'Vul alles in.'; return; }
+
+    const grades = JSON.parse(localStorage.getItem('grades') || '{}');
+    if (!grades[student]) grades[student] = {};
+    grades[student][lesson] = points;
+    localStorage.setItem('grades', JSON.stringify(grades));
+    res.textContent = 'Punten opgeslagen.';
+    renderResults();
+    setTimeout(()=> res.textContent='', 2000);
+  }
+
+  // teacher-only grade saving (in gradeinput view)
+  function saveGrade(){
+    const lesson = document.getElementById('gradeLesson').value;
+    const student = document.getElementById('gradeStudent').value;
+    const value = document.getElementById('gradeValue').value.trim();
+    const msg = document.getElementById('gradeMsg');
+    if (!lesson || !student || !value) { msg.textContent = 'Vul alles in.'; return; }
+    const grades = JSON.parse(localStorage.getItem('grades') || '{}');
+    if (!grades[student]) grades[student] = {};
+    grades[student][lesson] = value;
+    localStorage.setItem('grades', JSON.stringify(grades));
+    msg.textContent = 'Opgeslagen.';
+    renderResults();
+    setTimeout(()=> msg.textContent = '', 2000);
+  }
+
+  // If teacher view exists, populate selects
+  function populateGradeInputs() {
+    const lessonSelect = document.getElementById('gradeLesson');
+    const studentSelect = document.getElementById('gradeStudent');
+    if (lessonSelect && studentSelect) {
+      lessonSelect.innerHTML = lessonsToday.map(l => `<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join('');
+      studentSelect.innerHTML = JSON.parse(localStorage.getItem('app_users') || '[]').map(u => `<option value="${u}">${u}</option>`).join('');
+    }
+  }
+  populateGradeInputs();
+
+  // --- Absences sample data ---
+  function renderAbsences(){
+    const rows = [
+      {date:'2025-09-10', student:'lily.tseyen', reason:'Ziek'},
+      {date:'2025-09-11', student:'kiandra.vandeweyer', reason:'Tandarts'}
+    ];
+    const tbody = document.getElementById('absencesTable');
+    tbody.innerHTML = rows.map(r => `<tr><td>${r.date}</td><td>${r.student}</td><td>${r.reason}</td></tr>`).join('');
+  }
+  renderAbsences();
+
+  // --- Files (simple upload simulation) ---
+  function uploadFile() {
+    const fInput = document.getElementById('fileInput');
+    const files = fInput.files;
+    if (!files || files.length === 0) return alert('Kies een bestand.');
+    const list = JSON.parse(localStorage.getItem('files') || '[]');
+    // store only filename & uploader & timestamp (no real file)
+    for (let i = 0; i < files.length; i++) {
+      list.push({name: files[i].name, uploader: currentUser, date: new Date().toISOString()});
+    }
+    localStorage.setItem('files', JSON.stringify(list));
+    renderFiles();
+    fInput.value = '';
+  }
+
+  function renderFiles(){
+    const list = JSON.parse(localStorage.getItem('files') || '[]');
+    const ul = document.getElementById('fileList');
+    ul.innerHTML = '';
+    if (list.length === 0) { ul.innerHTML = '<div class="small muted">Geen bestanden.</div>'; return; }
+    list.forEach(f => {
+      const li = document.createElement('li');
+      li.innerHTML = `<strong>${f.name}</strong> <span class="small muted">(${f.uploader} • ${new Date(f.date).toLocaleString()})</span>`;
+      ul.appendChild(li);
+    });
+  }
+  renderFiles();
+
+  // --- Canteen (Foodmaker) ---
+  const menus = [
+    {name:'Pasta bolognese', price:'€4,50'},
+    {name:'Kip curry', price:'€4,20'},
+    {name:'Lasagne', price:'€4,00'},
+    {name:'Soep & brood', price:'€3,00'}
+  ];
+
+  function renderCanteen() {
+    const menuDiv = document.getElementById('canteenMenu');
+    menuDiv.innerHTML = menus.map((m, idx) => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;margin-bottom:8px;background:#f7fafb">
+        <div><strong>${escapeHtml(m.name)}</strong><div class="small muted">Foodmaker</div></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="small">${m.price}</div>
+          <button class="btn btn-primary" onclick="orderCanteen(${idx})">Bestel</button>
+        </div>
+      </div>
+    `).join('');
+    renderOrders();
+  }
+
+  function orderCanteen(idx) {
+    const orders = JSON.parse(localStorage.getItem('canteen_orders') || '[]');
+    orders.push({user: currentUser, item: menus[idx].name, price: menus[idx].price, date: new Date().toISOString()});
+    localStorage.setItem('canteen_orders', JSON.stringify(orders));
+    renderOrders();
+    alert('Bestelling geplaatst bij Foodmaker.');
+  }
+
+  function renderOrders() {
+    const orders = JSON.parse(localStorage.getItem('canteen_orders') || '[]');
+    const ul = document.getElementById('canteenOrders');
+    ul.innerHTML = '';
+    if (orders.length === 0) ul.innerHTML = '<div class="small muted">Nog geen bestellingen.</div>';
+    else orders.slice().reverse().forEach(o => {
+      const li = document.createElement('li');
+      li.innerHTML = `${escapeHtml(o.user)} bestelde ${escapeHtml(o.item)} (${o.price}) <span class="small muted">- ${new Date(o.date).toLocaleString()}</span>`;
+      ul.appendChild(li);
+    });
+  }
+
+  // --- Settings: change PFP ---
+  document.getElementById('setPfp').value = currentPfp;
+  function updatePfp() {
+    const url = document.getElementById('setPfp').value.trim();
+    if (!url) return alert('Voer een geldige URL in.');
+    localStorage.setItem('userPfp', url);
+    document.getElementById('sidebarPfp').src = url;
+    alert('Profielfoto bijgewerkt.');
+  }
+
+  // --- Logout ---
+  document.getElementById('logoutBtn').addEventListener('click', logout);
+  function logout() {
+    // Clear only user session keys, keep app-wide data (users/messages/grades) for demo persistence
+    localStorage.removeItem('loggedInUser');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userPfp');
+    window.location.href = 'login.html';
+  }
+
+  // --- Utility ---
+  function escapeHtml(s) {
+    if (!s) return '';
+    return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+  }
+
+  // render initial pieces
+  renderInbox();
+  renderRecentMessages();
+  renderAgendaFull();
+  renderCanteen();
+  renderFiles();
+  renderResults();
+  populateGradeInputs();
 </script>
 </body>
 </html>
