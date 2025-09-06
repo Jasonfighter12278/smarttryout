@@ -6,70 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0d1117;
-      color: #fff;
-      display: flex;
-    }
+    body { margin: 0; font-family: Arial, sans-serif; background: #0d1117; color: #fff; display: flex; }
     .sidebar {
-      width: 250px;
-      background: #161b22;
-      height: 100vh;
-      position: fixed;
-      left: 0; top: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      width: 250px; background: #161b22; height: 100vh; position: fixed; left: 0; top: 0;
+      padding: 20px; display: flex; flex-direction: column; gap: 10px;
     }
-    .profile {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
+    .profile { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
     .profile img { width: 50px; height: 50px; border-radius: 50%; }
     .sidebar nav a, .logout {
-      color: #fff;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px;
-      border-radius: 8px;
-      transition: background 0.2s;
-      cursor: pointer;
+      color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px;
+      padding: 10px; border-radius: 8px; transition: background 0.2s; cursor: pointer;
     }
     .sidebar nav a:hover, .logout:hover { background: #21262d; }
-    .main {
-      margin-left: 250px;
-      flex: 1;
-      padding: 20px;
-    }
-    header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 20px;
-    }
-    header input {
-      background: #161b22; border: none; padding: 8px 12px;
-      border-radius: 8px; color: #fff;
-    }
+    .main { margin-left: 250px; flex: 1; padding: 20px; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    header input { background: #161b22; border: none; padding: 8px 12px; border-radius: 8px; color: #fff; }
     .clock { font-weight: bold; }
     section { display: none; }
     section.active { display: block; }
-    .card {
-      background: #161b22;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-    input, textarea, select, button {
-      padding: 8px; border-radius: 6px; border: none; margin: 5px 0;
-    }
+    .card { background: #161b22; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+    input, textarea, select, button { padding: 8px; border-radius: 6px; border: none; margin: 5px 0; }
     button { background: #238636; color: #fff; cursor: pointer; }
     button:hover { background: #2ea043; }
+    ul { list-style: none; padding: 0; }
+    li { margin: 4px 0; }
+    a.download { color: #58a6ff; text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -115,7 +76,8 @@
       <div class="card">
         <h3>Agenda</h3>
         <form onsubmit="addAgenda(event)">
-          <input type="text" id="agendaText" placeholder="Nieuwe afspraak...">
+          <input type="date" id="agendaDate">
+          <input type="text" id="agendaText" placeholder="Activiteit">
           <button>Toevoegen</button>
         </form>
         <ul id="agendaList"></ul>
@@ -165,8 +127,10 @@
     <section id="files">
       <div class="card">
         <h3>Bestanden</h3>
-        <input type="file" id="fileInput">
-        <button onclick="uploadFile()">Upload</button>
+        <div id="fileUploadBox">
+          <input type="file" id="fileInput">
+          <button onclick="uploadFile()">Upload</button>
+        </div>
         <ul id="fileList"></ul>
       </div>
     </section>
@@ -189,13 +153,14 @@
         <h3>Cafetaria</h3>
         <form onsubmit="orderFood(event)">
           <select id="foodItem">
-            <option>Broodje kaas</option>
-            <option>Pizza</option>
-            <option>Salade</option>
+            <option value="Broodje kaas|3.00">Broodje kaas - €3,00</option>
+            <option value="Pizza|5.50">Pizza - €5,50</option>
+            <option value="Salade|4.00">Salade - €4,00</option>
           </select>
           <button>Bestel</button>
         </form>
         <ul id="orderList"></ul>
+        <p><b>Totaal:</b> €<span id="totalPrice">0.00</span></p>
       </div>
     </section>
 
@@ -218,164 +183,159 @@
   </main>
 
   <script>
-    // SECURITY: check login
+    // Security
     const user = localStorage.getItem("loggedInUser");
     if (!user) window.location.href = "index.html";
 
-    // Init UI
+    // UI init
+    const role = localStorage.getItem("userRole") || "";
     document.getElementById("userName").textContent = user;
     document.getElementById("welcomeName").textContent = user;
-    document.getElementById("userRole").textContent = localStorage.getItem("userRole") || "";
+    document.getElementById("userRole").textContent = role;
     document.getElementById("userPfp").src = localStorage.getItem("userPfp") || "https://i.pravatar.cc/100";
 
-    // Views
+    // Hide upload box for leerlingen
+    if (role !== "Leraar") document.getElementById("fileUploadBox").style.display = "none";
+
     function switchView(id) {
       document.querySelectorAll("main section").forEach(s => s.classList.remove("active"));
       document.getElementById(id).classList.add("active");
     }
-
-    // Logout
     function logout() {
       localStorage.removeItem("loggedInUser");
       localStorage.removeItem("userRole");
       localStorage.removeItem("userPfp");
       window.location.href = "index.html";
     }
-
-    // Clock
     function updateClock() {
-      const n = new Date();
-      document.getElementById("clock").textContent = n.toLocaleTimeString("nl-NL", {hour: "2-digit", minute: "2-digit"});
+      document.getElementById("clock").textContent = new Date().toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"});
     }
-    setInterval(updateClock, 1000); updateClock();
+    setInterval(updateClock,1000); updateClock();
 
     // === Agenda ===
     const agendaKey = "agenda_" + user;
     let agenda = JSON.parse(localStorage.getItem(agendaKey) || "[]");
     function renderAgenda() {
-      document.getElementById("agendaList").innerHTML = agenda.map(a => `<li>${a}</li>`).join("");
+      document.getElementById("agendaList").innerHTML = agenda.map(a=>`<li>${a.date}: ${a.text}</li>`).join("");
     }
     function addAgenda(e) {
       e.preventDefault();
-      const t = document.getElementById("agendaText").value;
-      if (!t) return;
-      agenda.push(t);
-      localStorage.setItem(agendaKey, JSON.stringify(agenda));
-      document.getElementById("agendaText").value = "";
+      const d=document.getElementById("agendaDate").value;
+      const t=document.getElementById("agendaText").value;
+      if(!d||!t) return;
+      agenda.push({date:d,text:t});
+      localStorage.setItem(agendaKey,JSON.stringify(agenda));
       renderAgenda();
+      e.target.reset();
     }
     renderAgenda();
 
     // === Messages ===
-    const msgKey = "messages";
-    let messages = JSON.parse(localStorage.getItem(msgKey) || "[]");
-    const users = JSON.parse(localStorage.getItem("app_users") || "[]");
-    document.getElementById("msgTo").innerHTML = users.filter(u=>u!==user).map(u=>`<option>${u}</option>`).join("");
-    function renderMessages() {
-      const div = document.getElementById("msgList");
-      div.innerHTML = messages.filter(m => m.from===user || m.to===user)
-        .map(m => `<p><b>${m.from} ➝ ${m.to}:</b> ${m.text}</p>`).join("");
+    const msgKey="messages";
+    let messages=JSON.parse(localStorage.getItem(msgKey)||"[]");
+    const users=JSON.parse(localStorage.getItem("app_users")||"[]");
+    document.getElementById("msgTo").innerHTML=users.filter(u=>u!==user).map(u=>`<option>${u}</option>`).join("");
+    function renderMessages(){
+      document.getElementById("msgList").innerHTML=messages.filter(m=>m.from===user||m.to===user)
+        .map(m=>`<p><b>${m.from} ➝ ${m.to}:</b> ${m.text}</p>`).join("");
     }
-    function sendMessage(e) {
+    function sendMessage(e){
       e.preventDefault();
-      const to = document.getElementById("msgTo").value;
-      const text = document.getElementById("msgText").value;
-      if (!text) return;
-      messages.push({from:user, to, text});
-      localStorage.setItem(msgKey, JSON.stringify(messages));
+      const to=document.getElementById("msgTo").value;
+      const text=document.getElementById("msgText").value;
+      if(!text) return;
+      messages.push({from:user,to,text});
+      localStorage.setItem(msgKey,JSON.stringify(messages));
       document.getElementById("msgText").value="";
       renderMessages();
     }
     renderMessages();
 
     // === Results ===
-    const gradeKey = "grades_" + user;
-    let grades = JSON.parse(localStorage.getItem(gradeKey) || "[]");
-    function renderGrades() {
-      document.getElementById("gradeList").innerHTML = grades.map(g=>`<li>${g.course}: ${g.grade}</li>`).join("");
-    }
-    function addGrade(e) {
+    const gradeKey="grades_"+user;
+    let grades=JSON.parse(localStorage.getItem(gradeKey)||"[]");
+    function renderGrades(){document.getElementById("gradeList").innerHTML=grades.map(g=>`<li>${g.course}: ${g.grade}</li>`).join("");}
+    function addGrade(e){
       e.preventDefault();
-      const c = document.getElementById("course").value;
-      const g = document.getElementById("grade").value;
-      if (!c||!g) return;
-      grades.push({course:c, grade:g});
-      localStorage.setItem(gradeKey, JSON.stringify(grades));
-      document.getElementById("course").value="";
-      document.getElementById("grade").value="";
-      renderGrades();
+      const c=document.getElementById("course").value;
+      const g=document.getElementById("grade").value;
+      if(!c||!g) return;
+      grades.push({course:c,grade:g});
+      localStorage.setItem(gradeKey,JSON.stringify(grades));
+      renderGrades(); e.target.reset();
     }
     renderGrades();
 
     // === Attendance ===
-    const absKey = "abs_" + user;
-    let abs = JSON.parse(localStorage.getItem(absKey) || "[]");
-    function renderAbs() {
-      document.getElementById("absList").innerHTML = abs.map(a=>`<li>${a.date} - ${a.reason}</li>`).join("");
-    }
-    function addAbsence(e) {
+    const absKey="abs_"+user;
+    let abs=JSON.parse(localStorage.getItem(absKey)||"[]");
+    function renderAbs(){document.getElementById("absList").innerHTML=abs.map(a=>`<li>${a.date} - ${a.reason}</li>`).join("");}
+    function addAbsence(e){
       e.preventDefault();
-      const d = document.getElementById("absDate").value;
-      const r = document.getElementById("absReason").value;
-      if (!d||!r) return;
-      abs.push({date:d, reason:r});
-      localStorage.setItem(absKey, JSON.stringify(abs));
+      const d=document.getElementById("absDate").value;
+      const r=document.getElementById("absReason").value;
+      if(!d||!r) return;
+      abs.push({date:d,reason:r});
+      localStorage.setItem(absKey,JSON.stringify(abs));
       renderAbs();
+      e.target.reset();
     }
     renderAbs();
 
     // === Files ===
-    const fileKey = "files_" + user;
-    let files = JSON.parse(localStorage.getItem(fileKey) || "[]");
-    function renderFiles() {
-      document.getElementById("fileList").innerHTML = files.map(f=>`<li>${f}</li>`).join("");
+    const fileKey="files_all"; // gedeeld voor iedereen
+    let files=JSON.parse(localStorage.getItem(fileKey)||"[]");
+    function renderFiles(){
+      document.getElementById("fileList").innerHTML=files.map(f=>`<li><a class="download" href="${f.url}" download="${f.name}">${f.name}</a></li>`).join("");
     }
-    function uploadFile() {
-      const f = document.getElementById("fileInput").files[0];
-      if (!f) return;
-      files.push(f.name);
-      localStorage.setItem(fileKey, JSON.stringify(files));
+    function uploadFile(){
+      const input=document.getElementById("fileInput");
+      const f=input.files[0]; if(!f) return;
+      const url=URL.createObjectURL(f);
+      files.push({name:f.name,url});
+      localStorage.setItem(fileKey,JSON.stringify(files));
       renderFiles();
     }
     renderFiles();
 
     // === Forms ===
-    const formKey = "forms_" + user;
-    let forms = JSON.parse(localStorage.getItem(formKey) || "[]");
-    function renderForms() {
-      document.getElementById("formList").innerHTML = forms.map(f=>`<li>${f}</li>`).join("");
-    }
-    function addForm(e) {
+    const formKey="forms_"+user;
+    let forms=JSON.parse(localStorage.getItem(formKey)||"[]");
+    function renderForms(){document.getElementById("formList").innerHTML=forms.map(f=>`<li>${f}</li>`).join("");}
+    function addForm(e){
       e.preventDefault();
-      const t = document.getElementById("formText").value;
-      if (!t) return;
+      const t=document.getElementById("formText").value;
+      if(!t) return;
       forms.push(t);
-      localStorage.setItem(formKey, JSON.stringify(forms));
-      document.getElementById("formText").value="";
+      localStorage.setItem(formKey,JSON.stringify(forms));
       renderForms();
+      e.target.reset();
     }
     renderForms();
 
     // === Canteen ===
-    const orderKey = "canteen_" + user;
-    let orders = JSON.parse(localStorage.getItem(orderKey) || "[]");
-    function renderOrders() {
-      document.getElementById("orderList").innerHTML = orders.map(o=>`<li>${o}</li>`).join("");
+    const orderKey="canteen_"+user;
+    let orders=JSON.parse(localStorage.getItem(orderKey)||"[]");
+    function renderOrders(){
+      document.getElementById("orderList").innerHTML=orders.map(o=>`<li>${o.item} - €${o.price.toFixed(2)}</li>`).join("");
+      const total=orders.reduce((s,o)=>s+o.price,0);
+      document.getElementById("totalPrice").textContent=total.toFixed(2);
     }
-    function orderFood(e) {
+    function orderFood(e){
       e.preventDefault();
-      const item = document.getElementById("foodItem").value;
-      orders.push(item);
-      localStorage.setItem(orderKey, JSON.stringify(orders));
+      const val=document.getElementById("foodItem").value;
+      const [item,price]=val.split("|");
+      orders.push({item,price:parseFloat(price)});
+      localStorage.setItem(orderKey,JSON.stringify(orders));
       renderOrders();
     }
     renderOrders();
 
     // === Settings ===
-    function updateProfile() {
-      const newName = document.getElementById("newName").value;
-      if (!newName) return;
-      localStorage.setItem("loggedInUser", newName);
+    function updateProfile(){
+      const newName=document.getElementById("newName").value;
+      if(!newName) return;
+      localStorage.setItem("loggedInUser",newName);
       document.getElementById("userName").textContent=newName;
       document.getElementById("welcomeName").textContent=newName;
     }
