@@ -1,865 +1,384 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Smartschool NG — NextGen Dashboard (Demo)</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Smartschool NextGen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    :root{
-      --bg:#0f1724;
-      --panel:#0b1220;
-      --muted:#9aa7b2;
-      --accent:#06b6d4;
-      --accent-2:#7c3aed;
-      --card:#0b1220;
-      --glass: rgba(255,255,255,0.03);
-      --success:#22c55e;
-      --warn:#f59e0b;
-      --danger:#ef4444;
-      --radius:12px;
-      --glass-border: rgba(255,255,255,0.04);
-      --text:#e6edf3;
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0d1117;
+      color: #fff;
+      display: flex;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,#071022 0%, #07192a 60%);color:var(--text)}
-    .layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh;gap:20px;padding:20px}
-    /* Sidebar */
-    .sidebar{background:linear-gradient(180deg,var(--panel),#071227);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 40px rgba(2,6,23,0.6)}
-    .brand{font-weight:800;font-size:18px;display:flex;align-items:center;gap:10px}
-    .logoDot{width:10px;height:10px;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
-    .userRow{display:flex;align-items:center;gap:10px;padding:12px;border-radius:10px;background:var(--glass);border:1px solid var(--glass-border)}
-    .userRow img{width:44px;height:44px;border-radius:8px;object-fit:cover}
-    .small{font-size:13px;color:var(--muted)}
-    .nav{display:flex;flex-direction:column;gap:6px;margin-top:10px}
-    .nav button{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;border:0;background:transparent;color:var(--muted);cursor:pointer;font-weight:600}
-    .nav button.active{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));color:var(--text);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.02)}
-    .nav button i{width:18px;text-align:center}
-    .profile-actions{margin-top:auto;display:flex;gap:8px;align-items:center}
-    .btn{padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
-    .btn-ghost{background:transparent;border:1px solid var(--glass-border);color:var(--text)}
-    .btn-accent{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#042;box-shadow:0 6px 20px rgba(7,12,24,0.6)}
-    /* Main content */
-    .main{display:flex;flex-direction:column;gap:16px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border)}
-    .search{display:flex;align-items:center;gap:10px;background:#071227;padding:6px 10px;border-radius:10px;border:1px solid var(--glass-border)}
-    .search input{background:transparent;border:0;color:var(--text);outline:none}
-    .top-actions{display:flex;align-items:center;gap:10px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));border-radius:12px;padding:16px;border:1px solid var(--glass-border);box-shadow:0 8px 32px rgba(2,6,23,0.6)}
-    h2{margin:0;color:var(--text);font-size:16px}
-    .muted{color:var(--muted)}
-    /* timetable */
-    .timetable{overflow:auto;background:linear-gradient(180deg,#081226,#071427);border-radius:10px;padding:12px;border:1px solid var(--glass-border)}
-    .tt-grid{display:grid;grid-template-columns:140px repeat(5,1fr);gap:8px;align-items:start}
-    .tt-header{display:flex;align-items:center;justify-content:center;font-weight:700;padding:10px;background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01));border-radius:8px}
-    .tt-time{padding:12px;font-weight:700}
-    .tt-cell{min-height:64px;border-radius:8px;padding:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.02)}
-    .tt-subject{font-weight:700}
-    .tt-meta{font-size:12px;color:var(--muted);margin-top:6px}
-    /* messages */
-    .msg{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
-    /* grades */
-    .grade-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.02)}
-    .grade-canvas{width:76px;height:76px}
-    .legend{display:flex;gap:10px;align-items:center}
-    .legend span{display:flex;gap:6px;align-items:center}
-    .dot{width:12px;height:12px;border-radius:4px}
-    .dot.green{background:var(--success)} .dot.orange{background:var(--warn)} .dot.red{background:var(--danger)}
-    /* responsive */
-    @media(max-width:900px){
-      .layout{grid-template-columns:80px 1fr;padding:10px}
-      .tt-grid{grid-template-columns:100px repeat(5,1fr)}
+    .sidebar {
+      width: 250px;
+      background: #161b22;
+      height: 100vh;
+      position: fixed;
+      left: 0; top: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .profile img { width: 50px; height: 50px; border-radius: 50%; }
+    .sidebar nav a, .logout {
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .sidebar nav a:hover, .logout:hover { background: #21262d; }
+    .main {
+      margin-left: 250px;
+      flex: 1;
+      padding: 20px;
+    }
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px;
+    }
+    header input {
+      background: #161b22; border: none; padding: 8px 12px;
+      border-radius: 8px; color: #fff;
+    }
+    .clock { font-weight: bold; }
+    section { display: none; }
+    section.active { display: block; }
+    .card {
+      background: #161b22;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    input, textarea, select, button {
+      padding: 8px; border-radius: 6px; border: none; margin: 5px 0;
+    }
+    button { background: #238636; color: #fff; cursor: pointer; }
+    button:hover { background: #2ea043; }
   </style>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="brand"><div class="logoDot"></div> Smartschool NextGen</div>
-
-      <div class="userRow">
-        <img id="sidebarPfp" src="" alt="pfp">
-        <div style="flex:1">
-          <div id="sidebarUser" style="font-weight:700">Demo User</div>
-          <div id="sidebarRole" class="small">Leerling</div>
-        </div>
-      </div>
-
-      <nav class="nav" id="sidebarNav">
-        <button data-view="dashboard" class="active"><i class="fa fa-home"></i><span>Dashboard</span></button>
-        <button data-view="agenda"><i class="fa fa-calendar-days"></i><span>Agenda</span></button>
-        <button data-view="messages"><i class="fa fa-envelope"></i><span>Berichten</span></button>
-        <button data-view="results"><i class="fa fa-chart-line"></i><span>Resultaten</span></button>
-        <button data-view="attendance"><i class="fa fa-user-check"></i><span>Afwezigheden</span></button>
-        <button data-view="files"><i class="fa fa-folder"></i><span>Bestanden</span></button>
-        <button data-view="forms"><i class="fa fa-file-lines"></i><span>Formulieren</span></button>
-        <button data-view="canteen"><i class="fa fa-utensils"></i><span>Cafetaria</span></button>
-        <button data-view="transport"><i class="fa fa-bus"></i><span>Vervoer</span></button>
-        <button data-view="settings"><i class="fa fa-gear"></i><span>Instellingen</span></button>
-        <!-- teacher button injected by script -->
-      </nav>
-
-      <div class="profile-actions">
-        <button id="profileBtn" class="btn btn-ghost">Profiel</button>
-        <button id="logoutBtn" class="btn btn-ghost">Log uit</button>
-      </div>
-    </aside>
-
-    <main class="main">
-      <div class="topbar">
-        <div style="display:flex;gap:16px;align-items:center">
-          <div style="font-weight:800">Dashboard</div>
-          <div class="small muted" id="topGreeting">Goedemorgen</div>
-        </div>
-
-        <div style="display:flex;gap:10px;align-items:center">
-          <div class="search"><i class="fa fa-magnifying-glass muted"></i><input id="globalSearch" placeholder="Zoek in school..." /></div>
-          <div class="top-actions">
-            <div class="small muted" id="topClock">--:--</div>
-            <button class="btn btn-ghost" title="Notificaties"><i class="fa fa-bell"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <section id="dashboard" class="view active">
-        <div class="grid">
-          <div class="card">
-            <h2>Welkom</h2>
-            <p id="welcomeText" class="small muted">Fijn dat je er bent</p>
-            <div style="margin-top:10px;display:flex;gap:12px;align-items:center;justify-content:space-between">
-              <div>
-                <div class="small">Gelogd als</div>
-                <strong id="welcomeName"></strong><div class="small" id="welcomeRole"></div>
-              </div>
-              <div style="text-align:right">
-                <div class="small">Aanwezigheid</div>
-                <div style="font-size:22px;font-weight:800">85%</div>
-                <div class="small muted">Semester</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <h2>Vandaag in de agenda</h2>
-            <div id="agendaPreview" style="margin-top:12px"></div>
-          </div>
-
-          <div class="card">
-            <h2>Recente berichten</h2>
-            <div id="recentMessages" style="margin-top:10px"></div>
-          </div>
-
-          <div class="card">
-            <h2>Foodmaker — Dagmenu</h2>
-            <div id="canteenMenu" style="margin-top:10px"></div>
-            <div style="margin-top:12px">
-              <h3 class="small muted">Bestellingen</h3>
-              <ul id="canteenOrders" class="small muted" style="margin-top:8px"></ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Agenda: week timetable view -->
-      <section id="agenda" class="view">
-        <div class="card">
-          <h2>Lesrooster — Weekoverzicht</h2>
-          <div class="muted small" style="margin-top:6px">Klik dagen om te navigeren. Dit rooster is interactief en gevuld met actuele lessen.</div>
-          <div class="timetable" style="margin-top:12px">
-            <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
-              <button class="btn btn-ghost" id="prevWeek"><i class="fa fa-arrow-left"></i></button>
-              <div id="weekRange" class="small muted">Week</div>
-              <button class="btn btn-ghost" id="nextWeek"><i class="fa fa-arrow-right"></i></button>
-            </div>
-
-            <div class="tt-grid" id="ttGrid">
-              <!-- Grid is built by JS -->
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Messages -->
-      <section id="messages" class="view">
-        <div class="grid">
-          <div class="card">
-            <h2>Inbox</h2>
-            <div id="inboxList" style="margin-top:12px"></div>
-          </div>
-          <div class="card">
-            <h2>Nieuw bericht</h2>
-            <label class="small muted">Aan</label>
-            <select id="msgRecipient" class="input"></select>
-            <label class="small muted" style="margin-top:8px">Onderwerp</label>
-            <input id="msgSubject" class="input" />
-            <label class="small muted" style="margin-top:8px">Bericht</label>
-            <textarea id="msgBody" class="input" rows="6"></textarea>
-            <div style="margin-top:8px;display:flex;gap:8px">
-              <button class="btn btn-accent" onclick="sendMessage()">Verzenden</button>
-              <button class="btn btn-ghost" onclick="clearCompose()">Wis</button>
-            </div>
-            <div id="msgSendResult" class="small muted" style="margin-top:8px"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Results -->
-      <section id="results" class="view">
-        <div class="grid">
-          <div class="card">
-            <h2>Resultaten</h2>
-            <div id="gradesSection" style="margin-top:12px"></div>
-          </div>
-
-          <div class="card">
-            <h2>Overzicht</h2>
-            <div id="gradesOverview" style="margin-top:12px"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Teacher grading view (only shown for teacher) -->
-      <section id="gradeinput" class="view">
-        <div class="card">
-          <h2>Punten Ingeven — Leraar</h2>
-          <div class="small muted" style="margin-top:6px">Je kan enkel cijfers invoeren als percentage (0–100) voor de bestaande leerlingen.</div>
-          <div style="display:grid;gap:8px;margin-top:12px">
-            <label class="small muted">Les</label>
-            <select id="gradeLesson" class="input"></select>
-            <label class="small muted">Leerling</label>
-            <select id="gradeStudent" class="input"></select>
-            <label class="small muted">Punten (%)</label>
-            <input id="gradeValue" class="input" placeholder="Bijv. 85" />
-            <div style="display:flex;gap:8px">
-              <button class="btn btn-accent" onclick="saveGrade()">Sla op</button>
-              <button class="btn btn-ghost" onclick="clearGradeInput()">Reset</button>
-            </div>
-            <div id="gradeMsg" class="small muted"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Attendance -->
-      <section id="attendance" class="view">
-        <div class="card">
-          <h2>Afwezigheden</h2>
-          <p class="small muted" style="margin-top:6px">Demo overzicht</p>
-          <table style="width:100%;margin-top:12px">
-            <thead><tr><th class="small muted">Datum</th><th class="small muted">Leerling</th><th class="small muted">Reden</th></tr></thead>
-            <tbody id="absencesTable"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Files -->
-      <section id="files" class="view">
-        <div class="card">
-          <h2>Bestanden</h2>
-          <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
-            <input type="file" id="fileInput" />
-            <button class="btn btn-accent" onclick="uploadFile()">Upload</button>
-          </div>
-          <div style="margin-top:12px">
-            <h3 class="small muted">Gedeelde bestanden</h3>
-            <ul id="fileList" class="small muted" style="margin-top:8px"></ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- Forms -->
-      <section id="forms" class="view">
-        <div class="card">
-          <h2>Formulieren</h2>
-          <ul class="small muted" style="margin-top:8px">
-            <li>Inschrijvingsformulier — 01-09-2025</li>
-            <li>Toestemmingsbrief excursie — 15-09-2025</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- Canteen -->
-      <section id="canteen" class="view">
-        <div class="card">
-          <h2>Cafetaria — Foodmaker</h2>
-          <div id="canteenMenu" style="margin-top:12px"></div>
-          <div style="margin-top:12px">
-            <h3 class="small muted">Bestellingen</h3>
-            <ul id="canteenOrders" class="small muted" style="margin-top:8px"></ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- Transport -->
-      <section id="transport" class="view">
-        <div class="card">
-          <h2>Vervoer</h2>
-          <ul class="small muted" style="margin-top:8px">
-            <li>Route 12 — Station → School (07:45)</li>
-            <li>Route 8 — Centrum → School (08:00)</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- Settings -->
-      <section id="settings" class="view">
-        <div class="card">
-          <h2>Instellingen</h2>
-          <div style="display:grid;gap:8px;margin-top:8px">
-            <label class="small muted">Profielfoto URL</label>
-            <input id="setPfp" class="input" placeholder="https://..." />
-            <div id="pfpHint" class="small muted">Leerlingen kunnen hun profielfoto niet aanpassen in deze demo.</div>
-            <div style="display:flex;gap:8px">
-              <button id="savePfpBtn" class="btn btn-accent">Sla profielfoto op</button>
-              <button class="btn btn-ghost" onclick="logout()">Log uit</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </main>
-  </div>
-
-<script>
-/* ================= DEMO USERS & SESSION ================= */
-// Hardcoded demo users + pfps
-const users = {
-  "tristan.vansonhoven": { key: "tristan.vansonhoven", name: "Tristan Vansonhoven", role: "Leraar", pfp: "https://i.pravatar.cc/150?img=48" },
-  "kiandra.vandeweyer": { key: "kiandra.vandeweyer", name: "Kiandra Vandeweyer", role: "Leerling", pfp: "https://i.pravatar.cc/150?img=12" },
-  "lily.tseyen": { key: "lily.tseyen", name: "Lily Tseyen", role: "Leerling", pfp: "https://i.pravatar.cc/150?img=32" }
-};
-
-// demoUserKey: change to "kiandra.vandeweyer" or "lily.tseyen" to test student view.
-// Default set to teacher as requested:
-const demoUserKey = "tristan.vansonhoven";
-
-let sessionUser = users[demoUserKey];
-
-// Persist minimal session (so reload keeps user)
-localStorage.setItem('demo_current_user', sessionUser.key);
-
-/* ================ Storage bootstrapping ================ */
-if (!localStorage.getItem('app_users')) {
-  localStorage.setItem('app_users', JSON.stringify(Object.keys(users)));
-}
-if (!localStorage.getItem('messages')) localStorage.setItem('messages', JSON.stringify([]));
-if (!localStorage.getItem('grades')) localStorage.setItem('grades', JSON.stringify({}));
-if (!localStorage.getItem('files')) localStorage.setItem('files', JSON.stringify([]));
-if (!localStorage.getItem('canteen_orders')) localStorage.setItem('canteen_orders', JSON.stringify([]));
-
-/* ================= UI Init ================== */
-document.getElementById('sidebarUser').textContent = sessionUser.name;
-document.getElementById('sidebarRole').textContent = sessionUser.role;
-document.getElementById('sidebarPfp').src = sessionUser.pfp;
-document.getElementById('welcomeName').textContent = sessionUser.name;
-document.getElementById('welcomeRole').textContent = sessionUser.role;
-document.getElementById('welcomeText').textContent = `Fijn dat je er bent, ${sessionUser.name}!`;
-document.getElementById('topGreeting').textContent = currentGreeting();
-document.getElementById('topClock').textContent = getTime();
-document.getElementById('setPfp').value = sessionUser.pfp;
-
-/* ================= Sidebar & Views ================== */
-const navButtons = document.querySelectorAll('#sidebarNav button');
-navButtons.forEach(b => b.addEventListener('click', () => switchView(b.dataset.view, b)));
-
-function switchView(viewId, btnEl) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  const v = document.getElementById(viewId);
-  if (v) v.classList.add('active');
-
-  document.querySelectorAll('#sidebarNav button').forEach(nb => nb.classList.remove('active'));
-  if (btnEl) btnEl.classList.add('active');
-
-  // dynamic rendering on view
-  if (viewId === 'agenda') renderTimetable();
-  if (viewId === 'messages') renderMessagesUI();
-  if (viewId === 'results') renderResults();
-  if (viewId === 'files') renderFiles();
-  if (viewId === 'canteen') renderCanteen();
-}
-
-/* show teacher button if teacher */
-if (sessionUser.role === 'Leraar') {
-  const nav = document.getElementById('sidebarNav');
-  const btn = document.createElement('button');
-  btn.dataset.view = 'gradeinput';
-  btn.innerHTML = '<i class="fa fa-pen"></i><span>Punten Ingeven</span>';
-  btn.addEventListener('click', () => switchView('gradeinput', btn));
-  nav.appendChild(btn);
-}
-
-/* logout -> index.html */
-document.getElementById('logoutBtn').addEventListener('click', logout);
-function logout() {
-  // demo: clear session
-  localStorage.removeItem('demo_current_user');
-  window.location.href = 'index.html';
-}
-
-/* clock */
-setInterval(()=> {
-  document.getElementById('topClock').textContent = getTime();
-  document.getElementById('topGreeting').textContent = currentGreeting();
-}, 1000);
-function getTime() { return new Date().toLocaleTimeString('nl-NL', {hour:'2-digit',minute:'2-digit'}); }
-function currentGreeting() {
-  const h = new Date().getHours();
-  if (h < 12) return 'Goedemorgen';
-  if (h < 18) return 'Goedemiddag';
-  return 'Goedenavond';
-}
-
-/* ================= Agenda (timetable) ================== */
-/* We create a 5-day grid (ma-vr) with fixed lesson slots */
-const weekOffsets = { // sample week offsets: will display current week +/- navigation
-  offsetWeeks: 0
-};
-const periodTimes = [
-  {label: '1', time: '08:25 - 09:15'},
-  {label: '2', time: '09:15 - 10:05'},
-  {label: '3', time: '10:15 - 11:05'},
-  {label: '4', time: '11:05 - 11:55'},
-  {label: 'Middag', time: '11:55 - 12:45'},
-  {label: '5', time: '12:45 - 13:35'},
-  {label: '6', time: '13:35 - 14:25'},
-  {label: '7', time: '14:35 - 15:25'}
-];
-
-// lessons dataset (with day index 0=Mon ..4=Fri and period index)
-const timetable = [
-  // monday
-  {day:0, period:0, subject:'ZW-Praktijk', room:'A207', teacher:'Klara Pauwels'},
-  {day:0, period:1, subject:'Godsdienst', room:'A204', teacher:'Anouk Goor'},
-  {day:0, period:2, subject:'ZW-Maaltijdzorg', room:'A109/H110', teacher:'Klara Pauwels'},
-  {day:0, period:3, subject:'Artistieke vorming', room:'B101', teacher:'Bieke Virns'},
-  // tuesday
-  {day:1, period:0, subject:'ZW-Pedagogisch handelen', room:'A204', teacher:'Charlien Mertens'},
-  {day:1, period:1, subject:'Frans', room:'A204', teacher:'Tinne Helsen'},
-  {day:1, period:2, subject:'Wiskunde', room:'A204', teacher:'Sarah Driesen'},
-  // wednesday
-  {day:2, period:0, subject:'Maatschappelijke vorming', room:'A204', teacher:'Marleen Holvoet'},
-  {day:2, period:1, subject:'ZW-Klasuur', room:'A204', teacher:'Sterre Vanlommel'},
-  {day:2, period:2, subject:'Nederlands', room:'A204', teacher:'Marleen Holvoet'},
-  // thursday
-  {day:3, period:0, subject:'ZW-Gezondheid en welzijn', room:'A204', teacher:'An Vervangen'},
-  {day:3, period:1, subject:'ZW-Pedagogisch handelen', room:'A204', teacher:'Charlien Mertens'},
-  // friday
-  {day:4, period:2, subject:'Informatica', room:'A204', teacher:'Wendy Thijs'},
-  {day:4, period:3, subject:'Lichamelijke opvoeding', room:'Sportlokalen', teacher:'Katrien Erpels'}
-];
-
-function renderTimetable() {
-  const grid = document.getElementById('ttGrid');
-  grid.innerHTML = '';
-  // build headers
-  const days = ['maandag','dinsdag','woensdag','donderdag','vrijdag'];
-  grid.appendChild(el('div', {className:'tt-header'} , 'Tijd'));
-  days.forEach(d => grid.appendChild(el('div',{className:'tt-header', style:'text-transform:capitalize'}, d)));
-  // fill rows: each period
-  periodTimes.forEach((p, pi) => {
-    // time column
-    const timeCol = el('div', {className:'tt-time'}, `<div style="font-weight:700">${p.label}</div><div class="small muted">${p.time}</div>`);
-    grid.appendChild(timeCol);
-    for (let day=0; day<5; day++) {
-      const cell = el('div', {className:'tt-cell', dataset:{day,period:pi}}, '');
-      // find a timetable entry
-      const entry = timetable.find(t => t.day===day && t.period===pi);
-      if (entry) {
-        cell.innerHTML = `<div class="tt-subject">${escapeHtml(entry.subject)}</div>
-          <div class="tt-meta">${escapeHtml(entry.room)} • ${escapeHtml(entry.teacher)}</div>`;
-      } else {
-        cell.innerHTML = `<div class="small muted">— vrij —</div>`;
-      }
-      grid.appendChild(cell);
-    }
-  });
-}
-
-function el(tag, opts, html) {
-  const node = document.createElement(tag);
-  if (opts) {
-    if (opts.className) node.className = opts.className;
-    if (opts.style) node.style = opts.style;
-    if (opts.dataset) Object.entries(opts.dataset).forEach(([k,v]) => node.dataset[k]=v);
-  }
-  if (html !== undefined) node.innerHTML = html;
-  return node;
-}
-
-/* Prev/Next week (demo only affects week label) */
-document.getElementById('prevWeek').addEventListener('click', ()=>{
-  weekOffsets.offsetWeeks -= 1; updateWeekLabel();
-});
-document.getElementById('nextWeek').addEventListener('click', ()=>{
-  weekOffsets.offsetWeeks += 1; updateWeekLabel();
-});
-function updateWeekLabel(){
-  const start = new Date();
-  start.setDate(start.getDate() + weekOffsets.offsetWeeks*7);
-  const monday = start;
-  // adjust to monday
-  const day = monday.getDay();
-  const diff = (day + 6) % 7; // monday=0
-  monday.setDate(monday.getDate() - diff);
-  const end = new Date(monday); end.setDate(monday.getDate()+4);
-  document.getElementById('weekRange').textContent = `${formatDate(monday)} — ${formatDate(end)}`;
-}
-function formatDate(d){ return d.toLocaleDateString('nl-NL',{day:'2-digit',month:'2-digit',year:'numeric'}); }
-
-/* initial render */
-renderTimetable();
-updateWeekLabel();
-
-/* ================= Messages ================= */
-function renderMessagesUI(){
-  const usersList = JSON.parse(localStorage.getItem('app_users') || '[]');
-  const sel = document.getElementById('msgRecipient');
-  sel.innerHTML = '';
-  usersList.filter(u => u !== sessionUser.key).forEach(u => {
-    const opt = document.createElement('option'); opt.value = u; opt.textContent = users[u] ? users[u].name : u; sel.appendChild(opt);
-  });
-  renderInbox();
-  renderRecentMessages();
-}
-
-function sendMessage(){
-  const to = document.getElementById('msgRecipient').value;
-  const subject = document.getElementById('msgSubject').value.trim();
-  const body = document.getElementById('msgBody').value.trim();
-  const res = document.getElementById('msgSendResult');
-  if (!to || !subject || !body) { res.textContent = 'Vul ontvanger, onderwerp en bericht in.'; return; }
-  const messages = JSON.parse(localStorage.getItem('messages') || '[]');
-  messages.push({id:Date.now(), from:sessionUser.key, to, subject, body, date:new Date().toISOString()});
-  localStorage.setItem('messages', JSON.stringify(messages));
-  res.textContent = 'Bericht verzonden.';
-  document.getElementById('msgSubject').value=''; document.getElementById('msgBody').value='';
-  renderInbox(); renderRecentMessages();
-  setTimeout(()=> res.textContent='',2000);
-}
-function clearCompose(){ document.getElementById('msgSubject').value=''; document.getElementById('msgBody').value=''; document.getElementById('msgSendResult').textContent=''; }
-
-function renderInbox(){
-  const messages = JSON.parse(localStorage.getItem('messages') || '[]');
-  const inbox = messages.filter(m=>m.to===sessionUser.key).reverse();
-  const container = document.getElementById('inboxList');
-  container.innerHTML = '';
-  if (inbox.length===0) { container.innerHTML = '<div class="small muted">Geen berichten.</div>'; return; }
-  inbox.forEach(m => {
-    const fromName = users[m.from] ? users[m.from].name : m.from;
-    const el = document.createElement('div'); el.className='msg'; el.style.marginBottom='8px';
-    el.innerHTML = `<strong>${escapeHtml(m.subject)}</strong><div class="small muted">Van: ${escapeHtml(fromName)} • ${new Date(m.date).toLocaleString()}</div><div style="margin-top:8px">${escapeHtml(m.body)}</div>`;
-    container.appendChild(el);
-  });
-}
-
-function renderRecentMessages(){
-  const messages = JSON.parse(localStorage.getItem('messages') || '[]');
-  const recents = messages.filter(m => m.to===sessionUser.key || m.from===sessionUser.key).slice(-3).reverse();
-  const box = document.getElementById('recentMessages');
-  box.innerHTML = '';
-  if (recents.length===0) box.innerHTML = '<div class="small muted">Geen recente berichten</div>';
-  recents.forEach(m=>{
-    const d = document.createElement('div'); d.className='msg'; d.style.marginBottom='8px';
-    const fromName = users[m.from] ? users[m.from].name : m.from;
-    const toName = users[m.to] ? users[m.to].name : m.to;
-    d.innerHTML = `<strong>${escapeHtml(m.subject)}</strong><div class="small muted">${escapeHtml(fromName)} → ${escapeHtml(toName)}</div>`;
-    box.appendChild(d);
-  });
-}
-
-/* ================= Files ================= */
-function uploadFile(){
-  const fInput = document.getElementById('fileInput');
-  const files = fInput.files;
-  if (!files || files.length===0) return alert('Kies een bestand.');
-  const list = JSON.parse(localStorage.getItem('files') || '[]');
-  for (let i=0;i<files.length;i++){
-    list.push({name:files[i].name,uploader:sessionUser.key,date:new Date().toISOString()});
-  }
-  localStorage.setItem('files', JSON.stringify(list));
-  renderFiles();
-  fInput.value='';
-}
-function renderFiles(){
-  const list = JSON.parse(localStorage.getItem('files') || '[]');
-  const ul = document.getElementById('fileList');
-  ul.innerHTML = '';
-  if (list.length===0){ ul.innerHTML = '<div class="small muted">Geen bestanden.</div>'; return; }
-  list.slice().reverse().forEach(f=>{
-    const li = document.createElement('li');
-    const uploader = users[f.uploader] ? users[f.uploader].name : f.uploader;
-    li.innerHTML = `<strong>${escapeHtml(f.name)}</strong> <span class="small muted">(${escapeHtml(uploader)} • ${new Date(f.date).toLocaleString()})</span>`;
-    ul.appendChild(li);
-  });
-}
-
-/* ================= Canteen ================= */
-const menus = [
-  {name:'Wrap', price:'€3.00'},
-  {name:'Bowl', price:'€4.20'},
-  {name:'Pasta', price:'€4.00'},
-  {name:'Broodje', price:'€3.00'}
-];
-function renderCanteen(){
-  const menuDivs = menus.map((m,idx)=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;margin-bottom:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.02)">
-      <div><strong>${escapeHtml(m.name)}</strong><div class="small muted">Foodmaker</div></div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <div class="small muted">${m.price}</div>
-        <button class="btn btn-accent" onclick="orderCanteen(${idx})">Bestel</button>
+  <aside class="sidebar">
+    <div class="profile">
+      <img id="userPfp" src="" alt="pfp">
+      <div>
+        <strong id="userName"></strong><br>
+        <small id="userRole"></small>
       </div>
     </div>
-  `).join('');
-  document.getElementById('canteenMenu').innerHTML = menuDivs;
-  renderOrders();
-}
-function orderCanteen(idx){
-  const orders = JSON.parse(localStorage.getItem('canteen_orders') || '[]');
-  orders.push({user:sessionUser.key,item:menus[idx].name,price:menus[idx].price,date:new Date().toISOString()});
-  localStorage.setItem('canteen_orders', JSON.stringify(orders));
-  renderOrders();
-  alert('Bestelling geplaatst bij Foodmaker.');
-}
-function renderOrders(){
-  const orders = JSON.parse(localStorage.getItem('canteen_orders') || '[]');
-  const ul = document.getElementById('canteenOrders');
-  ul.innerHTML = '';
-  if (orders.length===0) { ul.innerHTML = '<div class="small muted">Nog geen bestellingen.</div>'; return; }
-  orders.slice().reverse().forEach(o=>{
-    const li = document.createElement('li');
-    const name = users[o.user] ? users[o.user].name : o.user;
-    li.innerHTML = `${escapeHtml(name)} bestelde ${escapeHtml(o.item)} (${escapeHtml(o.price)}) <span class="small muted">- ${new Date(o.date).toLocaleString()}</span>`;
-    ul.appendChild(li);
-  });
-}
+    <nav>
+      <a onclick="switchView('dashboard')"><i class="fa fa-home"></i> Dashboard</a>
+      <a onclick="switchView('agenda')"><i class="fa fa-calendar"></i> Agenda</a>
+      <a onclick="switchView('messages')"><i class="fa fa-envelope"></i> Berichten</a>
+      <a onclick="switchView('results')"><i class="fa fa-graduation-cap"></i> Resultaten</a>
+      <a onclick="switchView('attendance')"><i class="fa fa-user-check"></i> Afwezigheden</a>
+      <a onclick="switchView('files')"><i class="fa fa-folder"></i> Bestanden</a>
+      <a onclick="switchView('forms')"><i class="fa fa-list"></i> Formulieren</a>
+      <a onclick="switchView('canteen')"><i class="fa fa-utensils"></i> Cafetaria</a>
+      <a onclick="switchView('transport')"><i class="fa fa-bus"></i> Vervoer</a>
+      <a onclick="switchView('settings')"><i class="fa fa-cog"></i> Instellingen</a>
+    </nav>
+    <div class="logout" onclick="logout()"><i class="fa fa-sign-out-alt"></i> Uitloggen</div>
+  </aside>
 
-/* ================= Absences demo ================= */
-function renderAbsences(){
-  const rows = [
-    {date:'2025-09-10', student:'kiandra.vandeweyer', reason:'Ziek'},
-    {date:'2025-09-11', student:'lily.tseyen', reason:'Tandarts'}
-  ];
-  const tbody = document.getElementById('absencesTable');
-  tbody.innerHTML = rows.map(r => `<tr><td class="small muted">${r.date}</td><td class="small">${users[r.student].name}</td><td class="small muted">${r.reason}</td></tr>`).join('');
-}
+  <main class="main">
+    <header>
+      <input type="text" placeholder="Zoek...">
+      <div id="clock" class="clock"></div>
+    </header>
 
-/* ================= Grades (percent + circular charts) ================= */
-// Utility to draw circular meter
-function renderGradeCircleOnCanvas(canvas, percent) {
-  const ctx = canvas.getContext('2d');
-  const size = Math.min(canvas.clientWidth, canvas.clientHeight);
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = size * dpr;
-  canvas.height = size * dpr;
-  ctx.scale(dpr, dpr);
-  ctx.clearRect(0,0,size,size);
+    <!-- Dashboard -->
+    <section id="dashboard" class="active">
+      <div class="card">
+        <h3>Welkom terug, <span id="welcomeName"></span>!</h3>
+        <p>Hier vind je een overzicht van je schoolleven.</p>
+      </div>
+    </section>
 
-  const cx = size/2, cy = size/2, radius = (size/2) - 8;
-  // background arc
-  ctx.beginPath();
-  ctx.lineWidth = 8;
-  ctx.strokeStyle = '#1b2430';
-  ctx.arc(cx, cy, radius, 0, Math.PI*2);
-  ctx.stroke();
+    <!-- Agenda -->
+    <section id="agenda">
+      <div class="card">
+        <h3>Agenda</h3>
+        <form onsubmit="addAgenda(event)">
+          <input type="text" id="agendaText" placeholder="Nieuwe afspraak...">
+          <button>Toevoegen</button>
+        </form>
+        <ul id="agendaList"></ul>
+      </div>
+    </section>
 
-  // choose color
-  let color = '#ef4444';
-  if (percent >= 70) color = '#22c55e';
-  else if (percent >= 50) color = '#f59e0b';
+    <!-- Berichten -->
+    <section id="messages">
+      <div class="card">
+        <h3>Berichten</h3>
+        <form onsubmit="sendMessage(event)">
+          <select id="msgTo"></select>
+          <input type="text" id="msgText" placeholder="Typ een bericht...">
+          <button>Verstuur</button>
+        </form>
+        <div id="msgList"></div>
+      </div>
+    </section>
 
-  // foreground
-  const start = -Math.PI/2;
-  const end = start + (Math.PI*2) * (Math.max(0,Math.min(100,percent))/100);
-  ctx.beginPath();
-  ctx.lineCap = 'round';
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 8;
-  ctx.arc(cx, cy, radius, start, end);
-  ctx.stroke();
+    <!-- Resultaten -->
+    <section id="results">
+      <div class="card">
+        <h3>Resultaten</h3>
+        <form onsubmit="addGrade(event)">
+          <input type="text" id="course" placeholder="Vak">
+          <input type="number" id="grade" placeholder="Punt">
+          <button>Opslaan</button>
+        </form>
+        <ul id="gradeList"></ul>
+      </div>
+    </section>
 
-  // text
-  ctx.font = 'bold 14px Inter, Arial';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#e6edf3';
-  ctx.fillText(Math.round(percent) + '%', cx, cy);
-}
+    <!-- Afwezigheden -->
+    <section id="attendance">
+      <div class="card">
+        <h3>Afwezigheden</h3>
+        <form onsubmit="addAbsence(event)">
+          <input type="date" id="absDate">
+          <input type="text" id="absReason" placeholder="Reden">
+          <button>Toevoegen</button>
+        </form>
+        <ul id="absList"></ul>
+      </div>
+    </section>
 
-function createGradeCanvas(percent){
-  const wrap = document.createElement('div');
-  wrap.style.width = '76px'; wrap.style.height = '76px';
-  const canvas = document.createElement('canvas');
-  canvas.style.width = '100%'; canvas.style.height='100%';
-  wrap.appendChild(canvas);
-  requestAnimationFrame(()=> renderGradeCircleOnCanvas(canvas, percent));
-  return wrap;
-}
+    <!-- Bestanden -->
+    <section id="files">
+      <div class="card">
+        <h3>Bestanden</h3>
+        <input type="file" id="fileInput">
+        <button onclick="uploadFile()">Upload</button>
+        <ul id="fileList"></ul>
+      </div>
+    </section>
 
-// Save grade (percent) for student+lesson
-function saveGradeForStudent(studentKey, lessonKey, percent) {
-  const grades = JSON.parse(localStorage.getItem('grades') || '{}');
-  if (!grades[studentKey]) grades[studentKey] = {};
-  grades[studentKey][lessonKey] = Number(percent);
-  localStorage.setItem('grades', JSON.stringify(grades));
-}
+    <!-- Formulieren -->
+    <section id="forms">
+      <div class="card">
+        <h3>Formulieren</h3>
+        <form onsubmit="addForm(event)">
+          <input type="text" id="formText" placeholder="Antwoord...">
+          <button>Indienen</button>
+        </form>
+        <ul id="formList"></ul>
+      </div>
+    </section>
 
-// UI: render results
-function renderResults(){
-  const grades = JSON.parse(localStorage.getItem('grades') || '{}');
-  const gradesSection = document.getElementById('gradesSection');
-  gradesSection.innerHTML = '';
+    <!-- Cafetaria -->
+    <section id="canteen">
+      <div class="card">
+        <h3>Cafetaria</h3>
+        <form onsubmit="orderFood(event)">
+          <select id="foodItem">
+            <option>Broodje kaas</option>
+            <option>Pizza</option>
+            <option>Salade</option>
+          </select>
+          <button>Bestel</button>
+        </form>
+        <ul id="orderList"></ul>
+      </div>
+    </section>
 
-  if (sessionUser.role === 'Leraar') {
-    // teacher: show each student with their lessons and small circle per lesson
-    const students = ['kiandra.vandeweyer','lily.tseyen'];
-    students.forEach(sk => {
-      const studentName = users[sk] ? users[sk].name : sk;
-      const box = document.createElement('div'); box.style.marginBottom='12px';
-      const title = document.createElement('div'); title.innerHTML = `<strong>${escapeHtml(studentName)}</strong>`; box.appendChild(title);
-      const gdiv = document.createElement('div'); gdiv.style.marginTop='8px';
-      const stuGrades = grades[sk] || {};
-      if (Object.keys(stuGrades).length === 0) {
-        gdiv.innerHTML = '<div class="small muted">Geen punten</div>';
-      } else {
-        Object.entries(stuGrades).forEach(([lesson, val])=>{
-          const row = document.createElement('div'); row.className='grade-row'; row.style.marginTop='8px';
-          const left = document.createElement('div'); left.innerHTML = `<div style="font-weight:700">${escapeHtml(lesson)}</div><div class="small muted">${escapeHtml(val)}%</div>`;
-          const right = createGradeCanvas(val);
-          row.appendChild(left); row.appendChild(right);
-          gdiv.appendChild(row);
-        });
-      }
-      box.appendChild(gdiv);
-      gradesSection.appendChild(box);
-    });
-  } else {
-    // student: show their grades
-    const myKey = sessionUser.key;
-    const myGrades = grades[myKey] || {};
-    if (Object.keys(myGrades).length === 0) {
-      gradesSection.innerHTML = '<div class="small muted">Je hebt nog geen punten.</div>';
-    } else {
-      Object.entries(myGrades).forEach(([lesson, val])=>{
-        const row = document.createElement('div'); row.className='grade-row'; row.style.marginTop='8px';
-        const left = document.createElement('div'); left.innerHTML = `<div style="font-weight:700">${escapeHtml(lesson)}</div><div class="small muted">Behaald</div>`;
-        const right = createGradeCanvas(val);
-        row.appendChild(left); row.appendChild(right);
-        gradesSection.appendChild(row);
-      });
+    <!-- Vervoer -->
+    <section id="transport">
+      <div class="card">
+        <h3>Vervoer</h3>
+        <p>Hier zie je info over schoolbussen en vervoer.</p>
+      </div>
+    </section>
+
+    <!-- Instellingen -->
+    <section id="settings">
+      <div class="card">
+        <h3>Instellingen</h3>
+        <input type="text" id="newName" placeholder="Nieuwe naam">
+        <button onclick="updateProfile()">Opslaan</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // SECURITY: check login
+    const user = localStorage.getItem("loggedInUser");
+    if (!user) window.location.href = "index.html";
+
+    // Init UI
+    document.getElementById("userName").textContent = user;
+    document.getElementById("welcomeName").textContent = user;
+    document.getElementById("userRole").textContent = localStorage.getItem("userRole") || "";
+    document.getElementById("userPfp").src = localStorage.getItem("userPfp") || "https://i.pravatar.cc/100";
+
+    // Views
+    function switchView(id) {
+      document.querySelectorAll("main section").forEach(s => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
     }
-  }
 
-  // overview (right)
-  const overview = document.getElementById('gradesOverview');
-  overview.innerHTML = '';
-  const gradesAll = JSON.parse(localStorage.getItem('grades') || '{}');
-  if (sessionUser.role === 'Leraar') {
-    // list summary per student
-    for (const sk of Object.keys(gradesAll).length ? Object.keys(gradesAll) : ['kiandra.vandeweyer','lily.tseyen']) {
-      const name = users[sk] ? users[sk].name : sk;
-      const box = document.createElement('div'); box.style.marginBottom='10px';
-      box.innerHTML = `<div style="font-weight:700">${escapeHtml(name)}</div>`;
-      const g = gradesAll[sk] || {};
-      if (Object.keys(g).length === 0) box.innerHTML += '<div class="small muted">Geen punten</div>';
-      else {
-        Object.entries(g).forEach(([l,v]) => {
-          const line = document.createElement('div'); line.className='small muted'; line.innerHTML = `${escapeHtml(l)} — ${escapeHtml(v)}%`; box.appendChild(line);
-        });
-      }
-      overview.appendChild(box);
+    // Logout
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      localStorage.removeItem("userRole");
+      localStorage.removeItem("userPfp");
+      window.location.href = "index.html";
     }
-  } else {
-    // student sees class overview (simple)
-    const students = Object.keys(gradesAll);
-    if (students.length === 0) overview.innerHTML = '<div class="small muted">Geen punten beschikbaar</div>';
-    else {
-      students.forEach(sk => {
-        const name = users[sk] ? users[sk].name : sk;
-        const box = document.createElement('div'); box.style.marginBottom='10px'; box.innerHTML = `<div style="font-weight:700">${escapeHtml(name)}</div>`;
-        const g = gradesAll[sk] || {};
-        if (Object.keys(g).length === 0) box.innerHTML += '<div class="small muted">Geen punten</div>';
-        else {
-          Object.entries(g).forEach(([l,v]) => {
-            const line = document.createElement('div'); line.className='small muted'; line.innerHTML = `${escapeHtml(l)} — ${escapeHtml(v)}%`; box.appendChild(line);
-          });
-        }
-        overview.appendChild(box);
-      });
+
+    // Clock
+    function updateClock() {
+      const n = new Date();
+      document.getElementById("clock").textContent = n.toLocaleTimeString("nl-NL", {hour: "2-digit", minute: "2-digit"});
     }
-  }
-}
+    setInterval(updateClock, 1000); updateClock();
 
-/* Teacher quick grade input (gradeinput view) */
-function populateGradeInputOptions(){
-  // lessons list from timetable, unique
-  const lessonSet = new Set(timetable.map(t => t.subject));
-  const lessonSelect = document.getElementById('gradeLesson');
-  lessonSelect.innerHTML = Array.from(lessonSet).map(l => `<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join('');
-  const studentSelect = document.getElementById('gradeStudent');
-  // only allow the 2 students
-  const teacherStudents = ['kiandra.vandeweyer','lily.tseyen'];
-  studentSelect.innerHTML = teacherStudents.map(k => `<option value="${k}">${escapeHtml(users[k].name)}</option>`).join('');
-}
-populateGradeInputOptions();
+    // === Agenda ===
+    const agendaKey = "agenda_" + user;
+    let agenda = JSON.parse(localStorage.getItem(agendaKey) || "[]");
+    function renderAgenda() {
+      document.getElementById("agendaList").innerHTML = agenda.map(a => `<li>${a}</li>`).join("");
+    }
+    function addAgenda(e) {
+      e.preventDefault();
+      const t = document.getElementById("agendaText").value;
+      if (!t) return;
+      agenda.push(t);
+      localStorage.setItem(agendaKey, JSON.stringify(agenda));
+      document.getElementById("agendaText").value = "";
+      renderAgenda();
+    }
+    renderAgenda();
 
-function saveGrade(){
-  const lesson = document.getElementById('gradeLesson').value;
-  const student = document.getElementById('gradeStudent').value;
-  const value = Number(document.getElementById('gradeValue').value.trim());
-  const msg = document.getElementById('gradeMsg');
-  if (!lesson || !student || isNaN(value)) { msg.textContent = 'Vul les, leerling en geldig cijfer (0–100) in.'; return; }
-  if (value < 0 || value > 100) { msg.textContent = 'Punten moeten tussen 0 en 100 liggen.'; return; }
-  saveGradeForStudent(student, lesson, value);
-  msg.textContent = 'Punten opgeslagen.';
-  renderResults();
-  setTimeout(()=> msg.textContent='',2000);
-}
-function clearGradeInput(){ document.getElementById('gradeValue').value=''; document.getElementById('gradeMsg').textContent=''; }
+    // === Messages ===
+    const msgKey = "messages";
+    let messages = JSON.parse(localStorage.getItem(msgKey) || "[]");
+    const users = JSON.parse(localStorage.getItem("app_users") || "[]");
+    document.getElementById("msgTo").innerHTML = users.filter(u=>u!==user).map(u=>`<option>${u}</option>`).join("");
+    function renderMessages() {
+      const div = document.getElementById("msgList");
+      div.innerHTML = messages.filter(m => m.from===user || m.to===user)
+        .map(m => `<p><b>${m.from} ➝ ${m.to}:</b> ${m.text}</p>`).join("");
+    }
+    function sendMessage(e) {
+      e.preventDefault();
+      const to = document.getElementById("msgTo").value;
+      const text = document.getElementById("msgText").value;
+      if (!text) return;
+      messages.push({from:user, to, text});
+      localStorage.setItem(msgKey, JSON.stringify(messages));
+      document.getElementById("msgText").value="";
+      renderMessages();
+    }
+    renderMessages();
 
-/* ================= Settings: pfp control ================= */
-const savePfpBtn = document.getElementById('savePfpBtn');
-if (sessionUser.role === 'Leerling') {
-  // students cannot change pfp in this demo
-  document.getElementById('setPfp').disabled = true;
-  savePfpBtn.disabled = true;
-  document.getElementById('pfpHint').textContent = 'Leerlingen kunnen hun profielfoto niet aanpassen in deze demo.';
-} else {
-  document.getElementById('setPfp').disabled = false;
-  savePfpBtn.disabled = false;
-  document.getElementById('pfpHint').textContent = 'Leraren kunnen hun profielfoto wijzigen.';
-  savePfpBtn.addEventListener('click', ()=>{
-    const url = document.getElementById('setPfp').value.trim();
-    if (!url) return alert('Voer een geldige URL in.');
-    sessionUser.pfp = url;
-    users[sessionUser.key].pfp = url;
-    document.getElementById('sidebarPfp').src = url;
-    alert('Profielfoto bijgewerkt.');
-  });
-}
+    // === Results ===
+    const gradeKey = "grades_" + user;
+    let grades = JSON.parse(localStorage.getItem(gradeKey) || "[]");
+    function renderGrades() {
+      document.getElementById("gradeList").innerHTML = grades.map(g=>`<li>${g.course}: ${g.grade}</li>`).join("");
+    }
+    function addGrade(e) {
+      e.preventDefault();
+      const c = document.getElementById("course").value;
+      const g = document.getElementById("grade").value;
+      if (!c||!g) return;
+      grades.push({course:c, grade:g});
+      localStorage.setItem(gradeKey, JSON.stringify(grades));
+      document.getElementById("course").value="";
+      document.getElementById("grade").value="";
+      renderGrades();
+    }
+    renderGrades();
 
-/* ================= Render initial things ================= */
-renderMessagesUI();
-renderFiles();
-renderCanteen();
-renderOrders();
-renderAbsences();
-renderResults();
-renderTimetable();
-updateWeekLabel();
+    // === Attendance ===
+    const absKey = "abs_" + user;
+    let abs = JSON.parse(localStorage.getItem(absKey) || "[]");
+    function renderAbs() {
+      document.getElementById("absList").innerHTML = abs.map(a=>`<li>${a.date} - ${a.reason}</li>`).join("");
+    }
+    function addAbsence(e) {
+      e.preventDefault();
+      const d = document.getElementById("absDate").value;
+      const r = document.getElementById("absReason").value;
+      if (!d||!r) return;
+      abs.push({date:d, reason:r});
+      localStorage.setItem(absKey, JSON.stringify(abs));
+      renderAbs();
+    }
+    renderAbs();
 
-/* small helpers */
-function escapeHtml(s){ if (!s && s!==0) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;'); }
+    // === Files ===
+    const fileKey = "files_" + user;
+    let files = JSON.parse(localStorage.getItem(fileKey) || "[]");
+    function renderFiles() {
+      document.getElementById("fileList").innerHTML = files.map(f=>`<li>${f}</li>`).join("");
+    }
+    function uploadFile() {
+      const f = document.getElementById("fileInput").files[0];
+      if (!f) return;
+      files.push(f.name);
+      localStorage.setItem(fileKey, JSON.stringify(files));
+      renderFiles();
+    }
+    renderFiles();
 
-/* Helper to format date already defined earlier (formatDate) if needed */
+    // === Forms ===
+    const formKey = "forms_" + user;
+    let forms = JSON.parse(localStorage.getItem(formKey) || "[]");
+    function renderForms() {
+      document.getElementById("formList").innerHTML = forms.map(f=>`<li>${f}</li>`).join("");
+    }
+    function addForm(e) {
+      e.preventDefault();
+      const t = document.getElementById("formText").value;
+      if (!t) return;
+      forms.push(t);
+      localStorage.setItem(formKey, JSON.stringify(forms));
+      document.getElementById("formText").value="";
+      renderForms();
+    }
+    renderForms();
 
-/* helper to render orders used earlier */
-function renderOrders(){ renderOrders = renderOrders; /* placeholder — already defined above */ }
+    // === Canteen ===
+    const orderKey = "canteen_" + user;
+    let orders = JSON.parse(localStorage.getItem(orderKey) || "[]");
+    function renderOrders() {
+      document.getElementById("orderList").innerHTML = orders.map(o=>`<li>${o}</li>`).join("");
+    }
+    function orderFood(e) {
+      e.preventDefault();
+      const item = document.getElementById("foodItem").value;
+      orders.push(item);
+      localStorage.setItem(orderKey, JSON.stringify(orders));
+      renderOrders();
+    }
+    renderOrders();
 
-/* Utility: make sure messages preview and inbox show */
-function renderInbox(){ renderInbox = renderInbox; } // placeholder (already exists)
-
-/* End of script */
-</script>
+    // === Settings ===
+    function updateProfile() {
+      const newName = document.getElementById("newName").value;
+      if (!newName) return;
+      localStorage.setItem("loggedInUser", newName);
+      document.getElementById("userName").textContent=newName;
+      document.getElementById("welcomeName").textContent=newName;
+    }
+  </script>
 </body>
 </html>
