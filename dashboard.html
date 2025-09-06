@@ -1,303 +1,170 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smartschool Modern Clone</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Smartschool NextGen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f5f5;
-      color: #333;
+    :root{
+      --bg:#f4f6f8;--card:#ffffff;--muted:#6b7280;--accent:#9b1c1c;--accent-2:#ff6f4d;
+      --radius:12px;--shadow:0 8px 24px rgba(16,24,40,0.08);
     }
-    header {
-      background: #a31616;
-      color: white;
-      padding: 10px 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    .topnav {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    .topnav button, .topnav a {
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 15px;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .topnav button:hover, .topnav a:hover {
-      color: #ffb6a6;
-    }
-    .topnav__btn--profile {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding-right: 15px;
-      border-right: 1px solid rgba(255,255,255,0.3);
-    }
-    .topnav img {
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-    }
-    .dropdown {
-      position: relative;
-    }
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: white;
-      color: #333;
-      min-width: 220px;
-      border-radius: 6px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      overflow: hidden;
-      z-index: 1000;
-    }
-    .dropdown-content a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 15px;
-      text-decoration: none;
-      color: #333;
-      transition: background 0.2s;
-    }
-    .dropdown-content a:hover {
-      background: #f2f2f2;
-    }
-    .dropdown.show .dropdown-content {
-      display: block;
-    }
-    main section {
-      display: none;
-      padding: 20px;
-      animation: fadeIn 0.3s;
-    }
-    main section.active {
-      display: block;
-    }
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-    .dashboard {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: white;
-      color: #333;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-    }
-    .card h3 {
-      margin-top: 0;
-      color: #a31616;
-    }
-    .calendar { text-align: center; }
-    .calendar table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    .calendar th, .calendar td {
-      border: 1px solid #ccc;
-      padding: 6px;
-      text-align: center;
-    }
-    .calendar .today {
-      background: #a31616;
-      color: white;
-      font-weight: bold;
-      border-radius: 50%;
-    }
-    .agenda-grid {
-      display: grid;
-      grid-template-columns: 120px repeat(5, 1fr);
-      border: 1px solid #ccc;
-      background: white;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .agenda-grid div {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-      border-right: 1px solid #eee;
-      text-align: center;
-    }
-    .agenda-grid div:nth-child(-n+6) {
-      font-weight: bold;
-      background: #f2f2f2;
-    }
+    *{box-sizing:border-box}
+    body,html,#app{margin:0;height:100%;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+    body{background:var(--bg);color:#111}
+
+    .app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+    .sidebar{background:linear-gradient(180deg,var(--accent),#7d1414);color:#fff;padding:20px;display:flex;flex-direction:column}
+    .brand{font-weight:700;font-size:18px;margin-bottom:20px}
+    .nav{display:flex;flex-direction:column;gap:8px}
+    .nav button{border:0;background:transparent;color:#fff;padding:10px;border-radius:8px;text-align:left;cursor:pointer;font-weight:600}
+    .nav button.active,.nav button:hover{background:rgba(255,255,255,0.15)}
+    .nav button i{margin-right:10px}
+    .profile{margin-top:auto;display:flex;align-items:center;gap:10px;padding-top:12px;border-top:1px solid rgba(255,255,255,.2)}
+    .profile img{width:40px;height:40px;border-radius:8px}
+
+    .main{display:flex;flex-direction:column}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:#fff;box-shadow:var(--shadow)}
+    .search{flex:1;margin-right:20px;display:flex;align-items:center;gap:8px;background:var(--bg);padding:6px 12px;border-radius:8px}
+    .search input{flex:1;border:0;outline:0;background:transparent}
+    .icon-btn{border:0;background:var(--bg);border-radius:8px;padding:8px;cursor:pointer}
+
+    .content{padding:20px;overflow:auto}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+    .card{background:var(--card);padding:16px;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .card h2{margin:0 0 12px}
+
+    .agenda-item,.msg{padding:10px;border-radius:8px;background:var(--bg);margin-bottom:8px}
+    .msg{display:flex;gap:10px;align-items:center}
+    .msg .avatar{width:40px;height:40px;border-radius:50%;background:#ddd}
+
+    .timetable{display:grid;grid-template-columns:100px repeat(5,1fr)}
+    .cell{border:1px solid #eee;min-height:60px;padding:6px}
+    .head{background:#fafafa;font-weight:700}
+
+    @media(max-width:900px){.app{grid-template-columns:70px 1fr}.nav button span{display:none}}
   </style>
 </head>
 <body>
-  <header>
-    <nav class="topnav">
-      <button class="topnav__btn--profile">
-        <img src="https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/1061_1b9bd6e8-b313-4e85-ba95-3c26ad96d5cb/plain/1/res/48" alt="Profiel">
-        <span>Tristan V</span>
-      </button>
-      <a onclick="showSection('home')">Start</a>
-      <div class="dropdown">
-        <button onclick="toggleDropdown(this)">Ga naar <i class="fa fa-caret-down"></i></button>
-        <div class="dropdown-content">
-          <a onclick="showSection('agenda')"><i class="fa fa-calendar"></i> Schoolagenda</a>
-          <a onclick="showSection('results')"><i class="fa fa-chart-line"></i> Resultaten</a>
-          <a onclick="showSection('messages')"><i class="fa fa-envelope"></i> Berichten</a>
-          <a onclick="showSection('forms')"><i class="fa fa-file-alt"></i> Formulieren</a>
-          <a onclick="showSection('helpdesk')"><i class="fa fa-life-ring"></i> Helpdesk</a>
-        </div>
-      </div>
-      <a onclick="showSection('agenda')">Vakken</a>
-      <a onclick="showSection('links')">Links</a>
-      <a onclick="showSection('messages')">Berichten</a>
-      <a onclick="showSection('notifs')">Meldingen</a>
-      <a onclick="showSection('search')"><i class="fa fa-search"></i></a>
-      <a onclick="showSection('helpdesk')"><i class="fa fa-question-circle"></i></a>
-      <a href="#"><i class="fa fa-right-from-bracket"></i></a>
+<div id="app" class="app">
+  <aside class="sidebar">
+    <div class="brand">Smartschool NG</div>
+    <nav class="nav">
+      <button class="active" data-view="dashboard"><i class="fa fa-house"></i><span>Dashboard</span></button>
+      <button data-view="agenda"><i class="fa fa-calendar-days"></i><span>Agenda</span></button>
+      <button data-view="messages"><i class="fa fa-envelope"></i><span>Berichten</span></button>
+      <button data-view="results"><i class="fa fa-chart-simple"></i><span>Resultaten</span></button>
+      <button data-view="attendance"><i class="fa fa-user-check"></i><span>Afwezigheden</span></button>
+      <button data-view="forms"><i class="fa fa-file-lines"></i><span>Formulieren</span></button>
+      <button data-view="files"><i class="fa fa-folder"></i><span>Bestanden</span></button>
+      <button data-view="canteen"><i class="fa fa-utensils"></i><span>Cafetaria</span></button>
+      <button data-view="transport"><i class="fa fa-bus"></i><span>Vervoer</span></button>
+      <button data-view="settings"><i class="fa fa-gear"></i><span>Instellingen</span></button>
     </nav>
-  </header>
-
-  <main>
-    <!-- Home dashboard -->
-    <section id="home" class="active">
-      <h1>Dashboard</h1>
-      <div class="dashboard">
-        <div class="card">
-          <h3>Afwezigheid wettigen</h3>
-          <p>Open hier de instructiefilm</p>
-        </div>
-        <div class="card">
-          <h3>Lezing Anky De Frangh</h3>
-          <p>Woensdag 1 oktober</p>
-          <img src="https://dummyimage.com/300x400/cccccc/000000&text=Poster" width="100%">
-        </div>
-        <div class="card calendar">
-          <h3 id="monthYear"></h3>
-          <table id="calendarTable"></table>
-        </div>
+    <div class="profile">
+      <img src="https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/1061_1b9bd6e8-b313-4e85-ba95-3c26ad96d5cb/plain/1/res/48" alt="user" />
+      <div>
+        <div><strong>Demo User</strong></div>
+        <small>Leraar</small>
       </div>
-    </section>
+    </div>
+  </aside>
 
-    <!-- Agenda -->
-    <section id="agenda">
-      <h1>Agenda</h1>
-      <div class="agenda-grid">
-        <div>Uren</div><div>Maandag</div><div>Dinsdag</div><div>Woensdag</div><div>Donderdag</div><div>Vrijdag</div>
-        <div>08:25 - 09:15</div><div>Wiskunde</div><div>Frans</div><div></div><div>Biologie</div><div>Nederlands</div>
-        <div>09:20 - 10:10</div><div>Natuurwetenschappen</div><div>Geschiedenis</div><div></div><div>Frans</div><div>Wiskunde</div>
+  <div class="main">
+    <header class="topbar">
+      <div class="search"><i class="fa fa-search"></i><input placeholder="Zoeken..."/></div>
+      <div>
+        <button class="icon-btn"><i class="fa fa-bell"></i></button>
+        <button class="icon-btn"><i class="fa fa-gear"></i></button>
       </div>
-    </section>
+    </header>
 
-    <!-- Messages -->
-    <section id="messages">
-      <h1>Berichten</h1>
-      <div class="card"><p>Geen nieuwe berichten.</p></div>
-    </section>
+    <div class="content">
+      <!-- Dashboard -->
+      <section id="dashboard" class="view">
+        <div class="grid">
+          <div class="card"><h2>Overzicht</h2><p>Welkom op het portaal. Vandaag 5 lessen, 2 berichten ongelezen.</p></div>
+          <div class="card"><h2>Vandaag in Agenda</h2><div class="agenda-item">08:30 – Wiskunde</div><div class="agenda-item">10:15 – Nederlands</div></div>
+          <div class="card"><h2>Recente berichten</h2><div class="msg"><div class="avatar"></div><div><strong>Directie</strong><br/>Morgen oudercontact</div></div></div>
+        </div>
+      </section>
 
-    <!-- Results -->
-    <section id="results">
-      <h1>Resultaten</h1>
-      <div class="card"><p>Hier verschijnen je resultaten.</p></div>
-    </section>
+      <!-- Agenda -->
+      <section id="agenda" class="view" style="display:none">
+        <h2>Lesrooster</h2>
+        <div class="card timetable">
+          <div class="cell head">Tijd</div>
+          <div class="cell head">Ma</div><div class="cell head">Di</div><div class="cell head">Wo</div><div class="cell head">Do</div><div class="cell head">Vr</div>
+          <div class="cell head">08:30</div>
+          <div class="cell">Wiskunde</div><div class="cell">Nederlands</div><div class="cell"></div><div class="cell">Geschiedenis</div><div class="cell">Engels</div>
+          <div class="cell head">10:15</div>
+          <div class="cell">Natuurwet.</div><div class="cell"></div><div class="cell">Frans</div><div class="cell">Sport</div><div class="cell"></div>
+        </div>
+      </section>
 
-    <!-- Forms -->
-    <section id="forms">
-      <h1>Formulieren</h1>
-      <div class="card"><p>Hier kan je formulieren invullen.</p></div>
-    </section>
+      <!-- Messages -->
+      <section id="messages" class="view" style="display:none">
+        <h2>Berichten</h2>
+        <div class="card msg"><div class="avatar"></div><div><strong>Jan Jansen</strong><br/>Kan je mijn punten bekijken?</div></div>
+        <div class="card msg"><div class="avatar"></div><div><strong>Directie</strong><br/>Schoolreis volgende week</div></div>
+      </section>
 
-    <!-- Helpdesk -->
-    <section id="helpdesk">
-      <h1>Helpdesk</h1>
-      <div class="card"><p>Contacteer onze helpdesk bij problemen.</p></div>
-    </section>
+      <!-- Results -->
+      <section id="results" class="view" style="display:none">
+        <h2>Resultaten</h2>
+        <div class="card"><p>Toets Wiskunde: 14/20</p><p>Toets Engels: 17/20</p></div>
+      </section>
 
-    <!-- Links -->
-    <section id="links">
-      <h1>Links</h1>
-      <div class="card"><p>Handige links voor jou.</p></div>
-    </section>
+      <!-- Attendance -->
+      <section id="attendance" class="view" style="display:none">
+        <h2>Afwezigheden</h2>
+        <div class="card"><p>Vandaag: 2 afwezig (Piet, Anna)</p></div>
+      </section>
 
-    <!-- Notifications -->
-    <section id="notifs">
-      <h1>Meldingen</h1>
-      <div class="card"><p>Geen meldingen.</p></div>
-    </section>
+      <!-- Forms -->
+      <section id="forms" class="view" style="display:none">
+        <h2>Formulieren</h2>
+        <div class="card"><p>Oudercontact inschrijving</p><button>Invullen</button></div>
+      </section>
 
-    <!-- Search -->
-    <section id="search">
-      <h1>Zoeken</h1>
-      <div class="card"><input type="text" placeholder="Zoek iets..." style="width:100%;padding:10px;"></div>
-    </section>
-  </main>
+      <!-- Files -->
+      <section id="files" class="view" style="display:none">
+        <h2>Bestanden</h2>
+        <div class="card"><p>Wiskunde hoofdstuk 1.pdf</p><p>Natuurwetenschappen experiment.docx</p></div>
+      </section>
 
-  <script>
-    function toggleDropdown(btn) {
-      btn.parentElement.classList.toggle("show");
-    }
-    function showSection(id) {
-      document.querySelectorAll('main section').forEach(s => s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
-    }
+      <!-- Canteen -->
+      <section id="canteen" class="view" style="display:none">
+        <h2>Cafetaria</h2>
+        <div class="card"><p>Vandaag: Pasta bolognese €4,50</p><button>Bestel</button></div>
+      </section>
 
-    // Calendar builder
-    function buildCalendar() {
-      const now = new Date();
-      const month = now.getMonth();
-      const year = now.getFullYear();
-      const today = now.getDate();
+      <!-- Transport -->
+      <section id="transport" class="view" style="display:none">
+        <h2>Vervoer</h2>
+        <div class="card"><p>Buslijn 3 – vertrek 07:45</p><p>Buslijn 5 – vertrek 08:00</p></div>
+      </section>
 
-      document.getElementById('monthYear').textContent = now.toLocaleString('nl-NL', { month: 'long', year: 'numeric' });
+      <!-- Settings -->
+      <section id="settings" class="view" style="display:none">
+        <h2>Instellingen</h2>
+        <div class="card"><label>Taal <select><option>Nederlands</option><option>Engels</option></select></label></div>
+      </section>
 
-      const firstDay = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-      const table = document.getElementById('calendarTable');
-      table.innerHTML = '';
-      const days = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
-      let header = '<tr>' + days.map(d => `<th>${d}</th>`).join('') + '</tr>';
-      table.innerHTML = header;
-
-      let date = 1;
-      for (let i = 0; i < 6; i++) {
-        let row = '<tr>';
-        for (let j = 1; j <= 7; j++) {
-          if (i === 0 && j < (firstDay === 0 ? 7 : firstDay)) {
-            row += '<td></td>';
-          } else if (date > daysInMonth) {
-            row += '<td></td>';
-          } else {
-            if (date === today) {
-              row += `<td class="today">${date}</td>`;
-            } else {
-              row += `<td>${date}</td>`;
-            }
-            date++;
-          }
-        }
-        row += '</tr>';
-        table.innerHTML += row;
-      }
-    }
-    buildCalendar();
-  </script>
+    </div>
+  </div>
+</div>
+<script>
+  const buttons=document.querySelectorAll('.nav button');
+  const views=document.querySelectorAll('.view');
+  buttons.forEach(btn=>btn.addEventListener('click',()=>{
+    buttons.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const id=btn.dataset.view;
+    views.forEach(v=>v.style.display=v.id===id?"block":"none");
+  }));
+</script>
 </body>
 </html>
