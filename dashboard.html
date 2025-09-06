@@ -27,6 +27,12 @@ body{font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var
 .dropdown-menu.links.open{display:grid}
 .dropdown-menu a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;color:#ddd;text-decoration:none;font-size:14px}
 .dropdown-menu a:hover{background:rgba(255,255,255,.1)}
+.dropdown-menu.meldingen{width:420px;background:#922;padding:12px;border-radius:8px}
+.meldingen-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.toggle{display:inline-flex;border:1px solid #fff;border-radius:6px;overflow:hidden}
+.toggle button{padding:4px 12px;background:none;border:none;color:#fff;cursor:pointer}
+.toggle button.active{background:#fff;color:#922}
+.melding-body{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;color:#ccc;text-align:center}
 .shell{display:none;grid-template-columns:280px 1fr 320px;min-height:calc(100vh - 56px)}
 .shell.active{display:grid}
 .left-pane,.center-pane,.right-pane{padding:18px;border-color:var(--border)}
@@ -34,6 +40,12 @@ body{font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var
 .right-pane{border-left:1px solid var(--border)}
 .clock{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:52px;font-weight:700}
 .clock small{margin-top:12px;font-size:20px;color:var(--muted)}
+.cal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:50%;font-size:14px;color:#fff}
+.cal-head{border:none;font-weight:700}
+.cal-cell.today{outline:2px solid #fff}
+.cal-cell.muted{opacity:.4}
 /* Mail */
 .mail-container{display:none;height:calc(100vh - 56px)}
 .mail-container.active{display:flex}
@@ -72,6 +84,34 @@ body{font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var
         <a href="#" onclick="showPage('customize')">⚙️ Aanpassen</a>
       </div>
     </div>
+    <div class="nav-item has-dropdown">Links
+      <div class="dropdown-menu links">
+        <a href="https://leerling.appwel.be/login" target="_blank">Appwel</a>
+        <a href="https://www.diddit.be/login" target="_blank">diddit</a>
+        <a href="https://redwood.e-ducate.me/login" target="_blank">e-ducate.me</a>
+        <a href="https://platform.ftrprf.be" target="_blank">FTRPRF</a>
+        <a href="https://myway.i-learn.be/login" target="_blank">i-Learn</a>
+        <a href="https://platform.ididdit.be/login" target="_blank">iDiddit</a>
+      </div>
+    </div>
+    <div class="nav-item has-dropdown">Meldingen
+      <div class="dropdown-menu meldingen">
+        <div class="meldingen-top">
+          <div class="toggle">
+            <button id="aanBtn" class="active">Aan</button>
+            <button id="uitBtn">Uit</button>
+          </div>
+          <div>
+            <button>Instellingen</button>
+            <button>Alles wissen</button>
+          </div>
+        </div>
+        <div class="melding-body">
+          <div style="font-size:48px">💬</div>
+          <p>Er zijn geen meldingen. Je bent volledig up-to-date!</p>
+        </div>
+      </div>
+    </div>
     <div class="nav-item" onclick="showPage('berichten')">Berichten<span class="badge" id="mailCount">0</span></div>
     <div class="nav-item" title="Afmelden">
       <a href="https://jasonfighter12278.github.io/smarttryout/index.html#" style="display:flex;align-items:center">
@@ -89,11 +129,19 @@ body{font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var
       <div id="clockTime">00:00:00</div>
       <small id="clockDate">-</small>
     </div>
+    <div class="calendar">
+      <div class="cal-top">
+        <button onclick="shiftMonth(-1)">◀</button>
+        <h3 id="calTitle"></h3>
+        <button onclick="shiftMonth(1)">▶</button>
+      </div>
+      <div id="calGrid" class="cal-grid"></div>
+    </div>
   </main>
 </div>
 
 <!-- Mail -->
-<div id="berichten" class="mail-container">
+<div id="berrichten" class="mail-container">
   <div class="mail-sidebar">
     <button onclick="switchMailbox('inbox')">📥 Inbox</button>
     <button onclick="switchMailbox('sent')">📤 Verzonden</button>
@@ -127,123 +175,30 @@ body{font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var
 </div>
 
 <script>
-// Hardcoded accounts
-const accounts = {
-  "tristan.vansonhoven": {
-    name: "Tristan Vansonhoven",
-    role: "Admin",
-    avatar: "https://i.imgur.com/1PfpFaa.png"
-  },
-  "kiandra.vandeweyer": {
-    name: "Kiandra Vandeweyer",
-    role: "Leerling",
-    avatar: "https://i.imgur.com/qRX7J0B.png"
-  },
-  "lily.tseyen": {
-    name: "Lily Tseyen",
-    role: "Leerling",
-    avatar: "https://i.imgur.com/E3Y4W0Z.png"
-  }
+// Users
+const accounts={
+  "tristan.vansonhoven":{name:"Tristan Vansonhoven",role:"Admin",avatar:"https://i.imgur.com/1PfpFaa.png"},
+  "kiandra.vandeweyer":{name:"Kiandra Vandeweyer",role:"Leerling",avatar:"https://i.imgur.com/qRX7J0B.png"},
+  "lily.tseyen":{name:"Lily Tseyen",role:"Leerling",avatar:"https://i.imgur.com/E3Y4W0Z.png"}
 };
-
-// Current login (hardcoded here, later can be dynamic)
-let currentUser = "tristan.vansonhoven";
-
-// Update navbar with user info
+let currentUser="tristan.vansonhoven"; // later from login
 function updateUserInfo(){
-  const user = accounts[currentUser];
-  document.querySelector(".nav-left img").src = user.avatar;
-  document.querySelector(".nav-left span").innerHTML = `<b>${user.name}</b> (${user.role})`;
+  const u=accounts[currentUser];
+  document.querySelector(".nav-left img").src=u.avatar;
+  document.querySelector(".nav-left span").innerHTML=`<b>${u.name}</b> (${u.role})`;
 }
 updateUserInfo();
 
-// Mail system
-let mails = {
-  "tristan.vansonhoven": { inbox: [], sent: [] },
-  "kiandra.vandeweyer": { inbox: [], sent: [] },
-  "lily.tseyen": { inbox: [], sent: [] }
-};
-let currentBox = "inbox";
-
-// Populate "To" dropdown with other users
-function populateRecipients(){
-  const select = document.getElementById("composeTo");
-  select.innerHTML = "";
-  Object.keys(accounts).forEach(acc=>{
-    if(acc!==currentUser){
-      const opt=document.createElement("option");
-      opt.value=acc;
-      opt.textContent=accounts[acc].name;
-      select.appendChild(opt);
-    }
+// Dropdown logic
+document.querySelectorAll('.has-dropdown').forEach(item=>{
+  item.addEventListener('click',e=>{
+    e.stopPropagation();
+    const menu=item.querySelector('.dropdown-menu');
+    document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'));
+    menu.classList.toggle('open');
   });
-}
-populateRecipients();
-
-// Show correct page
-function showPage(id){
-  document.querySelectorAll(".shell,.mail-container").forEach(p=>p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-// Mail functions
-function switchMailbox(box){
-  currentBox = box;
-  document.getElementById("compose").classList.remove("active");
-  document.getElementById("mailView").classList.remove("active");
-  renderMailbox();
-}
-function renderMailbox(){
-  const list=document.getElementById("mailList");
-  list.innerHTML="";
-  mails[currentUser][currentBox].forEach((m,i)=>{
-    let div=document.createElement("div");
-    div.className="mail-item"+(m.unread?" unread":"");
-    div.textContent=`${m.from||"Ik"} - ${m.subject}`;
-    div.onclick=()=>openMail(i);
-    list.appendChild(div);
-  });
-  updateBadge();
-}
-function openMail(i){
-  const mail=mails[currentUser][currentBox][i];
-  const view=document.getElementById("mailView");
-  view.classList.add("active");
-  mail.unread=false;
-  view.innerHTML=`<h3>${mail.subject}</h3><p><b>Van:</b> ${mail.from||"Ik"}</p><p>${mail.body}</p>`;
-  renderMailbox();
-}
-function composeMail(){
-  document.getElementById("compose").classList.add("active");
-  document.getElementById("mailView").classList.remove("active");
-}
-function sendMail(){
-  const to=document.getElementById("composeTo").value;
-  const subject=document.getElementById("composeSubject").value;
-  const body=document.getElementById("composeBody").value;
-  if(subject && body){
-    // Send to recipient inbox
-    mails[to].inbox.push({from:accounts[currentUser].name,subject,body,unread:true});
-    // Save in sender sent
-    mails[currentUser].sent.push({to:accounts[to].name,subject,body,unread:false});
-    // Reset
-    document.getElementById("composeSubject").value="";
-    document.getElementById("composeBody").value="";
-    alert("Bericht verzonden!");
-    switchMailbox("sent");
-  }
-}
-function updateBadge(){
-  const unread=mails[currentUser].inbox.filter(m=>m.unread).length;
-  const badge=document.getElementById("mailCount");
-  if(unread>0){
-    badge.style.display="inline-block";
-    badge.textContent=unread;
-  } else {
-    badge.style.display="none";
-  }
-}
-switchMailbox("inbox");
+});
+document.addEventListener('click',()=>{document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('open'))});
 
 // Clock
 function updateClock(){
@@ -251,8 +206,76 @@ function updateClock(){
   document.getElementById("clockTime").textContent=now.toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
   document.getElementById("clockDate").textContent=now.toLocaleDateString("nl-NL",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 }
-setInterval(updateClock,1000);
-updateClock();
+setInterval(updateClock,1000);updateClock();
+
+// Calendar
+let calPointer=new Date();
+function renderCalendar(){
+  const title=document.getElementById("calTitle");
+  const grid=document.getElementById("calGrid");
+  title.textContent=new Intl.DateTimeFormat("nl-NL",{month:"long",year:"numeric"}).format(calPointer);
+  grid.innerHTML="";
+  const weekDays=["ma","di","wo","do","vr","za","zo"];
+  weekDays.forEach(d=>{let h=document.createElement("div");h.className="cal-cell cal-head";h.textContent=d;grid.appendChild(h)});
+  const first=new Date(calPointer.getFullYear(),calPointer.getMonth(),1);
+  const startIndex=(first.getDay()+6)%7;
+  const daysInMonth=new Date(calPointer.getFullYear(),calPointer.getMonth()+1,0).getDate();
+  const prevDays=new Date(calPointer.getFullYear(),calPointer.getMonth(),0).getDate();
+  for(let i=startIndex-1;i>=0;i--){let c=document.createElement("div");c.className="cal-cell muted";c.textContent=prevDays-i;grid.appendChild(c)}
+  const today=new Date();
+  const isThisMonth=today.getFullYear()===calPointer.getFullYear()&&today.getMonth()===calPointer.getMonth();
+  for(let d=1;d<=daysInMonth;d++){let c=document.createElement("div");c.className="cal-cell";c.textContent=d;if(isThisMonth&&d===today.getDate())c.classList.add("today");grid.appendChild(c)}
+}
+function shiftMonth(delta){calPointer.setMonth(calPointer.getMonth()+delta);renderCalendar()}
+renderCalendar();
+
+// Mail system
+let mails={
+  "tristan.vansonhoven":{inbox:[],sent:[]},
+  "kiandra.vandeweyer":{inbox:[],sent:[]},
+  "lily.tseyen":{inbox:[],sent:[]}
+};
+let currentBox="inbox";
+function populateRecipients(){
+  const select=document.getElementById("composeTo");
+  select.innerHTML="";
+  Object.keys(accounts).forEach(acc=>{if(acc!==currentUser){let opt=document.createElement("option");opt.value=acc;opt.textContent=accounts[acc].name;select.appendChild(opt)}});
+}
+populateRecipients();
+function showPage(id){document.querySelectorAll(".shell,.mail-container").forEach(p=>p.classList.remove("active"));document.getElementById(id).classList.add("active")}
+function switchMailbox(box){currentBox=box;document.getElementById("compose").classList.remove("active");document.getElementById("mailView").classList.remove("active");renderMailbox()}
+function renderMailbox(){
+  const list=document.getElementById("mailList");list.innerHTML="";
+  mails[currentUser][currentBox].forEach((m,i)=>{let div=document.createElement("div");div.className="mail-item"+(m.unread?" unread":"");div.textContent=`${m.from||"Ik"} - ${m.subject}`;div.onclick=()=>openMail(i);list.appendChild(div)});
+  updateBadge();
+}
+function openMail(i){
+  const mail=mails[currentUser][currentBox][i];mail.unread=false;
+  const view=document.getElementById("mailView");view.classList.add("active");view.innerHTML=`<h3>${mail.subject}</h3><p><b>Van:</b> ${mail.from||"Ik"}</p><p>${mail.body}</p>`;
+  renderMailbox();
+}
+function composeMail(){document.getElementById("compose").classList.add("active");document.getElementById("mailView").classList.remove("active")}
+function sendMail(){
+  const to=document.getElementById("composeTo").value;
+  const subject=document.getElementById("composeSubject").value;
+  const body=document.getElementById("composeBody").value;
+  if(subject&&body){
+    mails[to].inbox.push({from:accounts[currentUser].name,subject,body,unread:true});
+    mails[currentUser].sent.push({to:accounts[to].name,subject,body,unread:false});
+    document.getElementById("composeSubject").value="";document.getElementById("composeBody").value="";
+    alert("Bericht verzonden!");switchMailbox("sent");
+  }
+}
+function updateBadge(){
+  const unread=mails[currentUser].inbox.filter(m=>m.unread).length;
+  const badge=document.getElementById("mailCount");
+  if(unread>0){badge.style.display="inline-block";badge.textContent=unread}else{badge.style.display="none"}
+}
+switchMailbox("inbox");
+
+// Meldingen toggle
+document.getElementById('aanBtn').addEventListener('click',()=>{document.getElementById('aanBtn').classList.add('active');document.getElementById('uitBtn').classList.remove('active')});
+document.getElementById('uitBtn').addEventListener('click',()=>{document.getElementById('uitBtn').classList.add('active');document.getElementById('aanBtn').classList.remove('active')});
 
 // Customization
 function applyCustomization(){
