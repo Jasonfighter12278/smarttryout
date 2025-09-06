@@ -1,743 +1,265 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="nl">
 <head>
 <meta charset="utf-8" />
+<title>Smartschool Dashboard</title>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Smartschool Dashboard — Demo</title>
-
 <style>
 :root{
-  /* Feel free to tweak colors */
-  --brand:#005ea6;    /* slightly Smartschool-blue inspired */
-  --brand-dark:#004b86;
-  --bg:#f2f6fb;
-  --panel:#ffffff;
-  --muted:#7b8aa3;
-  --accent:#00a0ff;
-  --danger:#a31d1d;
-  --border:#e1e8f0;
-  --text:#0b2540;
-  --muted-bg:#f5f8fc;
-  --success:#2aa14f;
+  --brand:#ff8000;   /* Navbar color */
+  --bg:#8b1b1b;      /* Background */
+  --ink:#ffffff;     /* Text color */
+  --muted:#ffd9d9;
+  --border:#9c2a2a;
 }
-
-/* Basic reset */
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  background:linear-gradient(180deg,var(--bg),#ecf3fb);
-  color:var(--text);
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  line-height:1.3;
-  padding-bottom:24px;
-}
-
-/* Top navigation */
-.navbar{
-  background:linear-gradient(180deg,var(--brand),var(--brand-dark));
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:12px 18px;
-  gap:12px;
-  position:sticky;
-  top:0;
-  z-index:1200;
-  box-shadow:0 2px 8px rgba(8,23,40,0.12);
-  border-bottom:1px solid rgba(255,255,255,0.06);
-}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+.navbar{background:var(--brand);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:100}
 .nav-left{display:flex;align-items:center;gap:10px}
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.brand img{width:36px;height:36px;border-radius:6px;object-fit:cover;background:#fff}
-.brand .school-name{font-weight:700;font-size:16px;letter-spacing:.2px}
-.nav-right{display:flex;align-items:center;gap:12px}
-.nav-item{
-  color:#fff;
-  background:transparent;
-  padding:6px 10px;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:14px;
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  border:1px solid transparent;
-}
-.nav-item:focus{outline:none;box-shadow:0 0 0 3px rgba(0,160,255,0.12)}
-.nav-item:hover{background:rgba(255,255,255,0.06)}
-.badge{
-  background:var(--accent);
-  color:#fff;
-  font-size:12px;
-  padding:2px 6px;
-  border-radius:999px;
-  display:inline-block;
-  min-width:20px;
-  text-align:center;
-}
-
-/* Dropdowns (no arrows) */
-.has-dropdown{position:relative}
-.dropdown-menu{
-  position:absolute;
-  top:calc(100% + 10px);
-  left:0;
-  min-width:220px;
-  background:var(--panel);
-  color:var(--text);
-  border-radius:10px;
-  box-shadow:0 14px 30px rgba(8,23,40,0.12);
-  border:1px solid var(--border);
-  padding:8px;
-  display:none;
-  z-index:2000;
-}
+.nav-right{display:flex;align-items:center;gap:18px;position:relative}
+.nav-item{position:relative;cursor:pointer}
+.nav-item:hover{opacity:.85}
+.badge{background:#1e90ff;color:#fff;border-radius:999px;font-size:12px;padding:2px 6px;margin-left:4px;display:none}
+.dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#922;border:1px solid var(--border);border-radius:8px;z-index:2000;box-shadow:0 6px 16px rgba(0,0,0,0.4)}
 .dropdown-menu.open{display:block}
-.dropdown-menu a{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:8px;
-  text-decoration:none;
-  color:var(--text);
-  border-radius:8px;
-  font-size:14px;
-}
-.dropdown-menu a:hover{background:var(--muted-bg)}
-
-/* Wide links menu */
-.dropdown-menu.links{
-  min-width:360px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-.dropdown-menu.links a{padding:10px}
-
-/* Notifications menu */
-.dropdown-menu.meldingen{
-  width:420px;
-  max-width:92vw;
-  padding:12px;
-}
-.meldingen-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.toggle{display:inline-flex;border:1px solid #dce9fb;border-radius:8px;overflow:hidden;background:var(--muted-bg)}
-.toggle button{padding:6px 10px;border:0;background:transparent;cursor:pointer;color:var(--text)}
-.toggle button.active{background:var(--accent);color:#fff}
-
-/* Layout shells */
-.container{
-  max-width:1200px;
-  margin:18px auto;
-  padding:0 12px;
-}
-.shell{
-  display:grid;
-  grid-template-columns:260px 1fr 320px;
-  gap:18px;
-  min-height:72vh;
-  align-items:start;
-}
-@media (max-width:980px){
-  .shell{grid-template-columns:1fr;gap:12px;padding-bottom:40px}
-  .right-pane{order:3}
-  .left-pane{order:1}
-  .center-pane{order:2}
-}
-
-/* panels */
-.left-pane,.center-pane,.right-pane,.mail-sidebar{
-  background:var(--panel);
-  border-radius:12px;
-  padding:18px;
-  border:1px solid var(--border);
-  box-shadow:0 6px 18px rgba(8,23,40,0.04);
-}
-
-/* left panel */
-.left-pane h3{margin-bottom:8px;font-size:16px}
-.left-pane p{color:var(--muted);font-size:14px;margin-bottom:10px}
-.left-pane a{color:var(--accent);text-decoration:none}
-
-/* center clock */
-.clock{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:36px 18px}
-.clock .time{
-  font-size:56px;font-weight:700;color:var(--brand-dark);letter-spacing:1px;
-}
-.clock small{margin-top:8px;color:var(--muted)}
-/* calendar (right) */
-.cal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.cal-top button{background:transparent;border:1px solid var(--border);padding:6px 8px;border-radius:8px;cursor:pointer}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
-.cal-cell{
-  aspect-ratio:1/1;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:8px;border:1px solid transparent;font-size:14px;padding:6px;
-  background:var(--muted-bg);
-  color:var(--text);
-}
-.cal-head{background:transparent;font-weight:700;color:var(--muted);border:none}
-.cal-cell.today{outline:2px solid var(--accent);font-weight:700}
-
-/* agenda */
-.agenda-container h2{margin-bottom:12px}
-.agenda-form{display:flex;gap:8px;margin-bottom:14px}
-.agenda-form input[type="text"],.agenda-form input[type="date"],.compose input,.compose textarea{
-  padding:10px;border-radius:8px;border:1px solid var(--border);background:transparent;font-size:14px;color:var(--text)
-}
-.agenda-form button{padding:10px 14px;border-radius:8px;border:none;background:var(--brand);color:#fff;cursor:pointer}
-.agenda-list{list-style:none;display:flex;flex-direction:column;gap:8px}
-.agenda-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:var(--muted-bg)}
-.agenda-item button{background:transparent;border:0;color:var(--danger);cursor:pointer;padding:6px;border-radius:6px}
-
-/* mail container */
-.mail-container{display:none}
+.dropdown-menu.simple{min-width:200px;padding:6px}
+.dropdown-menu.links{display:none;grid-template-columns:1fr 1fr;gap:8px;min-width:360px;padding:10px}
+.dropdown-menu.links.open{display:grid}
+.dropdown-menu a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;color:#ddd;text-decoration:none;font-size:14px}
+.dropdown-menu a:hover{background:rgba(255,255,255,.1)}
+.shell{display:none;grid-template-columns:280px 1fr 320px;min-height:calc(100vh - 56px)}
+.shell.active{display:grid}
+.left-pane,.center-pane,.right-pane{padding:18px;border-color:var(--border)}
+.left-pane{border-right:1px solid var(--border)}
+.right-pane{border-left:1px solid var(--border)}
+.clock{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:52px;font-weight:700}
+.clock small{margin-top:12px;font-size:20px;color:var(--muted)}
+/* Mail */
+.mail-container{display:none;height:calc(100vh - 56px)}
 .mail-container.active{display:flex}
-.mail-sidebar{width:220px;display:flex;flex-direction:column;gap:8px}
-.mail-sidebar button{background:transparent;border:0;padding:10px;text-align:left;border-radius:8px;color:var(--text);cursor:pointer;font-size:15px}
-.mail-sidebar button:hover{background:var(--muted-bg)}
-.mail-main{flex:1;display:flex;flex-direction:column;gap:12px}
-.mail-list{flex:1;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:6px}
-.mail-item{
-  background:var(--muted-bg);padding:12px;border-radius:8px;cursor:pointer;border:1px solid transparent;
-}
-.mail-item:hover{background:#eef6ff;border-color:rgba(0,160,255,0.08)}
-.mail-view{display:none;flex-direction:column;gap:8px;padding:12px;border-radius:8px;background:var(--panel);border:1px solid var(--border)}
+.mail-sidebar{width:220px;background:#922;padding:12px;display:flex;flex-direction:column;gap:10px}
+.mail-sidebar button{background:none;border:none;color:#fff;padding:8px;text-align:left;cursor:pointer;border-radius:6px}
+.mail-sidebar button:hover{background:rgba(255,255,255,0.1)}
+.mail-main{flex:1;background:#8b1b1b;padding:16px;display:flex;flex-direction:column}
+.mail-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.mail-item{background:#922;padding:8px;border-radius:6px;cursor:pointer}
+.mail-item.unread{font-weight:bold}
+.mail-item:hover{opacity:.8}
+.mail-view{flex:1;overflow-y:auto;display:none;flex-direction:column;gap:8px}
 .mail-view.active{display:flex}
 .compose{display:none;flex-direction:column;gap:8px}
 .compose.active{display:flex}
-.compose button{padding:10px;border-radius:8px;border:0;background:var(--brand);color:#fff;cursor:pointer}
-
-/* utility */
-.hr{height:1px;background:var(--border);margin:12px 0;border-radius:4px}
-.small{font-size:13px;color:var(--muted)}
-
-/* footer-like info (small) */
-.info-muted{font-size:13px;color:var(--muted);margin-top:8px}
-
-/* helper for invisible on small screens */
-.hide-mobile{display:inline-block}
-@media (max-width:600px){.hide-mobile{display:none}}
+.compose select,.compose input,.compose textarea{padding:8px;border-radius:6px;border:1px solid var(--border)}
+.compose button{background:#a31d1d;border:none;color:#fff;padding:8px;border-radius:6px;cursor:pointer}
+/* Customization */
+.customize{padding:20px}
+.customize label{display:block;margin:10px 0 4px}
+.customize input{padding:6px;border-radius:6px;border:1px solid var(--border);width:200px}
+.customize button{margin-top:12px;padding:8px 12px;background:#a31d1d;color:#fff;border:none;border-radius:6px;cursor:pointer}
 </style>
 </head>
 <body>
-
 <div class="navbar">
-  <div class="nav-left brand" style="gap:12px">
-    <img src="https://via.placeholder.com/48x48.png?text=SMG" alt="school">
-    <div>
-      <div class="school-name">&lt;username&gt;</div>
-      <div class="small">Sint Maria Geel</div>
-    </div>
+  <div class="nav-left">
+    <img src="https://via.placeholder.com/36" style="border-radius:50%">
+    <span><b>&lt;username&gt;</b></span>
   </div>
-
-  <div class="nav-right" role="navigation" aria-label="Hoofdmenu">
-    <button class="nav-item" id="homeBtn" title="Start" onclick="showPage('home')">Start</button>
-
-    <!-- dropdown: goto -->
-    <div class="nav-item has-dropdown" id="gotoItem">
-      <button class="nav-item" id="gotoBtn" aria-haspopup="true" aria-expanded="false">Ga naar</button>
-      <div class="dropdown-menu simple" id="gotoMenu" role="menu" aria-labelledby="gotoBtn">
-        <a href="#" role="menuitem" onclick="showPage('agenda');closeAllDropdowns();return false;">📅 Agenda</a>
-        <a href="#" role="menuitem" onclick="alert('Lesrooster (demo)')">📘 Lesrooster</a>
-        <a href="#" role="menuitem" onclick="showPage('berichten');closeAllDropdowns();return false;">✉️ Berichten</a>
+  <div class="nav-right">
+    <div class="nav-item" onclick="showPage('home')">Start</div>
+    <div class="nav-item has-dropdown">Ga naar
+      <div class="dropdown-menu simple">
+        <a href="#" onclick="showPage('berichten')">✉️ Berichten</a>
+        <a href="#" onclick="showPage('customize')">⚙️ Aanpassen</a>
       </div>
     </div>
-
-    <!-- links (wider) -->
-    <div class="nav-item has-dropdown" id="linksItem">
-      <button class="nav-item" id="linksBtn" aria-haspopup="true" aria-expanded="false">Links</button>
-      <div class="dropdown-menu links" id="linksMenu" role="menu" aria-labelledby="linksBtn">
-        <a href="https://leerling.appwel.be/login" target="_blank" rel="noopener">Appwel</a>
-        <a href="https://www.diddit.be/login" target="_blank" rel="noopener">diddit</a>
-        <a href="https://redwood.e-ducate.me/login" target="_blank" rel="noopener">e-ducate.me</a>
-        <a href="https://platform.ftrprf.be" target="_blank" rel="noopener">FTRPRF</a>
-        <a href="https://myway.i-learn.be/login" target="_blank" rel="noopener">i-Learn</a>
-        <a href="https://platform.ididdit.be/login" target="_blank" rel="noopener">iDiddit</a>
-        <a href="#" onclick="alert('Lernova (demo)')">Lernova</a>
-        <a href="https://www.pelckmansportaal.be" target="_blank" rel="noopener">Pelckmans Portaal</a>
-        <a href="https://www.scholierenkoepel.be" target="_blank" rel="noopener">Scholierenkoepel</a>
-        <a href="https://apps.plantyn.com" target="_blank" rel="noopener">Scoodle</a>
-        <a href="https://onderwijs.hetarchief.be" target="_blank" rel="noopener">Uitgeklaard</a>
-        <a href="https://onderwijs.vrt.be/edubox-bib" target="_blank" rel="noopener">VRT Leer mee</a>
-      </div>
+    <div class="nav-item" onclick="showPage('berichten')">Berichten<span class="badge" id="mailCount">0</span></div>
+    <div class="nav-item" title="Afmelden">
+      <a href="https://jasonfighter12278.github.io/smarttryout/index.html#" style="display:flex;align-items:center">
+        <img src="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/c4/logout-31dva2zl3l9ao92pwnmgnt.png/logout-6bjs3s3fnciv7c0ye52y3l.png?_a=DATAg1AAZAA0" 
+             alt="Logout" style="width:22px;height:22px">
+      </a>
     </div>
-
-    <!-- notifications -->
-    <div class="nav-item has-dropdown" id="meldingenItem">
-      <button class="nav-item" id="meldingenBtn" aria-haspopup="true" aria-expanded="false">Meldingen</button>
-      <div class="dropdown-menu meldingen" id="meldingenMenu" role="menu" aria-labelledby="meldingenBtn">
-        <div class="meldingen-top">
-          <div class="toggle" role="radiogroup" aria-label="Meldingen aan of uit">
-            <button id="aanBtn" class="active" role="radio" aria-checked="true">Aan</button>
-            <button id="uitBtn" role="radio" aria-checked="false">Uit</button>
-          </div>
-          <div>
-            <button class="nav-item" onclick="openNotificationsSettings()">Instellingen</button>
-            <button class="nav-item" onclick="clearNotifications()">Alles wissen</button>
-          </div>
-        </div>
-        <div class="melding-body" id="meldingenBody">
-          <div style="font-size:40px">💬</div>
-          <p class="small">Er zijn geen meldingen. Je bent volledig up-to-date!</p>
-        </div>
-      </div>
-    </div>
-
-    <button class="nav-item" id="berichtenBtn" onclick="showPage('berichten')">Berichten
-      <span class="badge" id="mailCount">0</span>
-    </button>
-
-    <!-- logout as image -->
-    <a class="nav-item" title="Afmelden" href="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/c4/logout-31dva2zl3l9ao92pwnmgnt.png/logout-6bjs3s3fnciv7c0ye52y3l.png?_a=DATAg1AAZAA0" id="logoutBtn" rel="noopener" target="_blank" style="padding:6px;border-radius:8px">
-      <img src="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/c4/logout-31dva2zl3l9ao92pwnmgnt.png/logout-6bjs3s3fnciv7c0ye52y3l.png?_a=DATAg1AAZAA0" alt="logout" style="width:28px;height:28px;display:block">
-    </a>
   </div>
 </div>
 
-<!-- Main content container -->
-<div class="container">
-
-  <!-- Home shell -->
-  <div id="home" class="shell">
-    <aside class="left-pane">
-      <h3>Schoolkalender</h3>
-      <p><a href="#" id="schoolCalendarLink">Link naar de SCHOOLKALENDER</a></p>
-      <div class="hr"></div>
-      <h3>Contactinformatie</h3>
-      <p class="small">Sint Maria Geel<br>
-        Pas 110 — 2440 Geel</p>
-      <p class="small">Tel.: 014 58 86 72<br>
-        Fax: 014 58 69 25<br>
-        E-mail: <a href="mailto:smg@kogeka.be">smg@kogeka.be</a>
-      </p>
-    </aside>
-
-    <main class="center-pane">
-      <div class="clock" role="region" aria-live="polite" aria-label="Klok en datum">
-        <div id="clockTime" class="time">00:00:00</div>
-        <small id="clockDate">-</small>
-      </div>
-    </main>
-
-    <aside class="right-pane">
-      <div class="calendar" aria-label="Kalender">
-        <div class="cal-top">
-          <button id="prevMonth" title="Vorige maand">◀</button>
-          <h3 id="calTitle" style="margin:0"></h3>
-          <button id="nextMonth" title="Volgende maand">▶</button>
-        </div>
-        <div id="calGrid" class="cal-grid" aria-hidden="false"></div>
-      </div>
-    </aside>
-  </div>
-
-  <!-- Agenda page (hidden unless active) -->
-  <div id="agenda" class="shell" style="display:none">
-    <main class="center-pane agenda-container">
-      <h2>Agenda</h2>
-      <form id="agendaForm" class="agenda-form" onsubmit="addEvent(event)">
-        <input type="text" id="eventTitle" placeholder="Titel" required />
-        <input type="date" id="eventDate" required />
-        <button type="submit">Toevoegen</button>
-      </form>
-      <ul id="agendaList" class="agenda-list" aria-live="polite"></ul>
-    </main>
-  </div>
-
-  <!-- Berichten / mail -->
-  <div id="berichten" class="mail-container" style="display:none">
-    <div class="mail-sidebar left-pane">
-      <button onclick="switchMailbox('inbox')">📥 Inbox</button>
-      <button onclick="switchMailbox('sent')">📤 Verzonden</button>
-      <button onclick="switchMailbox('drafts')">📝 Concepten</button>
-      <button onclick="composeMail()">✉️ Nieuw bericht</button>
-      <div class="hr"></div>
-      <div class="small">Opslag: <span id="mailStats">0 berichten</span></div>
+<!-- Home -->
+<div id="home" class="shell active">
+  <main class="center-pane">
+    <div class="clock">
+      <div id="clockTime">00:00:00</div>
+      <small id="clockDate">-</small>
     </div>
+  </main>
+</div>
 
-    <div class="mail-main">
-      <div id="mailList" class="mail-list" role="list"></div>
-      <div id="mailView" class="mail-view" role="region" aria-live="polite"></div>
-
-      <div id="compose" class="compose">
-        <input type="text" id="composeTo" placeholder="Aan (e-mail of naam)" />
-        <input type="text" id="composeSubject" placeholder="Onderwerp" />
-        <textarea id="composeBody" rows="6" placeholder="Bericht..."></textarea>
-        <div style="display:flex;gap:8px;">
-          <button onclick="sendMail()" type="button">Versturen</button>
-          <button onclick="saveDraft()" type="button" style="background:#f0f0f0;color:var(--text)">Opslaan als concept</button>
-          <button onclick="closeCompose()" type="button" style="background:transparent;border:0;color:var(--muted)">Annuleren</button>
-        </div>
-      </div>
+<!-- Mail -->
+<div id="berichten" class="mail-container">
+  <div class="mail-sidebar">
+    <button onclick="switchMailbox('inbox')">📥 Inbox</button>
+    <button onclick="switchMailbox('sent')">📤 Verzonden</button>
+    <button onclick="composeMail()">✉️ Nieuw bericht</button>
+  </div>
+  <div class="mail-main">
+    <div id="mailList" class="mail-list"></div>
+    <div id="mailView" class="mail-view"></div>
+    <div id="compose" class="compose">
+      <label>Aan:</label>
+      <select id="composeTo"></select>
+      <input type="text" id="composeSubject" placeholder="Onderwerp">
+      <textarea id="composeBody" rows="6" placeholder="Bericht..."></textarea>
+      <button onclick="sendMail()">Versturen</button>
     </div>
   </div>
+</div>
 
+<!-- Customize -->
+<div id="customize" class="shell">
+  <main class="center-pane customize" style="grid-column:1 / -1;">
+    <h2>Aanpassen</h2>
+    <label for="navColor">Navbar kleur:</label>
+    <input type="color" id="navColor" value="#ff8000">
+    <label for="textColor">Tekstkleur:</label>
+    <input type="color" id="textColor" value="#ffffff">
+    <label for="bgColor">Achtergrond kleur:</label>
+    <input type="color" id="bgColor" value="#8b1b1b">
+    <button onclick="applyCustomization()">Opslaan</button>
+  </main>
 </div>
 
 <script>
-/* ---- Utility / state and persistence ---- */
-const STORAGE_KEYS = {
-  AGENDA: 'ss_demo_agenda_v1',
-  MAILS: 'ss_demo_mails_v1',
-  SETTINGS: 'ss_demo_settings_v1'
+// Hardcoded accounts
+const accounts = {
+  "tristan.vansonhoven": {
+    name: "Tristan Vansonhoven",
+    role: "Admin",
+    avatar: "https://i.imgur.com/1PfpFaa.png"
+  },
+  "kiandra.vandeweyer": {
+    name: "Kiandra Vandeweyer",
+    role: "Leerling",
+    avatar: "https://i.imgur.com/qRX7J0B.png"
+  },
+  "lily.tseyen": {
+    name: "Lily Tseyen",
+    role: "Leerling",
+    avatar: "https://i.imgur.com/E3Y4W0Z.png"
+  }
 };
 
-function saveToStorage(key, data){ localStorage.setItem(key, JSON.stringify(data)); }
-function loadFromStorage(key, fallback){ try{ const v=localStorage.getItem(key); return v?JSON.parse(v):fallback }catch(e){return fallback} }
+// Current login (hardcoded here, later can be dynamic)
+let currentUser = "tristan.vansonhoven";
 
-/* initialize data */
-let events = loadFromStorage(STORAGE_KEYS.AGENDA, []);
-let mails = loadFromStorage(STORAGE_KEYS.MAILS, {
-  inbox:[
-    {id:genId(), from:"Directie",subject:"Welkom bij Smartschool (demo)",body:"Welkom bij Smartschool demo! Veel succes dit schooljaar.",date:formatDate(new Date()), read:false}
-  ],
-  sent:[],
-  drafts:[]
-});
-let settings = loadFromStorage(STORAGE_KEYS.SETTINGS, {notifications:true});
-
-/* helpers */
-function genId(){ return 'id_'+Math.random().toString(36).slice(2,9) }
-function formatDate(d){
-  try{
-    return new Intl.DateTimeFormat('nl-NL',{day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date(d));
-  }catch(e){ return d.toString() }
+// Update navbar with user info
+function updateUserInfo(){
+  const user = accounts[currentUser];
+  document.querySelector(".nav-left img").src = user.avatar;
+  document.querySelector(".nav-left span").innerHTML = `<b>${user.name}</b> (${user.role})`;
 }
+updateUserInfo();
 
-/* ---- Pages / navigation ---- */
-function showPage(id){
-  document.querySelectorAll('.shell, .mail-container').forEach(el=>{
-    el.style.display = 'none';
-    el.classList.remove('active');
-  });
-  const el = document.getElementById(id);
-  if(!el) return;
-  el.style.display = (id==='berichten') ? 'flex' : 'grid';
-  // special layout for mail container
-  if(id==='berichten'){ document.getElementById('berichten').classList.add('active'); document.querySelector('.shell')?.classList.remove('active') }
-  else el.classList.add('active');
-  // hide compose & mail view when switching away
-  if(id!=='berichten'){ closeCompose(); document.getElementById('mailView').classList.remove('active') }
-  if(id==='home'){ renderCalendar(); }
-}
+// Mail system
+let mails = {
+  "tristan.vansonhoven": { inbox: [], sent: [] },
+  "kiandra.vandeweyer": { inbox: [], sent: [] },
+  "lily.tseyen": { inbox: [], sent: [] }
+};
+let currentBox = "inbox";
 
-/* ---- Dropdown behaviour (no arrows shown) ---- */
-const dropdownTriggers = document.querySelectorAll('.has-dropdown');
-dropdownTriggers.forEach(wrapper=>{
-  const btn = wrapper.querySelector('button');
-  const menu = wrapper.querySelector('.dropdown-menu');
-  if(!btn || !menu) return;
-  btn.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    const isOpen = menu.classList.contains('open');
-    closeAllDropdowns();
-    if(!isOpen){
-      menu.classList.add('open');
-      btn.setAttribute('aria-expanded','true');
+// Populate "To" dropdown with other users
+function populateRecipients(){
+  const select = document.getElementById("composeTo");
+  select.innerHTML = "";
+  Object.keys(accounts).forEach(acc=>{
+    if(acc!==currentUser){
+      const opt=document.createElement("option");
+      opt.value=acc;
+      opt.textContent=accounts[acc].name;
+      select.appendChild(opt);
     }
   });
-});
-
-/* close dropdowns globally */
-function closeAllDropdowns(){
-  document.querySelectorAll('.dropdown-menu').forEach(m=>{
-    m.classList.remove('open');
-    const parent = m.parentElement;
-    const btn = parent && parent.querySelector('button');
-    if(btn) btn.setAttribute('aria-expanded','false');
-  });
 }
-document.addEventListener('click', closeAllDropdowns);
-document.addEventListener('keydown', (e)=>{
-  if(e.key === 'Escape'){ closeAllDropdowns(); closeCompose(); document.getElementById('mailView').classList.remove('active'); }
-});
+populateRecipients();
 
-/* ---- Clock ---- */
+// Show correct page
+function showPage(id){
+  document.querySelectorAll(".shell,.mail-container").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+// Mail functions
+function switchMailbox(box){
+  currentBox = box;
+  document.getElementById("compose").classList.remove("active");
+  document.getElementById("mailView").classList.remove("active");
+  renderMailbox();
+}
+function renderMailbox(){
+  const list=document.getElementById("mailList");
+  list.innerHTML="";
+  mails[currentUser][currentBox].forEach((m,i)=>{
+    let div=document.createElement("div");
+    div.className="mail-item"+(m.unread?" unread":"");
+    div.textContent=`${m.from||"Ik"} - ${m.subject}`;
+    div.onclick=()=>openMail(i);
+    list.appendChild(div);
+  });
+  updateBadge();
+}
+function openMail(i){
+  const mail=mails[currentUser][currentBox][i];
+  const view=document.getElementById("mailView");
+  view.classList.add("active");
+  mail.unread=false;
+  view.innerHTML=`<h3>${mail.subject}</h3><p><b>Van:</b> ${mail.from||"Ik"}</p><p>${mail.body}</p>`;
+  renderMailbox();
+}
+function composeMail(){
+  document.getElementById("compose").classList.add("active");
+  document.getElementById("mailView").classList.remove("active");
+}
+function sendMail(){
+  const to=document.getElementById("composeTo").value;
+  const subject=document.getElementById("composeSubject").value;
+  const body=document.getElementById("composeBody").value;
+  if(subject && body){
+    // Send to recipient inbox
+    mails[to].inbox.push({from:accounts[currentUser].name,subject,body,unread:true});
+    // Save in sender sent
+    mails[currentUser].sent.push({to:accounts[to].name,subject,body,unread:false});
+    // Reset
+    document.getElementById("composeSubject").value="";
+    document.getElementById("composeBody").value="";
+    alert("Bericht verzonden!");
+    switchMailbox("sent");
+  }
+}
+function updateBadge(){
+  const unread=mails[currentUser].inbox.filter(m=>m.unread).length;
+  const badge=document.getElementById("mailCount");
+  if(unread>0){
+    badge.style.display="inline-block";
+    badge.textContent=unread;
+  } else {
+    badge.style.display="none";
+  }
+}
+switchMailbox("inbox");
+
+// Clock
 function updateClock(){
-  const now = new Date();
-  document.getElementById('clockTime').textContent = now.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  document.getElementById('clockDate').textContent = now.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const now=new Date();
+  document.getElementById("clockTime").textContent=now.toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  document.getElementById("clockDate").textContent=now.toLocaleDateString("nl-NL",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 }
 setInterval(updateClock,1000);
 updateClock();
 
-/* ---- Calendar UI ---- */
-let calPointer = new Date();
-const calGrid = document.getElementById('calGrid');
-function renderCalendar(){
-  const title = document.getElementById('calTitle');
-  title.textContent = new Intl.DateTimeFormat('nl-NL',{month:'long',year:'numeric'}).format(calPointer);
-  calGrid.innerHTML = '';
-  const weekDays=['ma','di','wo','do','vr','za','zo'];
-  weekDays.forEach(d=>{
-    const cell = document.createElement('div');
-    cell.className = 'cal-cell cal-head';
-    cell.textContent = d;
-    calGrid.appendChild(cell);
-  });
-
-  const first = new Date(calPointer.getFullYear(), calPointer.getMonth(), 1);
-  const startIndex = (first.getDay() + 6) % 7; // mon=0
-  const daysInMonth = new Date(calPointer.getFullYear(), calPointer.getMonth()+1, 0).getDate();
-  const prevDays = new Date(calPointer.getFullYear(), calPointer.getMonth(), 0).getDate();
-
-  // previous month tail
-  for(let i=startIndex-1;i>=0;i--){
-    const c = document.createElement('div');
-    c.className='cal-cell';
-    c.style.opacity = '0.38';
-    c.textContent = (prevDays - i);
-    calGrid.appendChild(c);
-  }
-
-  const today = new Date();
-  const isThisMonth = (today.getFullYear()===calPointer.getFullYear() && today.getMonth()===calPointer.getMonth());
-
-  for(let d=1;d<=daysInMonth;d++){
-    const c = document.createElement('div');
-    c.className='cal-cell';
-    c.textContent = d;
-    if(isThisMonth && d===today.getDate()) c.classList.add('today');
-    calGrid.appendChild(c);
-  }
+// Customization
+function applyCustomization(){
+  document.querySelector(".navbar").style.background=document.getElementById("navColor").value;
+  document.querySelector(".navbar").style.color=document.getElementById("textColor").value;
+  document.body.style.background=document.getElementById("bgColor").value;
 }
-document.getElementById('prevMonth').addEventListener('click', ()=>{ calPointer.setMonth(calPointer.getMonth()-1); renderCalendar();});
-document.getElementById('nextMonth').addEventListener('click', ()=>{ calPointer.setMonth(calPointer.getMonth()+1); renderCalendar();});
-renderCalendar();
-
-/* ---- Agenda: CRUD + persistence ---- */
-const agendaListEl = document.getElementById('agendaList');
-function renderEvents(){
-  agendaListEl.innerHTML = '';
-  if(events.length===0){
-    const li = document.createElement('li');
-    li.className='agenda-item';
-    li.innerHTML = '<span class="small">Geen afspraken.</span>';
-    agendaListEl.appendChild(li);
-    return;
-  }
-  events.sort((a,b)=>new Date(a.date) - new Date(b.date));
-  events.forEach((ev, i)=>{
-    const li = document.createElement('li');
-    li.className='agenda-item';
-    li.innerHTML = `<span>${ev.date} — ${escapeHtml(ev.title)}</span><div><button title="Verwijder" onclick="removeEvent(${i})">✕</button></div>`;
-    agendaListEl.appendChild(li);
-  });
-}
-function addEvent(e){
-  e.preventDefault();
-  const title = document.getElementById('eventTitle').value.trim();
-  const date = document.getElementById('eventDate').value;
-  if(!title || !date) return;
-  events.push({id:genId(),title,date});
-  saveToStorage(STORAGE_KEYS.AGENDA, events);
-  document.getElementById('eventTitle').value='';
-  document.getElementById('eventDate').value='';
-  renderEvents();
-}
-function removeEvent(i){
-  if(i<0 || i>=events.length) return;
-  events.splice(i,1);
-  saveToStorage(STORAGE_KEYS.AGENDA, events);
-  renderEvents();
-}
-renderEvents();
-
-/* ---- Mailbox functionality ---- */
-let currentBox = 'inbox';
-const mailListEl = document.getElementById('mailList');
-const mailViewEl = document.getElementById('mailView');
-
-function renderMailbox(){
-  mailListEl.innerHTML = '';
-  const box = mails[currentBox] || [];
-  if(box.length===0){
-    const div = document.createElement('div');
-    div.className='mail-item';
-    div.textContent = 'Geen berichten.';
-    mailListEl.appendChild(div);
-  } else {
-    box.forEach((m, i)=>{
-      const div = document.createElement('div');
-      div.className='mail-item';
-      div.tabIndex = 0;
-      div.innerHTML = `<strong style="display:block">${escapeHtml(m.subject||'(geen onderwerp)')}</strong>
-                       <div class="small">${escapeHtml(m.from || m.to || 'Onbekend')} — ${escapeHtml(m.date||'')}</div>`;
-      div.onclick = ()=>openMail(i);
-      div.onkeydown = (ev)=>{ if(ev.key==='Enter') openMail(i) };
-      mailListEl.appendChild(div);
-    });
-  }
-  updateMailCount();
-  document.getElementById('mailStats').textContent = `${(mails.inbox?.length||0)+(mails.sent?.length||0)+(mails.drafts?.length||0)} berichten`;
-}
-function openMail(i){
-  const mail = mails[currentBox][i];
-  if(!mail) return;
-  mail.read = true;
-  saveMails();
-  mailViewEl.classList.add('active');
-  mailViewEl.innerHTML = `<h3>${escapeHtml(mail.subject||'(geen onderwerp)')}</h3>
-    <p><b>Van:</b> ${escapeHtml(mail.from||mail.to||'Onbekend')} <span class="small"> — ${escapeHtml(mail.date||'')}</span></p>
-    <div style="white-space:pre-wrap;padding-top:8px">${escapeHtml(mail.body||'')}</div>
-    <div style="margin-top:12px">
-      <button onclick="replyMail('${mail.id}')" style="margin-right:8px">Beantwoorden</button>
-      <button onclick="deleteMail('${mail.id}')">Verwijderen</button>
-    </div>`;
-  renderMailbox();
-}
-function switchMailbox(box){
-  currentBox = box;
-  document.getElementById('compose').classList.remove('active');
-  mailViewEl.classList.remove('active');
-  renderMailbox();
-}
-function composeMail(){
-  document.getElementById('compose').classList.add('active');
-  mailViewEl.classList.remove('active');
-}
-function closeCompose(){
-  document.getElementById('compose').classList.remove('active');
-  document.getElementById('composeTo').value='';
-  document.getElementById('composeSubject').value='';
-  document.getElementById('composeBody').value='';
-}
-function sendMail(){
-  const to = document.getElementById('composeTo').value.trim();
-  const subject = document.getElementById('composeSubject').value.trim();
-  const body = document.getElementById('composeBody').value.trim();
-  if(!subject || !body){
-    alert('Vul minstens onderwerp en bericht in.');
-    return;
-  }
-  const m = {id:genId(), to, subject, body, date:formatDate(new Date())};
-  mails.sent.unshift(m);
-  saveMails();
-  alert('Bericht verzonden!');
-  closeCompose();
-  switchMailbox('sent');
-}
-function saveDraft(){
-  const to = document.getElementById('composeTo').value.trim();
-  const subject = document.getElementById('composeSubject').value.trim();
-  const body = document.getElementById('composeBody').value.trim();
-  if(!subject && !body && !to){
-    alert('Niets ingevuld om op te slaan.');
-    return;
-  }
-  const m = {id:genId(), to, subject, body, date:formatDate(new Date())};
-  mails.drafts.unshift(m);
-  saveMails();
-  alert('Concept opgeslagen.');
-  closeCompose();
-  switchMailbox('drafts');
-}
-function saveMails(){ saveToStorage(STORAGE_KEYS.MAILS, mails); renderMailbox(); }
-function replyMail(id){
-  // find mail
-  const box = Object.keys(mails).find(k=>mails[k].some(m=>m.id===id));
-  const mail = mails[box].find(m=>m.id===id);
-  if(!mail) return;
-  document.getElementById('compose').classList.add('active');
-  document.getElementById('composeTo').value = mail.from || '';
-  document.getElementById('composeSubject').value = (mail.subject? 'Re: '+mail.subject : 'Re:');
-  document.getElementById('composeBody').value = `\n\n--- Origineel bericht ---\n${mail.body||''}`;
-}
-function deleteMail(id){
-  // remove matching id from any box
-  ['inbox','sent','drafts'].forEach(k=>{
-    mails[k] = mails[k].filter(m=>m.id!==id);
-  });
-  saveMails();
-  mailViewEl.classList.remove('active');
-  renderMailbox();
-}
-
-/* mail utils */
-function updateMailCount(){
-  document.getElementById('mailCount').textContent = mails.inbox.length;
-}
-updateMailCount();
-
-/* initial render */
-renderMailbox();
-
-/* ---- Notifications controls ---- */
-document.getElementById('aanBtn').addEventListener('click', ()=>{
-  settings.notifications = true;
-  saveToStorage(STORAGE_KEYS.SETTINGS, settings);
-  document.getElementById('aanBtn').classList.add('active');
-  document.getElementById('aanBtn').setAttribute('aria-checked','true');
-  document.getElementById('uitBtn').classList.remove('active');
-  document.getElementById('uitBtn').setAttribute('aria-checked','false');
-});
-document.getElementById('uitBtn').addEventListener('click', ()=>{
-  settings.notifications = false;
-  saveToStorage(STORAGE_KEYS.SETTINGS, settings);
-  document.getElementById('uitBtn').classList.add('active');
-  document.getElementById('uitBtn').setAttribute('aria-checked','true');
-  document.getElementById('aanBtn').classList.remove('active');
-  document.getElementById('aanBtn').setAttribute('aria-checked','false');
-});
-function clearNotifications(){
-  const mb = document.getElementById('meldingenBody');
-  mb.innerHTML = '<div style="font-size:40px">✅</div><p class="small">Je meldingen zijn gewist.</p>';
-}
-
-/* ---- small helpful functions ---- */
-function escapeHtml(s){ if(!s && s!==0) return ''; return String(s).replace(/[&<>"'`]/g, (m)=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;', '`':'&#96;' }[m])) }
-
-/* ---- Simple notification settings modal / link handlers (demo) ---- */
-function openNotificationsSettings(){ alert('Meldingen instellingen (demo) — hier kan je instellingen zichtbaar maken.'); }
-
-/* ---- Email count / update on load ---- */
-(function loadAll(){
-  // load stored agenda & mails into state (already loaded at top)
-  events = loadFromStorage(STORAGE_KEYS.AGENDA, events);
-  mails = loadFromStorage(STORAGE_KEYS.MAILS, mails);
-  settings = loadFromStorage(STORAGE_KEYS.SETTINGS, settings);
-  renderEvents();
-  renderMailbox();
-  updateMailCount();
-})();
-
-/* ---- Simple helper for demo: set sample school calendar link ---- */
-document.getElementById('schoolCalendarLink').addEventListener('click', function(e){
-  e.preventDefault();
-  alert('Open schoolkalender (demo).');
-});
-
-/* ---- quick page wiring for top buttons ---- */
-document.getElementById('homeBtn').addEventListener('click', ()=>showPage('home'));
-document.getElementById('berichtenBtn').addEventListener('click', ()=>showPage('berichten'));
-
-/* ---- Respond to window unload: persist current data again ---- */
-window.addEventListener('beforeunload', ()=>{
-  saveToStorage(STORAGE_KEYS.AGENDA, events);
-  saveToStorage(STORAGE_KEYS.MAILS, mails);
-  saveToStorage(STORAGE_KEYS.SETTINGS, settings);
-});
-
-/* ---- small helpers for mobile usability: tap outside to close compose / mail view ---- */
-document.addEventListener('click', (e) => {
-  // clicks outside mail view close it when not on mail-related elements
-  const inMail = e.target.closest('.mail-main, .mail-sidebar, .nav-right, .dropdown-menu');
-  if(!inMail) {
-    // don't forcibly close mailbox page, just dropdowns already handled
-  }
-});
-
-/* ---- Escape HTML for safety in displayed content (used earlier) ---- */
-
-/* End of script */
 </script>
 </body>
 </html>
