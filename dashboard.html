@@ -14,29 +14,30 @@
     *{box-sizing:border-box;}
     body,html{margin:0;font-family:Inter,system-ui;background:var(--bg);height:100%;}
     .app{display:grid;grid-template-columns:260px 1fr;min-height:100vh;}
-    .sidebar{background:linear-gradient(180deg,var(--accent),#e74c3c);color:#fff;padding:20px;display:flex;flex-direction:column;}
+    .sidebar{background:linear-gradient(180deg,var(--accent),#e74c3c);color:#fff;padding:20px;display:flex;flex-direction:column;transition:all .3s;}
     .brand{font-weight:700;font-size:18px;margin-bottom:30px;}
     .nav{display:flex;flex-direction:column;gap:8px;}
-    .nav button{border:0;background:transparent;color:#fff;padding:12px;border-radius:10px;text-align:left;cursor:pointer;font-weight:600;transition:0.2s;}
+    .nav button{border:0;background:transparent;color:#fff;padding:12px;border-radius:10px;text-align:left;cursor:pointer;font-weight:600;transition:0.2s;display:flex;align-items:center;}
     .nav button.active,.nav button:hover{background:rgba(255,255,255,0.2);}
     .nav button i{margin-right:10px;}
     .profile{margin-top:auto;display:flex;align-items:center;gap:10px;border-top:1px solid rgba(255,255,255,.2);padding-top:15px;}
-    .profile img{width:45px;height:45px;border-radius:50%;}
+    .profile img{width:45px;height:45px;border-radius:50%;object-fit:cover;}
     .logout{background:#fff;color:#e74c3c;font-size:14px;padding:6px 10px;border-radius:8px;cursor:pointer;font-weight:600;}
     .main{display:flex;flex-direction:column;}
     .topbar{display:flex;align-items:center;justify-content:space-between;padding:15px 25px;background:#fff;box-shadow:var(--shadow);}
-    .search{flex:1;margin-right:20px;display:flex;align-items:center;gap:8px;background:var(--bg);padding:8px 14px;border-radius:8px;}
-    .search input{flex:1;border:0;outline:0;background:transparent;}
     .icon-btn{border:0;background:var(--bg);border-radius:8px;padding:10px;cursor:pointer;}
     .content{padding:25px;overflow:auto;}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
-    .card{background:var(--card);padding:20px;border-radius:var(--radius);box-shadow:var(--shadow);}
-    .card h2{margin:0 0 15px;}
+    .card{background:var(--card);padding:20px;border-radius:var(--radius);box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:all .3s ease;}
+    .card.show{opacity:1;transform:translateY(0);}
     .agenda-item{padding:10px;background:var(--bg);border-radius:10px;margin-bottom:8px;}
     .msg{display:flex;gap:10px;align-items:center;padding:12px;border-radius:10px;background:var(--bg);margin-bottom:10px;}
     .msg .avatar{width:40px;height:40px;border-radius:50%;background:#ddd;}
     .progress{width:120px;height:120px;border-radius:50%;background:conic-gradient(var(--accent) calc(var(--p)*1%),#ddd 0);display:flex;align-items:center;justify-content:center;font-weight:700;color:#333;font-size:20px;margin:auto;}
     .clock{font-size:18px;font-weight:600;color:#444;}
+    .view{display:none;}
+    .view.active{display:block;animation:fadeIn .3s ease;}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
     @media(max-width:900px){.app{grid-template-columns:70px 1fr}.nav button span{display:none}}
   </style>
 </head>
@@ -57,10 +58,10 @@
       <button data-view="settings"><i class="fa fa-gear"></i><span>Instellingen</span></button>
     </nav>
     <div class="profile">
-      <img src="https://i.pravatar.cc/100" alt="user"/>
+      <img id="profileImg" src="https://i.pravatar.cc/100" alt="user"/>
       <div>
         <div id="profileName">Demo User</div>
-        <small>Learner</small>
+        <small id="profileRole">Leerling</small>
       </div>
       <div class="logout" onclick="logout()">Log uit</div>
     </div>
@@ -73,7 +74,7 @@
     </header>
     <div class="content">
       <!-- Dashboard -->
-      <section id="dashboard" class="view">
+      <section id="dashboard" class="view active">
         <div class="grid">
           <div class="card">
             <h2>Welkom terug!</h2>
@@ -95,60 +96,20 @@
           </div>
         </div>
       </section>
+      <!-- Agenda -->
+      <section id="agenda" class="view"><h2>Agenda</h2><div class="card"><div id="agendaFull"></div></div></section>
       <!-- Other pages -->
-      <section id="agenda" class="view" style="display:none"><h2>Agenda</h2><div class="card">[Lesrooster]</div></section>
-      <section id="messages" class="view" style="display:none"><h2>Berichten</h2><div class="card">[Inbox]</div></section>
-      <section id="results" class="view" style="display:none"><h2>Resultaten</h2><div class="card">[Rapport]</div></section>
-      <section id="attendance" class="view" style="display:none"><h2>Afwezigheden</h2><div class="card">[Afwezigheden overzicht]</div></section>
-      <section id="files" class="view" style="display:none"><h2>Bestanden</h2><div class="card">[Documenten]</div></section>
-      <section id="forms" class="view" style="display:none"><h2>Formulieren</h2><div class="card">[Formulieren lijst]</div></section>
-      <section id="canteen" class="view" style="display:none"><h2>Cafetaria</h2><div class="card" id="canteenMenu"></div></section>
-      <section id="transport" class="view" style="display:none"><h2>Vervoer</h2><div class="card">[Busroutes]</div></section>
-      <section id="settings" class="view" style="display:none"><h2>Instellingen</h2><div class="card">[Instellingen]</div></section>
+      <section id="messages" class="view"><h2>Berichten</h2><div class="card">[Inbox]</div></section>
+      <section id="results" class="view"><h2>Resultaten</h2><div class="card">[Rapport]</div></section>
+      <section id="attendance" class="view"><h2>Afwezigheden</h2><div class="card">[Afwezigheden overzicht]</div></section>
+      <section id="files" class="view"><h2>Bestanden</h2><div class="card">[Documenten]</div></section>
+      <section id="forms" class="view"><h2>Formulieren</h2><div class="card">[Formulieren lijst]</div></section>
+      <section id="canteen" class="view"><h2>Cafetaria</h2><div class="card" id="canteenMenu"></div></section>
+      <section id="transport" class="view"><h2>Vervoer</h2><div class="card">[Busroutes]</div></section>
+      <section id="settings" class="view"><h2>Instellingen</h2><div class="card">[Instellingen]</div></section>
     </div>
   </div>
 </div>
 <script>
-  // Nav switching
+  // Sidebar navigation
   const buttons=document.querySelectorAll('.nav button');
-  const views=document.querySelectorAll('.view');
-  buttons.forEach(btn=>btn.addEventListener('click',()=>{
-    buttons.forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const id=btn.dataset.view;
-    views.forEach(v=>v.style.display=v.id===id?\"block\":\"none\");
-  }));
-
-  // User profile
-  const user=localStorage.getItem('loggedInUser');
-  if(!user){ window.location.href='login.html'; }
-  document.getElementById('profileName').textContent=user;
-  document.getElementById('welcomeMsg').textContent=`Fijn dat je er bent, ${user}!`;
-
-  // Greeting
-  const hour=new Date().getHours();
-  let greet=\"Goede dag\";
-  if(hour<12) greet=\"Goedemorgen\"; else if(hour<18) greet=\"Goedemiddag\"; else greet=\"Goedenavond\";
-  document.getElementById('greeting').textContent=greet;
-
-  // Clock
-  function updateClock(){
-    const now=new Date();
-    document.getElementById('clock').textContent=now.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
-  }
-  setInterval(updateClock,1000);updateClock();
-
-  // Agenda mock
-  const agendaToday=[\"08:30 – Wiskunde\",\"10:15 – Nederlands\",\"13:00 – Sport\",\"15:00 – Engels\"];
-  document.getElementById('agendaList').innerHTML=agendaToday.map(a=>`<div class='agenda-item'>${a}</div>`).join('');
-
-  // Canteen mock (rotating menu)
-  const menus=[\"Pasta bolognese €4,50\",\"Kip curry €4,20\",\"Lasagne €4,00\",\"Soep & brood €3,00\"];
-  const day=new Date().getDay(); // 1=Mon
-  document.getElementById('canteenMenu').innerHTML=menus[day%menus.length]+\" <button>Bestel</button>\";
-
-  // Logout
-  function logout(){localStorage.removeItem('loggedInUser');window.location.href='login.html';}
-</script>
-</body>
-</html>
