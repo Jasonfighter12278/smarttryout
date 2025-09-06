@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     :root {
-      --bg:#f4f6f8; --card:#ffffff; --accent:#ff7043;
+      --bg:#f4f6f8; --card:#ffffff; --accent:#ff7043; --accent2:#ff9f68;
       --radius:14px; --shadow:0 6px 18px rgba(0,0,0,0.08);
     }
     *{box-sizing:border-box;}
@@ -22,7 +22,6 @@
     .nav button i{margin-right:10px;}
     .profile{margin-top:auto;display:flex;align-items:center;gap:10px;border-top:1px solid rgba(255,255,255,.2);padding-top:15px;}
     .profile img{width:45px;height:45px;border-radius:50%;}
-    .profile div{flex:1;}
     .logout{background:#fff;color:#e74c3c;font-size:14px;padding:6px 10px;border-radius:8px;cursor:pointer;font-weight:600;}
     .main{display:flex;flex-direction:column;}
     .topbar{display:flex;align-items:center;justify-content:space-between;padding:15px 25px;background:#fff;box-shadow:var(--shadow);}
@@ -36,7 +35,8 @@
     .agenda-item{padding:10px;background:var(--bg);border-radius:10px;margin-bottom:8px;}
     .msg{display:flex;gap:10px;align-items:center;padding:12px;border-radius:10px;background:var(--bg);margin-bottom:10px;}
     .msg .avatar{width:40px;height:40px;border-radius:50%;background:#ddd;}
-    .progress{width:100px;height:100px;border-radius:50%;background:conic-gradient(var(--accent) calc(var(--p)*1%),#ddd 0);display:flex;align-items:center;justify-content:center;font-weight:700;color:#333;font-size:18px;margin:auto;}
+    .progress{width:120px;height:120px;border-radius:50%;background:conic-gradient(var(--accent) calc(var(--p)*1%),#ddd 0);display:flex;align-items:center;justify-content:center;font-weight:700;color:#333;font-size:20px;margin:auto;}
+    .clock{font-size:18px;font-weight:600;color:#444;}
     @media(max-width:900px){.app{grid-template-columns:70px 1fr}.nav button span{display:none}}
   </style>
 </head>
@@ -50,7 +50,11 @@
       <button data-view="messages"><i class="fa fa-envelope"></i><span>Berichten</span></button>
       <button data-view="results"><i class="fa fa-chart-line"></i><span>Resultaten</span></button>
       <button data-view="attendance"><i class="fa fa-user-check"></i><span>Afwezigheden</span></button>
+      <button data-view="files"><i class="fa fa-folder"></i><span>Bestanden</span></button>
+      <button data-view="forms"><i class="fa fa-file-lines"></i><span>Formulieren</span></button>
       <button data-view="canteen"><i class="fa fa-utensils"></i><span>Cafetaria</span></button>
+      <button data-view="transport"><i class="fa fa-bus"></i><span>Vervoer</span></button>
+      <button data-view="settings"><i class="fa fa-gear"></i><span>Instellingen</span></button>
     </nav>
     <div class="profile">
       <img src="https://i.pravatar.cc/100" alt="user"/>
@@ -64,9 +68,8 @@
   <div class="main">
     <header class="topbar">
       <div id="greeting"></div>
-      <div>
-        <button class="icon-btn"><i class="fa fa-bell"></i></button>
-      </div>
+      <div class="clock" id="clock"></div>
+      <div><button class="icon-btn"><i class="fa fa-bell"></i></button></div>
     </header>
     <div class="content">
       <!-- Dashboard -->
@@ -78,9 +81,7 @@
           </div>
           <div class="card">
             <h2>Vandaag in Agenda</h2>
-            <div class="agenda-item">08:30 – Wiskunde</div>
-            <div class="agenda-item">10:15 – Nederlands</div>
-            <div class="agenda-item">13:00 – Sport</div>
+            <div id="agendaList"></div>
           </div>
           <div class="card">
             <h2>Recente berichten</h2>
@@ -89,41 +90,26 @@
           </div>
           <div class="card" style="text-align:center">
             <h2>Attentie</h2>
-            <div class="progress" style="--p:75">75%</div>
+            <div class="progress" id="attendanceProgress" style="--p:85">85%</div>
             <small>Aanwezigheden dit semester</small>
           </div>
         </div>
       </section>
-      <!-- Agenda -->
-      <section id="agenda" class="view" style="display:none">
-        <h2>Lesrooster</h2>
-        <div class="card">[Mock timetable content]</div>
-      </section>
-      <!-- Messages -->
-      <section id="messages" class="view" style="display:none">
-        <h2>Berichten</h2>
-        <div class="card">[Berichtenlijst hier]</div>
-      </section>
-      <!-- Results -->
-      <section id="results" class="view" style="display:none">
-        <h2>Resultaten</h2>
-        <div class="card">[Resultaten overzicht]</div>
-      </section>
-      <!-- Attendance -->
-      <section id="attendance" class="view" style="display:none">
-        <h2>Afwezigheden</h2>
-        <div class="card">[Afwezigheden lijst]</div>
-      </section>
-      <!-- Canteen -->
-      <section id="canteen" class="view" style="display:none">
-        <h2>Cafetaria</h2>
-        <div class="card">Vandaag: Lasagne €4,20 <button>Bestel</button></div>
-      </section>
+      <!-- Other pages -->
+      <section id="agenda" class="view" style="display:none"><h2>Agenda</h2><div class="card">[Lesrooster]</div></section>
+      <section id="messages" class="view" style="display:none"><h2>Berichten</h2><div class="card">[Inbox]</div></section>
+      <section id="results" class="view" style="display:none"><h2>Resultaten</h2><div class="card">[Rapport]</div></section>
+      <section id="attendance" class="view" style="display:none"><h2>Afwezigheden</h2><div class="card">[Afwezigheden overzicht]</div></section>
+      <section id="files" class="view" style="display:none"><h2>Bestanden</h2><div class="card">[Documenten]</div></section>
+      <section id="forms" class="view" style="display:none"><h2>Formulieren</h2><div class="card">[Formulieren lijst]</div></section>
+      <section id="canteen" class="view" style="display:none"><h2>Cafetaria</h2><div class="card" id="canteenMenu"></div></section>
+      <section id="transport" class="view" style="display:none"><h2>Vervoer</h2><div class="card">[Busroutes]</div></section>
+      <section id="settings" class="view" style="display:none"><h2>Instellingen</h2><div class="card">[Instellingen]</div></section>
     </div>
   </div>
 </div>
 <script>
-  // Navigation
+  // Nav switching
   const buttons=document.querySelectorAll('.nav button');
   const views=document.querySelectorAll('.view');
   buttons.forEach(btn=>btn.addEventListener('click',()=>{
@@ -133,7 +119,7 @@
     views.forEach(v=>v.style.display=v.id===id?\"block\":\"none\");
   }));
 
-  // Load profile
+  // User profile
   const user=localStorage.getItem('loggedInUser');
   if(!user){ window.location.href='login.html'; }
   document.getElementById('profileName').textContent=user;
@@ -145,11 +131,24 @@
   if(hour<12) greet=\"Goedemorgen\"; else if(hour<18) greet=\"Goedemiddag\"; else greet=\"Goedenavond\";
   document.getElementById('greeting').textContent=greet;
 
-  // Logout
-  function logout(){
-    localStorage.removeItem('loggedInUser');
-    window.location.href='login.html';
+  // Clock
+  function updateClock(){
+    const now=new Date();
+    document.getElementById('clock').textContent=now.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'});
   }
+  setInterval(updateClock,1000);updateClock();
+
+  // Agenda mock
+  const agendaToday=[\"08:30 – Wiskunde\",\"10:15 – Nederlands\",\"13:00 – Sport\",\"15:00 – Engels\"];
+  document.getElementById('agendaList').innerHTML=agendaToday.map(a=>`<div class='agenda-item'>${a}</div>`).join('');
+
+  // Canteen mock (rotating menu)
+  const menus=[\"Pasta bolognese €4,50\",\"Kip curry €4,20\",\"Lasagne €4,00\",\"Soep & brood €3,00\"];
+  const day=new Date().getDay(); // 1=Mon
+  document.getElementById('canteenMenu').innerHTML=menus[day%menus.length]+\" <button>Bestel</button>\";
+
+  // Logout
+  function logout(){localStorage.removeItem('loggedInUser');window.location.href='login.html';}
 </script>
 </body>
 </html>
