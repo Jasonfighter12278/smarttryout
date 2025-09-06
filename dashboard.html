@@ -1,386 +1,303 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smartschool – Dashboard (Demo)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-VzPz8o3Q1l4iW7y3y3sXk3z4NqHj0nq3b6FoY7F9tQmHq2n6yK4q2g8o0w2Y9bQZ0rj1aP6y1G4yqzq5rG5b0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smartschool Modern Clone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    :root{
-      --red-900:#821b1b; /* deep header */
-      --red-800:#8f1d1d; /* header hover */
-      --red-700:#9d2323; /* cards */
-      --red-600:#a92b2b;
-      --bg:#e9e9e9;
-      --card:#a02828;
-      --text:#ffffff;
-      --muted:#e7b7b7;
-      --line:#d3d3d3;
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      color: #333;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#6f1515;}
-
-    /* Top bar */
-    header.topbar{position:sticky;top:0;z-index:50;background:var(--red-900);color:#fff;}
-    .topnav{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:10px 16px;}
-    .profile{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none}
-    .profile img{width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,.25)}
-    .navlink, .navbtn{color:#fff;text-decoration:none;background:none;border:0;font:inherit;cursor:pointer;padding:8px 10px;border-radius:6px}
-    .navlink:hover, .navbtn:hover{background:var(--red-800)}
-    .spacer{flex:1}
-    .iconbtn{width:36px;height:36px;display:grid;place-items:center;border-radius:50%}
-
-    /* Dropdown mega menu (Ga naar) */
-    .dropdown{position:relative}
-    .menu{position:absolute;top:52px;left:-120px;min-width:660px;background:var(--red-900);color:#fff;border-radius:12px;box-shadow:0 22px 50px rgba(0,0,0,.4);display:none;padding:18px 22px}
-    .dropdown.open .menu{display:block}
-    .menu:before{content:"";position:absolute;top:-10px;left:160px;border:10px solid transparent;border-bottom-color:var(--red-900)}
-    .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
-    .menu-group{display:grid;gap:12px}
-    .menu a{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;padding:10px 12px;border-radius:10px}
-    .menu a:hover{background:var(--red-800)}
-    .menu i{width:22px;text-align:center}
-    .menu .rule{height:1px;background:rgba(255,255,255,.25);margin:8px 0}
-
-    /* App shell */
-    .app{max-width:1400px;margin:0 auto;background:#7b1717;min-height:calc(100vh - 56px);}
-    main{padding:0 16px 60px}
-
-    /* Tabs / sections */
-    section.view{display:none}
-    section.view.active{display:block}
-
-    /* ---------- HOME (dashboard) ---------- */
-    .board{display:grid;grid-template-columns:330px 1fr 380px;gap:18px;padding:18px}
-    .card{background:var(--red-700);color:#fff;border-radius:8px;box-shadow:0 6px 14px rgba(0,0,0,.25);}
-    .card h3{margin:0;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.15);font-weight:600}
-    .card .content{padding:14px 16px}
-
-    /* left column */
-    .absent-tile{display:grid;place-items:center;height:280px}
-    .absent-tile .bigicon{font-size:120px;color:#e6e6e6}
-    .link{color:#ffd3d3;text-decoration:underline;display:block;text-align:center;margin-top:8px}
-
-    .schoolkal{margin-top:18px}
-
-    .contact{margin-top:18px}
-    .contact p{margin:6px 0}
-
-    /* middle column */
-    .poster img{width:100%;height:auto;border-radius:6px;display:block}
-    .news{margin-top:18px}
-    .news-list{display:grid;gap:14px;margin:0;padding:0;list-style:none}
-    .news-item{display:flex;gap:12px;align-items:flex-start;background:rgba(0,0,0,.08);padding:10px 12px;border-radius:8px}
-    .news-item i{font-size:18px;opacity:.95}
-    .news-item .meta{opacity:.85;font-size:13px}
-
-    /* right column */
-    .calendar .month{display:flex;align-items:center;justify-content:space-between}
-    .calendar .month button{border:0;background:transparent;color:#fff;font-size:18px;cursor:pointer;padding:6px}
-    .calendar table{width:100%;border-collapse:collapse;margin-top:12px;color:#fff}
-    .calendar th,.calendar td{border:1px solid rgba(255,255,255,.25);text-align:center;padding:8px}
-    .calendar td.is-today{background:#fff;color:#7b1717;font-weight:700}
-
-    .catalog{margin-top:18px}
-    .catalog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .tile{background:#c34a4a;border-radius:10px;display:grid;place-items:center;aspect-ratio:1/1;font-size:28px}
-
-    /* ---------- AGENDA ---------- */
-    .agenda-wrap{padding:16px}
-    .agenda-head{display:flex;align-items:center;justify-content:space-between;color:#fff;margin-bottom:10px}
-    .agenda-title{font-weight:700}
-    .agenda-grid{border:2px solid #c8c8c8;border-radius:10px;overflow:hidden;background:#fff}
-    .ag-head{display:grid;grid-template-columns:140px repeat(5, 1fr);}
-    .ag-head div{padding:10px 12px;background:#efefef;border-right:1px solid #ddd;font-weight:600}
-    .ag-head div:last-child{border-right:0}
-    .ag-body{display:grid;grid-template-columns:140px repeat(5, 1fr)}
-    .ag-body .cell{min-height:84px;border-right:1px solid #e1e1e1;border-top:1px solid #e1e1e1;padding:10px}
-    .ag-body .time{background:#fafafa;font-weight:600}
-    .subject{background:#f9f9ff;border:1px solid #d9d9ff;border-radius:6px;padding:6px 8px;display:inline-block}
-    .subject.green{background:#eafff0;border-color:#b5f0cc}
-    .subject.yellow{background:#fff7d6;border-color:#f1e1a3}
-
-    /* ---------- RESULTS placeholder ---------- */
-    .results{color:#fff;padding:24px}
-
-    /* Footer pad */
-    .pad{height:20px}
-
-    @media (max-width:1200px){
-      .board{grid-template-columns:1fr}
+    header {
+      background: #a31616;
+      color: white;
+      padding: 10px 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .topnav button, .topnav a {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 15px;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .topnav button:hover, .topnav a:hover {
+      color: #ffb6a6;
+    }
+    .topnav__btn--profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-right: 15px;
+      border-right: 1px solid rgba(255,255,255,0.3);
+    }
+    .topnav img {
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+    }
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      color: #333;
+      min-width: 220px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      overflow: hidden;
+      z-index: 1000;
+    }
+    .dropdown-content a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 15px;
+      text-decoration: none;
+      color: #333;
+      transition: background 0.2s;
+    }
+    .dropdown-content a:hover {
+      background: #f2f2f2;
+    }
+    .dropdown.show .dropdown-content {
+      display: block;
+    }
+    main section {
+      display: none;
+      padding: 20px;
+      animation: fadeIn 0.3s;
+    }
+    main section.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      color: #333;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+    .card h3 {
+      margin-top: 0;
+      color: #a31616;
+    }
+    .calendar { text-align: center; }
+    .calendar table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    .calendar th, .calendar td {
+      border: 1px solid #ccc;
+      padding: 6px;
+      text-align: center;
+    }
+    .calendar .today {
+      background: #a31616;
+      color: white;
+      font-weight: bold;
+      border-radius: 50%;
+    }
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: 120px repeat(5, 1fr);
+      border: 1px solid #ccc;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .agenda-grid div {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      border-right: 1px solid #eee;
+      text-align: center;
+    }
+    .agenda-grid div:nth-child(-n+6) {
+      font-weight: bold;
+      background: #f2f2f2;
     }
   </style>
 </head>
 <body>
-  <header class="topbar">
+  <header>
     <nav class="topnav">
-      <a class="profile" href="#" id="btnHome">
-        <img src="https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/1061_1b9bd6e8-b313-4e85-ba95-3c26ad96d5cb/plain/1/res/48" alt="Profiel"/>
-        <strong>Tristan Vansonhoven</strong>
-      </a>
-      <button class="navbtn" data-goto="home">Start</button>
-      <div class="dropdown" id="gotoDrop">
-        <button class="navbtn" id="btnGoto">Ga naar <i class="fa-solid fa-caret-down"></i></button>
-        <div class="menu" role="menu">
-          <div class="menu-grid">
-            <div class="menu-group">
-              <a href="#" data-goto="messages"><i class="fa-solid fa-inbox"></i>Berichten</a>
-              <a href="#" data-goto="forms"><i class="fa-solid fa-square-poll-horizontal"></i>Formulieren</a>
-              <a href="#" data-goto="helpdesk"><i class="fa-solid fa-circle-question"></i>Helpdesk</a>
-              <a href="#" data-goto="intrade"><i class="fa-solid fa-file-lines"></i>Intrade</a>
-              <a href="#" data-goto="lvs"><i class="fa-solid fa-chart-line"></i>Leerlingvolgsysteem</a>
-              <a href="#" data-goto="timetable"><i class="fa-regular fa-circle-check"></i>Lesrooster</a>
-              <a href="#" data-goto="docs"><i class="fa-regular fa-folder-open"></i>Mijn documenten</a>
-              <a href="#" data-goto="profile"><i class="fa-solid fa-user-graduate"></i>Mijn leerlingfiche</a>
-              <a href="#" data-goto="news"><i class="fa-regular fa-star"></i>Nieuwsberichten</a>
-            </div>
-            <div class="menu-group">
-              <a href="#" data-goto="online"><i class="fa-solid fa-user-group"></i>Online sessies</a>
-              <a href="#" data-goto="planner"><i class="fa-solid fa-calendar-check"></i>Planner</a>
-              <a href="#" data-goto="portfolio"><i class="fa-regular fa-id-badge"></i>Portfolio</a>
-              <a href="#" data-goto="results"><i class="fa-solid fa-bullseye"></i>Resultaten</a>
-              <a href="#" data-goto="agenda"><i class="fa-regular fa-calendar-days"></i>Schoolagenda</a>
-              <a href="#" data-goto="wiki"><i class="fa-solid fa-pen"></i>Wiki</a>
-              <div class="rule"></div>
-              <a href="#" data-goto="guide"><i class="fa-regular fa-circle-question"></i>Handleiding</a>
-            </div>
-          </div>
+      <button class="topnav__btn--profile">
+        <img src="https://userpicture10.smartschool.be/User/Userimage/hashimage/hash/1061_1b9bd6e8-b313-4e85-ba95-3c26ad96d5cb/plain/1/res/48" alt="Profiel">
+        <span>Tristan V</span>
+      </button>
+      <a onclick="showSection('home')">Start</a>
+      <div class="dropdown">
+        <button onclick="toggleDropdown(this)">Ga naar <i class="fa fa-caret-down"></i></button>
+        <div class="dropdown-content">
+          <a onclick="showSection('agenda')"><i class="fa fa-calendar"></i> Schoolagenda</a>
+          <a onclick="showSection('results')"><i class="fa fa-chart-line"></i> Resultaten</a>
+          <a onclick="showSection('messages')"><i class="fa fa-envelope"></i> Berichten</a>
+          <a onclick="showSection('forms')"><i class="fa fa-file-alt"></i> Formulieren</a>
+          <a onclick="showSection('helpdesk')"><i class="fa fa-life-ring"></i> Helpdesk</a>
         </div>
       </div>
-      <button class="navbtn" data-goto="agenda">Vakken</button>
-      <button class="navbtn" data-goto="links">Links</button>
-      <button class="navbtn" data-goto="messages">Berichten</button>
-      <button class="navbtn" data-goto="notifications">Meldingen</button>
-      <div class="spacer"></div>
-      <button class="navbtn iconbtn"><i class="fa-solid fa-magnifying-glass"></i></button>
-      <button class="navbtn iconbtn"><i class="fa-regular fa-circle-question"></i></button>
-      <button class="navbtn iconbtn"><i class="fa-solid fa-right-from-bracket"></i></button>
+      <a onclick="showSection('agenda')">Vakken</a>
+      <a onclick="showSection('links')">Links</a>
+      <a onclick="showSection('messages')">Berichten</a>
+      <a onclick="showSection('notifs')">Meldingen</a>
+      <a onclick="showSection('search')"><i class="fa fa-search"></i></a>
+      <a onclick="showSection('helpdesk')"><i class="fa fa-question-circle"></i></a>
+      <a href="#"><i class="fa fa-right-from-bracket"></i></a>
     </nav>
   </header>
 
-  <div class="app">
-    <main>
-      <!-- HOME -->
-      <section id="home" class="view active" aria-label="Dashboard">
-        <div class="board">
-          <!-- Left column -->
-          <div>
-            <div class="card absent">
-              <h3>Afwezigheid wettigen</h3>
-              <div class="content absent-tile">
-                <i class="fa-solid fa-chalkboard-user bigicon" aria-hidden="true"></i>
-                <a class="link" href="#">Open hier de instructiefilm</a>
-              </div>
-            </div>
-
-            <div class="card schoolkal">
-              <h3>Schoolkalender</h3>
-              <div class="content">
-                <a class="link" href="#">Link naar de SCHOOLKALENDER</a>
-              </div>
-            </div>
-
-            <div class="card contact">
-              <h3>Contactinformatie</h3>
-              <div class="content">
-                <p><strong>Sint Maria Geel</strong><br>Pas 110<br>2440 Geel</p>
-                <p>Tel.: 014 58 86 72<br>Fax: 014 58 60 25</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Middle column -->
-          <div>
-            <div class="card poster">
-              <h3>Lezing Anky De Frangh woensdag 1 oktober</h3>
-              <div class="content">
-                <img src="https://images.unsplash.com/photo-1520975922284-9d56f2f95b39?q=80&w=800&auto=format&fit=crop" alt="Poster" />
-              </div>
-            </div>
-            <div class="card news">
-              <h3>Nieuws</h3>
-              <div class="content">
-                <ul class="news-list">
-                  <li class="news-item"><i class="fa-solid fa-seedling"></i> <div><strong>Vaknieuws</strong><div class="meta">25-26 SMG ARTISTIEKE VORMING 4ZW ALGEMEEN BV • 2025-09-04 19:23</div></div></li>
-                  <li class="news-item"><i class="fa-regular fa-handshake"></i> <div><strong>Afspraken lessen Godsdienst</strong><div class="meta">25-26 SMG 4de jaar A-fin. GOD • 2025-09-01 02:24</div></div></li>
-                  <li class="news-item"><i class="fa-solid fa-book-open-reader"></i> <div><strong>Leren samenvatten</strong><div class="meta">25-26 SMG 4ZW zorg • 2025-09-03 16:16</div></div></li>
-                  <li class="news-item"><i class="fa-solid fa-chalkboard"></i> <div><strong>Afpraken vak MAVO</strong><div class="meta">2025-2026 SMG 4A - ZWA MAVO MH • 2025-09-01 14:02</div></div></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right column -->
-          <div>
-            <div class="card calendar">
-              <h3>september 2025</h3>
-              <div class="content">
-                <div class="month">
-                  <button aria-label="Vorige maand"><i class="fa-solid fa-chevron-left"></i></button>
-                  <div>september 2025</div>
-                  <button aria-label="Volgende maand"><i class="fa-solid fa-chevron-right"></i></button>
-                </div>
-                <table aria-label="Kalender">
-                  <thead>
-                    <tr><th>ma</th><th>di</th><th>wo</th><th>do</th><th>vr</th><th>za</th><th>zo</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr><td></td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
-                    <tr><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td></tr>
-                    <tr><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td></tr>
-                    <tr><td>22</td><td>23</td><td>24</td><td class="is-today">25</td><td>26</td><td>27</td><td>28</td></tr>
-                    <tr><td>29</td><td>30</td><td></td><td></td><td></td><td></td><td></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="card catalog">
-              <h3>Online catalogus Kogeka bibs</h3>
-              <div class="content">
-                <p><a class="link" href="#">Klik hier</a> om naar de online catalogus te gaan voor boeken en films in verschillende Kogeka bibs.</p>
-                <div class="catalog-grid">
-                  <div class="tile"><i class="fa-solid fa-book"></i></div>
-                  <div class="tile"><i class="fa-regular fa-id-card"></i></div>
-                  <div class="tile"><i class="fa-solid fa-people-group"></i></div>
-                  <div class="tile"><i class="fa-solid fa-person-swimming"></i></div>
-                  <div class="tile"><i class="fa-solid fa-microscope"></i></div>
-                  <div class="tile"><i class="fa-solid fa-person"></i></div>
-                  <div class="tile"><i class="fa-solid fa-gamepad"></i></div>
-                  <div class="tile"><i class="fa-regular fa-lightbulb"></i></div>
-                  <div class="tile"><i class="fa-solid fa-gears"></i></div>
-                </div>
-              </div>
-            </div>
-          </div>
+  <main>
+    <!-- Home dashboard -->
+    <section id="home" class="active">
+      <h1>Dashboard</h1>
+      <div class="dashboard">
+        <div class="card">
+          <h3>Afwezigheid wettigen</h3>
+          <p>Open hier de instructiefilm</p>
         </div>
-        <div class="pad"></div>
-      </section>
-
-      <!-- AGENDA -->
-      <section id="agenda" class="view" aria-label="Agenda">
-        <div class="agenda-wrap">
-          <div class="agenda-head">
-            <button class="navbtn" id="agPrev"><i class="fa-solid fa-chevron-left"></i></button>
-            <div class="agenda-title">4A-ZWA</div>
-            <button class="navbtn" id="agNext"><i class="fa-solid fa-chevron-right"></i></button>
-          </div>
-
-          <div class="agenda-grid" role="table" aria-label="Weekrooster">
-            <div class="ag-head" role="rowgroup">
-              <div role="columnheader">&nbsp;</div>
-              <div role="columnheader">maandag 8/9</div>
-              <div role="columnheader">dinsdag 9/9</div>
-              <div role="columnheader">woensdag 10/9</div>
-              <div role="columnheader">donderdag 11/9</div>
-              <div role="columnheader">vrijdag 12/9</div>
-            </div>
-
-            <div class="ag-body" role="rowgroup">
-              <!-- Row 1 -->
-              <div class="cell time" role="rowheader">08:25 - 09:15<br><small>1</small></div>
-              <div class="cell"><span class="subject">Wiskunde</span></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-
-              <!-- Row 2 -->
-              <div class="cell time" role="rowheader">09:15 - 10:05<br><small>2</small></div>
-              <div class="cell"></div>
-              <div class="cell"><span class="subject green">Frans</span></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"><span class="subject yellow">Nederlands</span></div>
-
-              <!-- Row 3 -->
-              <div class="cell time" role="rowheader">10:15 - 11:05<br><small>3</small></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"><span class="subject">LO</span></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-
-              <!-- Row 4 -->
-              <div class="cell time" role="rowheader">11:05 - 11:55<br><small>4</small></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-
-              <!-- Midday -->
-              <div class="cell time" role="rowheader"><strong>Middag</strong><br>11:55 - 12:45</div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-
-              <!-- Row 5 -->
-              <div class="cell time" role="rowheader">12:45 - 13:35<br><small>5</small></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-
-              <!-- Row 6 -->
-              <div class="cell time" role="rowheader">13:35 - 14:25<br><small>6</small></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-
-              <!-- Row 7 -->
-              <div class="cell time" role="rowheader">14:25 - 15:15<br><small>7</small></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-              <div class="cell"></div>
-
-            </div>
-          </div>
+        <div class="card">
+          <h3>Lezing Anky De Frangh</h3>
+          <p>Woensdag 1 oktober</p>
+          <img src="https://dummyimage.com/300x400/cccccc/000000&text=Poster" width="100%">
         </div>
-      </section>
-
-      <!-- RESULTS placeholder -->
-      <section id="results" class="view" aria-label="Resultaten">
-        <div class="results">
-          <h2>Resultaten</h2>
-          <p>Hier komen de resultaten.</p>
+        <div class="card calendar">
+          <h3 id="monthYear"></h3>
+          <table id="calendarTable"></table>
         </div>
-      </section>
-    </main>
-  </div>
+      </div>
+    </section>
+
+    <!-- Agenda -->
+    <section id="agenda">
+      <h1>Agenda</h1>
+      <div class="agenda-grid">
+        <div>Uren</div><div>Maandag</div><div>Dinsdag</div><div>Woensdag</div><div>Donderdag</div><div>Vrijdag</div>
+        <div>08:25 - 09:15</div><div>Wiskunde</div><div>Frans</div><div></div><div>Biologie</div><div>Nederlands</div>
+        <div>09:20 - 10:10</div><div>Natuurwetenschappen</div><div>Geschiedenis</div><div></div><div>Frans</div><div>Wiskunde</div>
+      </div>
+    </section>
+
+    <!-- Messages -->
+    <section id="messages">
+      <h1>Berichten</h1>
+      <div class="card"><p>Geen nieuwe berichten.</p></div>
+    </section>
+
+    <!-- Results -->
+    <section id="results">
+      <h1>Resultaten</h1>
+      <div class="card"><p>Hier verschijnen je resultaten.</p></div>
+    </section>
+
+    <!-- Forms -->
+    <section id="forms">
+      <h1>Formulieren</h1>
+      <div class="card"><p>Hier kan je formulieren invullen.</p></div>
+    </section>
+
+    <!-- Helpdesk -->
+    <section id="helpdesk">
+      <h1>Helpdesk</h1>
+      <div class="card"><p>Contacteer onze helpdesk bij problemen.</p></div>
+    </section>
+
+    <!-- Links -->
+    <section id="links">
+      <h1>Links</h1>
+      <div class="card"><p>Handige links voor jou.</p></div>
+    </section>
+
+    <!-- Notifications -->
+    <section id="notifs">
+      <h1>Meldingen</h1>
+      <div class="card"><p>Geen meldingen.</p></div>
+    </section>
+
+    <!-- Search -->
+    <section id="search">
+      <h1>Zoeken</h1>
+      <div class="card"><input type="text" placeholder="Zoek iets..." style="width:100%;padding:10px;"></div>
+    </section>
+  </main>
 
   <script>
-    // SPA navigation
-    const show = id => {
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    function toggleDropdown(btn) {
+      btn.parentElement.classList.toggle("show");
+    }
+    function showSection(id) {
+      document.querySelectorAll('main section').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
-      // close dropdown if open
-      document.getElementById('gotoDrop').classList.remove('open');
-    };
-    document.querySelectorAll('[data-goto]').forEach(el=>{
-      el.addEventListener('click', e=>{ e.preventDefault(); show(el.dataset.goto); });
-    });
-    document.getElementById('btnHome').addEventListener('click', e=>{e.preventDefault();show('home')});
+      document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+    }
 
-    // Ga naar dropdown
-    const drop = document.getElementById('gotoDrop');
-    document.getElementById('btnGoto').addEventListener('click', (e)=>{
-      e.stopPropagation();
-      drop.classList.toggle('open');
-    });
-    document.addEventListener('click', ()=> drop.classList.remove('open'));
+    // Calendar builder
+    function buildCalendar() {
+      const now = new Date();
+      const month = now.getMonth();
+      const year = now.getFullYear();
+      const today = now.getDate();
+
+      document.getElementById('monthYear').textContent = now.toLocaleString('nl-NL', { month: 'long', year: 'numeric' });
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      const table = document.getElementById('calendarTable');
+      table.innerHTML = '';
+      const days = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
+      let header = '<tr>' + days.map(d => `<th>${d}</th>`).join('') + '</tr>';
+      table.innerHTML = header;
+
+      let date = 1;
+      for (let i = 0; i < 6; i++) {
+        let row = '<tr>';
+        for (let j = 1; j <= 7; j++) {
+          if (i === 0 && j < (firstDay === 0 ? 7 : firstDay)) {
+            row += '<td></td>';
+          } else if (date > daysInMonth) {
+            row += '<td></td>';
+          } else {
+            if (date === today) {
+              row += `<td class="today">${date}</td>`;
+            } else {
+              row += `<td>${date}</td>`;
+            }
+            date++;
+          }
+        }
+        row += '</tr>';
+        table.innerHTML += row;
+      }
+    }
+    buildCalendar();
   </script>
 </body>
 </html>
