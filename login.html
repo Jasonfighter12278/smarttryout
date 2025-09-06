@@ -132,32 +132,50 @@
   </div>
 
 <script>
+  // Demo users (username -> {password, role, pfp})
   const users = {
-    "lily.tseyen": "Lily1606",
-    "tristan.vansonhoven": "Tristan1606",
-    "kiandra.vandeweyer": "Kiandra1606"
+    "lily.tseyen": { password: "Lily1606", role: "Leerling", pfp: "https://i.pravatar.cc/150?u=lily" },
+    "kiandra.vandeweyer": { password: "Kiandra1606", role: "Leerling", pfp: "https://i.pravatar.cc/150?u=kiandra" },
+    "tristan.vansonhoven": { password: "Tristan1606", role: "Leraar", pfp: "https://i.pravatar.cc/150?u=tristan" }
   };
+
+  // Make sure these base app storage keys exist (messages, grades, files)
+  if (!localStorage.getItem('app_users')) {
+    // Store the known users list for messaging UI to read (usernames only)
+    localStorage.setItem('app_users', JSON.stringify(Object.keys(users)));
+  }
+  if (!localStorage.getItem('messages')) localStorage.setItem('messages', JSON.stringify([]));
+  if (!localStorage.getItem('grades')) localStorage.setItem('grades', JSON.stringify({}));
+  if (!localStorage.getItem('files')) localStorage.setItem('files', JSON.stringify([]));
+  if (!localStorage.getItem('canteen_orders')) localStorage.setItem('canteen_orders', JSON.stringify([]));
 
   function login() {
     const user = document.getElementById("username").value.trim();
     const pass = document.getElementById("password").value.trim();
     const error = document.getElementById("error");
 
-    if (users[user] && users[user] === pass) {
+    if (users[user] && users[user].password === pass) {
       localStorage.setItem("loggedInUser", user);
+      localStorage.setItem("userRole", users[user].role);
+      localStorage.setItem("userPfp", users[user].pfp);
+      // ensure app_users stays updated (if you add accounts later)
+      const appUsers = JSON.parse(localStorage.getItem('app_users') || '[]');
+      if (!appUsers.includes(user)) {
+        appUsers.push(user);
+        localStorage.setItem('app_users', JSON.stringify(appUsers));
+      }
       window.location.href = "dashboard.html";
     } else {
       error.style.display = "block";
+      setTimeout(()=> error.style.display = "none", 3500);
     }
   }
 
-  const togglePassword = document.getElementById("togglePassword");
-  const passwordField = document.getElementById("password");
-  togglePassword.addEventListener("click", () => {
-    passwordField.type = passwordField.type === "password" ? "text" : "password";
+  document.getElementById('togglePassword').addEventListener('click', () => {
+    const p = document.getElementById('password');
+    p.type = p.type === 'password' ? 'text' : 'password';
   });
 </script>
 
 </body>
 </html>
-
